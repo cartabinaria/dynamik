@@ -1,6 +1,12 @@
 import { persisted } from 'svelte-local-storage-store';
 
-export const themes = ['halloween', 'autumn', 'dracula', 'cartabinaria_light', 'cartabinaria_dark'] as const;
+export const themes = [
+	'halloween',
+	'autumn',
+	'dracula',
+	'cartabinaria_light',
+	'cartabinaria_dark'
+] as const;
 type Theme = (typeof themes)[number];
 
 export const DEFAULT_COURSE_KEY = 'default';

@@ -51,7 +51,8 @@
 			<h1 class="text-4xl font-semibold text-center">Risorse</h1>
 			<h3 class="text-2 font-semibold text-center">
 				Materiali di studio condivisi e creati da studenti per studenti, gestiti da <span
-					class="underline"><a href="https://cartabinaria.students.cs.unibo.it">CartaBinaria</a></span
+					class="underline"
+					><a href="https://cartabinaria.students.cs.unibo.it">CartaBinaria</a></span
 				>
 			</h3>
 		</div>
