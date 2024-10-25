@@ -4,14 +4,14 @@ import nodeAdapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const BASE_PATH = process.env.BASE_PATH || '';
-const CSUNIBO_DEPLOY = process.env.CSUNIBO_DEPLOY === 'true';
+const CARTABINARIA_DEPLOY = process.env.CARTABINARIA_DEPLOY === 'true';
 
 /**
  *
  * @returns {import('@sveltejs/kit').Adapter}
  */
 function chooseAdapter() {
-	if (CSUNIBO_DEPLOY) {
+	if (CARTABINARIA_DEPLOY) {
 		return nodeAdapter();
 	} else {
 		return vercelAdapter();
