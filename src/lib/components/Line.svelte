@@ -14,7 +14,7 @@
 	$: external = 'mime' in data ? data.mime === 'text/statik-link' : false;
 
 	/**
-	 * Check if the statik url for the data uses an external link to 'csunibo.github.io'
+	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
 	 *
 	 * This function is especially created for '/libri/'.
 	 */
