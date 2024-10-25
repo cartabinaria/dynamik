@@ -5,7 +5,7 @@
 	"display": "standalone",
 	"theme_color": "#971327",
 	"background_color": "#282828",
-	"description": "Raccolta risorse per il DISI di UniBo gestito da CSUnibo",
+	"description": "Raccolta risorse per il DISI di UniBo gestito da CartaBinaria",
 	"icons": [
 		{
 			"src": "unibo192.png",

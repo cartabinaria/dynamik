@@ -5,7 +5,7 @@
 
 	const WORKFLOW_NAMES = ['filenames', 'build-and-deploy'];
 	const WORKFLOW_URL = (project: string, workflow: string) =>
-		`https://github.com/csunibo/${project}/actions/workflows/${workflow}.yml`;
+		`https://github.com/cartabinaria/${project}/actions/workflows/${workflow}.yml`;
 
 	export let data: PageData;
 </script>

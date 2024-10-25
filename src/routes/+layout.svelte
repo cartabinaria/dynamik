@@ -45,7 +45,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" property="og:image" content={ogImage} />
 	<meta property="og:image" content={ogImage} />
-	<meta property="og:site_name" content="Risorse CSUnibo" />
+	<meta property="og:site_name" content="Risorse CartaBinaria" />
 </svelte:head>
 
 <slot />

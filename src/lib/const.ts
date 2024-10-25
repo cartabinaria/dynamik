@@ -1,4 +1,4 @@
-const ORG = 'csunibo';
+const ORG = 'cartabinaria';
 export const RISORSE_BASE_URL =
 	process.env.VITE_RISORSE_BASE_URL || 'https://risorse.students.cs.unibo.it';
 export const GH_PAGES_BASE_URL = `https://${ORG}.github.io`;

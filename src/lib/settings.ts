@@ -1,6 +1,6 @@
 import { persisted } from 'svelte-local-storage-store';
 
-export const themes = ['halloween', 'autumn', 'dracula', 'csunibo_light', 'csunibo_dark'] as const;
+export const themes = ['halloween', 'autumn', 'dracula', 'cartabinaria_light', 'cartabinaria_dark'] as const;
 type Theme = (typeof themes)[number];
 
 export const DEFAULT_COURSE_KEY = 'default';
@@ -13,7 +13,7 @@ export interface Settings {
 }
 
 const settings = persisted<Settings>('settings', {
-	theme: 'csunibo_dark',
+	theme: 'cartabinaria_dark',
 	newTab: false,
 	defaultCourse: DEFAULT_COURSE_KEY,
 	isoDates: false

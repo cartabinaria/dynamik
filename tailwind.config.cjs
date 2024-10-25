@@ -15,7 +15,7 @@ module.exports = {
 	daisyui: {
 		themes: [
 			{
-				csunibo_dark: {
+				cartabinaria_dark: {
 					primary: '#EA8C55',
 					secondary: '#971327',
 					accent: '#4281A4',
@@ -24,7 +24,7 @@ module.exports = {
 					neutral: '#06253A',
 					'base-200': '#0f1f2a' // versione chiara *commentabile*
 				},
-				csunibo_light: {
+				cartabinaria_light: {
 					secondary: '#971327',
 					primary: '#EA8C55',
 					accent: '#4281A4',
