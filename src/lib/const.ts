@@ -1,6 +1,5 @@
 const ORG = 'cartabinaria';
-export const RISORSE_BASE_URL =
-	process.env.VITE_RISORSE_BASE_URL || 'https://risorse.students.cs.unibo.it';
+export const RISORSE_BASE_URL = process.env.VITE_RISORSE_BASE_URL || 'https://dynamik.vercel.app/';
 export const GH_PAGES_BASE_URL = `https://${ORG}.github.io`;
 const GH_BASE_URL = `https://github.com/${ORG}`;
 const GH_DEV_BASE_URL = `https://github.dev/${ORG}`;
