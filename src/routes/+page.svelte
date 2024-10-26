@@ -57,16 +57,25 @@
 
 <div class="flex justify-center">
 	<div class="container max-w-5xl">
-		<div class="m-10">
-			<h1 class="text-4xl font-semibold text-center">Risorse</h1>
-			<h3 class="text-2 font-semibold text-center">
-				Materiali di studio condivisi e creati da studenti per studenti, gestiti da <span
-					class="underline"
-					><a href="https://cartabinaria.students.cs.unibo.it">CartaBinaria</a></span
-				>
-			</h3>
+		<div class="mt-10 mx-auto text-center">
+			<h1 class="mb-4 text-4xl font-bold">Risorse</h1>
+			<p>
+				Materiali di studio condivisi e creati da studenti per studenti, gestiti da
+				<span class="underline">
+					<a href="https://cartabinaria.students.cs.unibo.it"> CartaBinaria </a>
+				</span>
+			</p>
 		</div>
-		<ul class="menu p-2 text-lg">
+		<div class="divider"></div>
+
+		<div class="prose sm:mx-auto mx-4">
+			<p>
+				Seleziona il tuo corso di laurea per accedere ai materiali di studio condivisi e creati da
+				studenti per studenti.
+			</p>
+		</div>
+
+		<ul class="menu p-2 text-lg mt-8">
 			{#each data.degrees as degree}
 				{#if degree.teachings != null}
 					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
@@ -82,5 +91,34 @@
 				{@render line('Stato', `${base}/build`, '📊')}
 			</div>
 		</ul>
+
+		<div class="alert alert-warning mx-4 my-8 w-full sm:mx-auto" role="alert">
+			<span class="icon-[ph--hand-palm-fill] text-4xl"></span>
+			<div>
+				<p class="block font-bold">
+					<strong>Disclaimer</strong>
+				</p>
+				<p class="text-xs mb-2">
+					Questo sito è stato pensato, creato e mantenuto da studenti.
+					<strong>
+						Non è in alcun modo ufficiale e non è affiliato con l'Università di Bologna.
+					</strong>
+				</p>
+				<p class="text-xs">
+					I materiali presenti sono stati creati da studenti e non sono verificati o approvati da
+					docenti o dal dipartimento. Per segnalare errori, problemi o richieste di rimozione di
+					materiale, contattaci su <a class="link" href="https://t.me/cartabinaria">Telegram.</a>
+				</p>
+			</div>
+		</div>
+
+		<div class="my-8">
+			<p class="text-center">
+				<a href="https://t.me/cartabinaria" class="btn btn-ghost">
+					<span class="icon-[ph--telegram-logo-fill] text-2xl"></span>
+					Contattaci su Telegram
+				</a>
+			</p>
+		</div>
 	</div>
 </div>
