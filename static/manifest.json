@@ -3,18 +3,18 @@
 	"short_name": "Risorse",
 	"start_url": "/",
 	"display": "standalone",
-	"theme_color": "#971327",
+	"theme_color": "#EA8C55",
 	"background_color": "#282828",
 	"description": "Raccolta risorse per il DISI di UniBo gestito da CartaBinaria",
 	"icons": [
 		{
-			"src": "unibo192.png",
-			"sizes": "192x192",
+			"src": "cartabinaria-250.png",
+			"sizes": "250x250",
 			"type": "image/png",
 			"purpose": "any"
 		},
 		{
-			"src": "unibo512.png",
+			"src": "cartabinaria-512.png",
 			"sizes": "512x512",
 			"type": "image/png",
 			"purpose": "maskable"
