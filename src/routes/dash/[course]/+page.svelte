@@ -71,7 +71,7 @@
 			</h1>
 		</div>
 		<div class="navbar-end flex items-center">
-			<a class="btn btn-square btn-ghost" title="Indietro" href="/">
+			<a class="btn btn-square btn-ghost" title="Indietro" href="/" aria-label="Indietro">
 				<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
 			</a>
 		</div>
