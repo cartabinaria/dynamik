@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { Degree } from '$lib/teachings';
-	import Line from './Line.svelte';
 	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
 	import { browser } from '$app/environment';
 
@@ -38,12 +37,23 @@
 			<button
 				class="text-content hover:text-error focus:outline-none"
 				on:click={() => setBannerClosed()}
+				aria-label="Chiudi banner"
 			>
 				<span class="text-xl icon-[akar-icons--x-small]"></span>
 			</button>
 		</div>
 	</div>
 {/if}
+
+{#snippet line(name: string, href: string, icon: string)}
+	<li>
+		<a class="py-8 justify-center text-center border-base-content border-2 mb-4" {href}>
+			{icon}
+			{name}
+			{icon}
+		</a>
+	</li>
+{/snippet}
 
 <div class="flex justify-center">
 	<div class="container max-w-5xl">
@@ -59,14 +69,16 @@
 		<ul class="menu p-2 text-lg">
 			{#each data.degrees as degree}
 				{#if degree.teachings != null}
-					<Line name={degree.name} icon={degree.icon} href="{base}/dash/{degree.id}" />
+					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
 				{:else}
-					<Line name={degree.name} icon={degree.icon} href="{base}/{degree.id}" />
+					{@render line(degree.name, `${base}/${degree.id}`, degree.icon)}
 				{/if}
 			{/each}
 
-			<Line name="Impostazioni" icon="🔧" href="{base}/settings" />
-			<Line name="Stato" icon="📊" href="{base}/build" />
+			<div class="my-10"></div>
+
+			{@render line('Impostazioni', `${base}/settings`, '🔧')}
+			{@render line('Stato', `${base}/build`, '📊')}
 		</ul>
 	</div>
 </div>

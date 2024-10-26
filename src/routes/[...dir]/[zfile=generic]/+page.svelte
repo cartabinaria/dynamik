@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 
@@ -23,17 +25,13 @@
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<iframe bind:this={iframe} title="Embedded resource" src={data.url} />
+<Breadcrumbs url={$page.url} borderRadius={null} />
+
+<iframe bind:this={iframe} title="Embedded resource" src={data.url} class="h-full w-full"></iframe>
 
 <style>
-	iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		border: 0;
-		width: 100vw;
-		height: 100vh;
+	:global(html),
+	:global(body) {
+		height: 100%;
 	}
 </style>
