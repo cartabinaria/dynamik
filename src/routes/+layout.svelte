@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} /> 
+	<link rel="icon" href={favicon} />
 
 	<!-- OG preview settings -->
 	<meta name="twitter:card" content="summary_large_image" />
