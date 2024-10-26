@@ -14,6 +14,10 @@ const EXTRA_BUNDLED_LANGUAGES = [
 
 export const match: ParamMatcher = (file) => {
 	const parts = file.split('.');
+	if (parts.length < 2) {
+		return false;
+	}
+
 	const extention = parts.pop();
 	if (extention == null) {
 		return false;
