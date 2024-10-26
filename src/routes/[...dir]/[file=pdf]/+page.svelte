@@ -8,12 +8,10 @@
 
 	let iframe: HTMLIFrameElement;
 	onMount(() => {
-		// Focus the iframe
-		iframe.contentWindow?.focus();
+		iframe.contentWindow?.focus(); // Focus the iframe
 	});
 
 	$: title = getTitle(data.url);
-
 	function getTitle(url: string) {
 		const part = url.split('/');
 		return part[part.length - 1].split('?')[0];
@@ -24,6 +22,8 @@
 	<title>{title}</title>
 	<meta property="og:title" content={title} />
 </svelte:head>
+
+<Breadcrumbs url={$page.url} borderRadius={null} />
 
 <iframe bind:this={iframe} title="Embedded resource" src={data.url} class="h-full w-full"></iframe>
 
