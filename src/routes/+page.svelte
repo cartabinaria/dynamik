@@ -75,10 +75,12 @@
 				{/if}
 			{/each}
 
-			<div class="my-10"></div>
+			<div class="divider"></div>
 
-			{@render line('Impostazioni', `${base}/settings`, '🔧')}
-			{@render line('Stato', `${base}/build`, '📊')}
+			<div class="grid grid-cols-2 gap-8">
+				{@render line('Impostazioni', `${base}/settings`, '🔧')}
+				{@render line('Stato', `${base}/build`, '📊')}
+			</div>
 		</ul>
 	</div>
 </div>
