@@ -5,7 +5,7 @@
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
 	import { getLoginUrl, getWhoAmI } from '$lib/upld';
 	import ListTeaching from './ListTeaching.svelte';
-	import type { TeachingsBatch } from './ListTeaching.svelte';
+	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
 
 	export let data: PageData;
