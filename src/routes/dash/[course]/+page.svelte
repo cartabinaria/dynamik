@@ -54,7 +54,19 @@
 
 <div class="max-w-5xl p-4 mx-auto">
 	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-sm px-5 mb-5">
-		<div class="navbar-start">
+		<div class="navbar-start flex items-center">
+			<a href="/" class="btn btn-outline" title="Home" aria-label="Home">
+				<span class="icon-[ic--round-home]"></span>
+				Home
+			</a>
+		</div>
+		<div class="navbar min-h-0 p-0 justify-center items-center">
+			<h1 class="flex flex-wrap text-xl text-center font-semibold text-base-content">
+				{data.degree.name}
+			</h1>
+		</div>
+
+		<div class="navbar-end">
 			{#if login != null}
 				{#await login then login}
 					{#if 'error' in login}
@@ -64,16 +76,6 @@
 					{/if}
 				{/await}
 			{/if}
-		</div>
-		<div class="navbar min-h-0 p-0 justify-center items-center">
-			<h1 class="flex flex-wrap text-xl text-center font-semibold text-base-content">
-				{data.degree.name}
-			</h1>
-		</div>
-		<div class="navbar-end flex items-center">
-			<a class="btn btn-square btn-ghost" title="Indietro" href="/" aria-label="Indietro">
-				<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
-			</a>
 		</div>
 	</nav>
 	<ListTeaching
