@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import { page } from '$app/stores';
 
 	export let data: PageData;
 

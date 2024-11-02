@@ -15,6 +15,7 @@
 	let focusIdx = 0;
 	$: {
 		// every time the search query changes, reset the active element
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		query;
 		focusIdx = 0;
 	}
