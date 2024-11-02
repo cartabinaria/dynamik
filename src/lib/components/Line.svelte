@@ -52,6 +52,7 @@
 					on:click={() => isDone.toggle()}
 					type="button"
 					title="Click to mark as done"
+					aria-label="Click to mark as done"
 				>
 					<span
 						class="text-bold icon-[solar--file-bold-duotone]"
@@ -86,6 +87,7 @@
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}
 					<a
+						aria-label="Download"
 						class="flex text-lg ml-3"
 						href={GH_PAGES_BASE_URL + base + '/' + data.name}
 						download
@@ -94,7 +96,7 @@
 						<span class="text-accent text-3xl icon-[solar--download-square-bold]"></span>
 					</a>
 				{:else}
-					<button disabled class="flex text-lg ml-3">
+					<button disabled class="flex text-lg ml-3" aria-label="Download">
 						<span class="text-neutral text-3xl icon-[solar--download-square-bold]"></span>
 					</button>
 				{/if}

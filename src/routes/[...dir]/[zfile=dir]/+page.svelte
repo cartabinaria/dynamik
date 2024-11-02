@@ -3,7 +3,6 @@
 
 	import Line from '$lib/components/Line.svelte';
 	import { teachingsFilter, type Degree } from '$lib/teachings';
-	import { EDIT_URLS } from '$lib/const';
 	import { doneFiles, anyFileDone } from '$lib/todo-file';
 
 	import type { PageData } from './$types';
@@ -13,24 +12,10 @@
 
 	let fuzzy: FuzzySearch;
 
-	let editUrls = EDIT_URLS($page.url.pathname);
-
-	// -- breadcrumbs --
-	let breadcrumbMobile = true;
-	function mobileBreadcrumb() {
-		breadcrumbMobile = !breadcrumbMobile;
-	}
-
 	$: urlParts = $page.url.pathname
 		.split('/')
 		.slice(1)
 		.filter((p) => p !== ''); // otherwise we get an empty string at the end
-
-	const getPartHref = (part: string) =>
-		$page.url.pathname
-			.split('/')
-			.slice(0, $page.url.pathname.split('/').indexOf(part) + 1)
-			.join('/');
 
 	function kebabToTitle(str: string) {
 		return str
@@ -129,6 +114,7 @@
 				class="lg:ml-2 p-1 flex mr-2 items-center"
 				on:click={cleanDone}
 				title="Clean all done files in this page"
+				aria-label="Clean all done files in this page"
 			>
 				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
 			</button>

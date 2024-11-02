@@ -9,6 +9,9 @@
 	import { EDIT_URLS } from '../../../lib/const';
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
+
+	import 'katex/dist/katex.css';
+
 	export let data: PageData;
 
 	let markdown: HTMLElement;
@@ -48,9 +51,9 @@
 				class="btn btn-ghost text-2xl"
 			>
 				{#if menuOpen}
-					<span class="icon-[material-symbols--close-rounded]" />
+					<span class="icon-[material-symbols--close-rounded]"></span>
 				{:else}
-					<span class="icon-[material-symbols--menu-rounded]" />
+					<span class="icon-[material-symbols--menu-rounded]"></span>
 				{/if}
 			</button>
 		</div>
@@ -89,13 +92,11 @@
 		bind:this={tocContainer}
 		class:tocHidden={!menuOpen}
 	>
-		<section class="prose mt-10" id="toc" bind:this={toc} role="contentinfo" />
+		<section class="prose mt-10" id="toc" bind:this={toc} role="contentinfo"></section>
 	</div>
 </main>
 
 <style>
-	@import 'katex/dist/katex.css';
-
 	.tocHidden {
 		max-width: 0;
 		margin: 0;
