@@ -16,6 +16,10 @@
 		const part = url.split('/');
 		return part[part.length - 1].split('?')[0];
 	}
+
+	if ($page.url.searchParams.has('page')) {
+		data.url += `#page=${$page.url.searchParams.get('page')}`;
+	}
 </script>
 
 <svelte:head>
