@@ -11,15 +11,27 @@
 		iframe.contentWindow?.focus(); // Focus the iframe
 	});
 
-	$: title = getTitle(data.url);
-	function getTitle(url: string) {
+	function genTitle(url: string) {
 		const part = url.split('/');
 		return part[part.length - 1].split('?')[0];
 	}
+	$: title = genTitle(data.url);
 
-	if ($page.url.searchParams.has('page')) {
-		data.url += `#page=${$page.url.searchParams.get('page')}`;
+	function genIframeUrl(baseUrl: string) {
+		const params = $page.url.searchParams;
+
+		if (params.has('page')) {
+			const pageParam = params.get('page');
+			// if page is a number, append it to the url (security)
+			const pageParamNumber = Number(pageParam);
+			if (!isNaN(pageParamNumber)) {
+				baseUrl += `#page=${pageParamNumber}`;
+			}
+		}
+
+		return baseUrl;
 	}
+	$: iframeUrl = genIframeUrl(data.url);
 </script>
 
 <svelte:head>
@@ -29,7 +41,7 @@
 
 <Breadcrumbs url={$page.url} borderRadius={null} />
 
-<iframe bind:this={iframe} title="Embedded resource" src={data.url} class="h-full w-full"></iframe>
+<iframe bind:this={iframe} title="Embedded resource" src={iframeUrl} class="h-full w-full"></iframe>
 
 <style>
 	:global(html),
