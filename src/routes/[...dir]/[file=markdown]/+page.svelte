@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import { init as tocInit } from 'tocbot';
 	// @ts-expect-error - katex auto-render is not typed
@@ -12,15 +11,15 @@
 
 	import 'katex/dist/katex.css';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
 	let markdown: HTMLElement;
 	let toc: HTMLElement;
 	let tocContainer: HTMLElement;
 
-	let menuOpen = false;
+	let menuOpen = $state(false);
 
-	onMount(async () => {
+	$effect(() => {
 		autoRender(markdown, {
 			delimiters: [
 				{ left: '$$', right: '$$', display: true },
@@ -44,7 +43,7 @@
 	<div class="overflow-y-scroll max-h-screen grow">
 		<div class="flex float-right sticky top-5 justify-end m-5">
 			<button
-				on:click={() => {
+				onclick={() => {
 					if (!menuOpen) tocContainer.scrollTo(0, 0);
 					menuOpen = !menuOpen;
 				}}

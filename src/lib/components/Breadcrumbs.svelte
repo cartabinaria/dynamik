@@ -1,17 +1,14 @@
 <script lang="ts">
 	import { EDIT_URLS } from '$lib/const';
 
-	let {
-		url,
-		degree,
-		onfuzzy,
-		borderRadius = 'rounded-box'
-	}: {
+	type Props = {
 		url: URL;
 		degree?: string | null;
 		onfuzzy?: (e: Event) => void;
 		borderRadius?: string | null;
-	} = $props();
+	};
+
+	let { url, degree, onfuzzy, borderRadius = 'rounded-box' }: Props = $props();
 
 	let path = $derived(url.pathname);
 	let searchParams = $derived(url.searchParams);
@@ -19,9 +16,6 @@
 
 	// -- breadcrumbs --
 	let breadcrumbMobile = $state(true);
-	$effect(() => {
-		console.log('Breadcrumb mobile:', breadcrumbMobile);
-	});
 	function mobileBreadcrumb() {
 		breadcrumbMobile = !breadcrumbMobile;
 	}
@@ -71,13 +65,7 @@
 
 <div class="navbar flex bg-base-200 shadow-sm px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
-		<button
-			class="sm:hidden flex btn btn-ghost btn-sm"
-			onclick={() => {
-				console.log('Mobile breadcrumb');
-				mobileBreadcrumb();
-			}}
-		>
+		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
 			<span
 				class="sm:hidden flex text-2xl items-center text-accent icon-[solar--folder-path-connect-bold-duotone]"
 			>

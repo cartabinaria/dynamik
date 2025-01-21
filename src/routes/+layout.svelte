@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '../app.css';
 	import { onMount } from 'svelte';
 	import settings from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
@@ -17,6 +16,7 @@
 		return DEGREES.some((c) => c.id === course);
 	};
 
+	import '../app.css';
 	import favicon from '$lib/assets/cartabinaria.png';
 	import ogImage from '$lib/assets/cartabinaria-opengraph.png';
 </script>

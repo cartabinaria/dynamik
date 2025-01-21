@@ -1,21 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	import Line from '$lib/components/Line.svelte';
 	import { teachingsFilter, type Degree } from '$lib/teachings';
 	import { doneFiles, anyFileDone } from '$lib/todo-file';
 
-	import type { PageData } from './$types';
+	import Line from '$lib/components/Line.svelte';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import FuzzySearch from './FuzzySearch.svelte';
-	import Breadcrumbs from '../../../lib/components/Breadcrumbs.svelte';
-	export let data: PageData;
 
-	let fuzzy: FuzzySearch;
+	import type { PageData } from './$types';
 
-	$: urlParts = $page.url.pathname
-		.split('/')
-		.slice(1)
-		.filter((p) => p !== ''); // otherwise we get an empty string at the end
+	let { data }: { data: PageData } = $props();
 
 	function kebabToTitle(str: string) {
 		return str
@@ -44,10 +39,19 @@
 		}
 	}
 
-	$: title = genTitle(urlParts);
+	let fuzzy: FuzzySearch;
+
+	let urlParts = $derived(
+		page.url.pathname
+			.split('/')
+			.slice(1)
+			.filter((p) => p !== '') // otherwise we get an empty string at the end
+	);
+
+	let title = $derived(genTitle(urlParts));
 
 	// --- Sorting ---
-	let reverseMode = true; // partiamo in ordine A-Z
+	let reverseMode = $state(true); // partiamo in ordine A-Z
 
 	/**
 	 * Inverte l'ordine di visualizzazione delle risorse
@@ -85,10 +89,10 @@
 		return null;
 	}
 
-	$: degree = guessDegree(urlParts[0]);
+	let degree = $derived(guessDegree(urlParts[0]));
 
 	// Done file status
-	$: isDone = anyFileDone(data.manifest.files?.map((f) => f.url) ?? []);
+	let isDone = $derived(anyFileDone(data.manifest.files?.map((f) => f.url) ?? []));
 
 	function cleanDone() {
 		doneFiles.update((old) => {
@@ -106,13 +110,13 @@
 </svelte:head>
 
 <main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<Breadcrumbs {degree} url={$page.url} onfuzzy={() => fuzzy.show()} />
+	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
 				class="lg:ml-2 p-1 flex mr-2 items-center"
-				on:click={cleanDone}
+				onclick={cleanDone}
 				title="Clean all done files in this page"
 				aria-label="Clean all done files in this page"
 			>
@@ -120,7 +124,7 @@
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
-		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" on:click={toggleReverse}>
+		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" onclick={toggleReverse}>
 			Nome
 			<span class="ms-2 text-xl icon-[solar--sort-vertical-bold-duotone]" class:flip={reverseMode}
 			></span>

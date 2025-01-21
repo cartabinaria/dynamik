@@ -6,12 +6,8 @@
 	import { getDoneStatus } from '$lib/todo-file';
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
-	export let data: File | Directory;
+	let { data }: { data: File | Directory } = $props();
 	// export let customUrl: string | undefined = undefined;
-
-	$: base = $page.url.pathname.split('?')[0];
-	$: isFile = 'mime' in data;
-	$: external = 'mime' in data ? data.mime === 'text/statik-link' : false;
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
@@ -25,12 +21,15 @@
 		return true;
 	}
 
-	$: isDone = getDoneStatus(data.url);
-
 	function splitDate(date: string) {
 		const [day, month, year, time] = date.split(' ');
 		return { day, month, year, time };
 	}
+
+	let base = $derived($page.url.pathname.split('?')[0]);
+	let isFile = $derived('mime' in data);
+	let external = $derived('mime' in data ? data.mime === 'text/statik-link' : false);
+	let isDone = $derived(getDoneStatus(data.url));
 </script>
 
 <div class="contents">
@@ -49,7 +48,7 @@
 			{:else if isFile}
 				<button
 					class="flex text-xl mr-2 align-center"
-					on:click={() => isDone.toggle()}
+					onclick={() => isDone.toggle()}
 					type="button"
 					title="Click to mark as done"
 					aria-label="Click to mark as done"
