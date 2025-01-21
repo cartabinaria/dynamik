@@ -5,7 +5,7 @@
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import { init as tocInit } from 'tocbot';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
 	let docContainer: HTMLElement;
 

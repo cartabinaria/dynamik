@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
 	import { getLoginUrl, getWhoAmI } from '$lib/upld';
@@ -8,16 +8,16 @@
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
 
-	export let data: PageData;
-	let activeYears: string[] = [];
+	let { data }: { data: PageData } = $props();
 
-	let login:
-		| Promise<{ error: string } | { username: string; name: string; avatarUrl: string }>
-		| undefined;
+	let activeYears: string[] = $state([]);
+
+	type LoginState = { username: string; name: string; avatarUrl: string } | { error: string };
+	let loginState: Promise<LoginState> | undefined = $state(undefined);
 
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		login = getWhoAmI(fetch);
+		loginState = getWhoAmI(fetch);
 	});
 
 	function namesToTeachings(names: string[]): Teaching[] {
@@ -41,7 +41,7 @@
 		return { mandatory, electives };
 	}
 
-	$: reorganizedTeachings = reorganizeTeachings(data.degree);
+	let reorganizedTeachings = $derived(reorganizeTeachings(data.degree));
 </script>
 
 <svelte:head>
@@ -67,10 +67,10 @@
 		</div>
 
 		<div class="navbar-end">
-			{#if login != null}
-				{#await login then login}
+			{#if loginState != null}
+				{#await loginState then login}
 					{#if 'error' in login}
-						<a class="btn btn-square btn-ghost" href={getLoginUrl($page.url)}> Login </a>
+						<a class="btn btn-square btn-ghost" href={getLoginUrl(page.url)}> Login </a>
 					{:else}
 						<img src={login.avatarUrl} alt="User avatar" class="w-10 rounded-xl" />
 					{/if}

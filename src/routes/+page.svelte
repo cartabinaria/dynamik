@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { Degree } from '$lib/teachings';
-	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
 	import { browser } from '$app/environment';
 
-	export let data: {
-		degrees: Degree[];
-	};
+	import type { Degree } from '$lib/teachings';
+	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+
+	let { data }: { data: { degrees: Degree[] } } = $props();
 </script>
 
 <svelte:head>
@@ -36,7 +35,7 @@
 			</p>
 			<button
 				class="text-content hover:text-error focus:outline-none"
-				on:click={() => setBannerClosed()}
+				onclick={() => setBannerClosed()}
 				aria-label="Chiudi banner"
 			>
 				<span class="text-xl icon-[akar-icons--x-small]"></span>

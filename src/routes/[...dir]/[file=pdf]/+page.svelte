@@ -2,9 +2,9 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
 	let iframe: HTMLIFrameElement;
 	onMount(() => {
@@ -15,10 +15,10 @@
 		const part = url.split('/');
 		return part[part.length - 1].split('?')[0];
 	}
-	$: title = genTitle(data.url);
+	let title = $derived(genTitle(data.url));
 
-	function genIframeUrl(baseUrl: string) {
-		const params = $page.url.searchParams;
+	function genIframeUrl(baseUrl: string, pageUrl: URL) {
+		const params = pageUrl.searchParams;
 
 		if (params.has('page')) {
 			const pageParam = params.get('page');
@@ -31,7 +31,7 @@
 
 		return baseUrl;
 	}
-	$: iframeUrl = genIframeUrl(data.url);
+	let iframeUrl = $derived(genIframeUrl(data.url, page.url));
 </script>
 
 <svelte:head>
@@ -39,7 +39,7 @@
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<Breadcrumbs url={$page.url} borderRadius={null} />
+<Breadcrumbs url={page.url} borderRadius={null} />
 
 <iframe bind:this={iframe} title="Embedded resource" src={iframeUrl} class="h-full w-full"></iframe>
 

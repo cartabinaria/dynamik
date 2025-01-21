@@ -7,7 +7,7 @@
 	const WORKFLOW_URL = (project: string, workflow: string) =>
 		`https://github.com/cartabinaria/${project}/actions/workflows/${workflow}.yaml`;
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 </script>
 
 <main class="md:container md:m-auto p-4">

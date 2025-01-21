@@ -2,20 +2,17 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
+	let title = $derived.by(() => {
+		const part = data.url.split('/');
+		return part[part.length - 1].split('?')[0];
+	});
 
 	let iframe: HTMLIFrameElement;
 	onMount(() => {
 		// Focus the iframe
 		iframe.contentWindow?.focus();
 	});
-
-	$: title = getTitle(data.url);
-
-	function getTitle(url: string) {
-		const part = url.split('/');
-		return part[part.length - 1].split('?')[0];
-	}
 </script>
 
 <svelte:head>
