@@ -3,7 +3,7 @@
 	import type { PageData } from './$types';
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
-	import { init as tocInit } from 'tocbot';
+	import tocbot from 'tocbot';
 
 	let { data }: { data: PageData } = $props();
 
@@ -21,7 +21,7 @@
 			throwOnError: false
 		});
 		// build the table of contents by finding all the headings
-		tocInit({
+		tocbot.init({
 			tocSelector: '#toc',
 			contentSelector: '#markdown',
 			headingSelector: 'h2, h3, h4',
