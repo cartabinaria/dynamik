@@ -53,7 +53,7 @@
 </svelte:head>
 
 <div class="max-w-5xl p-4 mx-auto">
-	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-sm px-5 mb-5">
+	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-xs px-5 mb-5">
 		<div class="navbar-start flex items-center">
 			<a href="/" class="btn btn-outline" title="Home" aria-label="Home">
 				<span class="icon-[ic--round-home]"></span>

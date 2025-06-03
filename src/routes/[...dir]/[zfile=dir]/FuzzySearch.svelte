@@ -68,7 +68,7 @@
 <label for="my-modal" class="modal cursor-pointer" role="search">
 	<label class="modal-box relative p-2">
 		<input
-			class="input input-ghost w-full focus:outline-none focus:border-0 mb-0"
+			class="input input-ghost w-full focus:outline-hidden focus:border-0 mb-0"
 			type="text"
 			placeholder="Search..."
 			bind:this={queryInput}

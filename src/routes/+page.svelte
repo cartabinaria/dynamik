@@ -34,7 +34,7 @@
 				></span>
 			</p>
 			<button
-				class="text-content hover:text-error focus:outline-none"
+				class="text-content hover:text-error focus:outline-hidden"
 				onclick={() => setBannerClosed()}
 				aria-label="Chiudi banner"
 			>
@@ -74,7 +74,7 @@
 			</p>
 		</div>
 
-		<ul class="menu p-2 text-lg mt-8">
+		<ul class="menu p-2 text-lg mt-8 w-full">
 			{#each data.degrees as degree}
 				{#if degree.teachings != null}
 					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
@@ -91,7 +91,7 @@
 			</div>
 		</ul>
 
-		<div class="alert alert-warning mx-4 my-8 w-full sm:mx-auto" role="alert">
+		<div class="alert alert-warning md:mx-4 md:my-8 grow mx-2 sm:mx-auto" role="alert">
 			<span class="icon-[ph--hand-palm-fill] text-4xl"></span>
 			<div>
 				<p class="block font-bold">
