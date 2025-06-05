@@ -63,7 +63,7 @@
 	let title = $derived(genTitle(urlParts));
 </script>
 
-<div class="navbar flex bg-base-200 shadow-sm px-5 {borderRadius}">
+<div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
 		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
 			<span
@@ -101,7 +101,7 @@
 	<div class="navbar-end">
 		<div class="flex flex-1 justify-end">
 			<a
-				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost flex-shrink-0 w-8"
+				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
 				aria-label="GitHub Repository"
 				href={editUrls.github_repo}
 			>

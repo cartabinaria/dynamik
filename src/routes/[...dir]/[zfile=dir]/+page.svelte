@@ -131,7 +131,9 @@
 		</button>
 	</div>
 
-	<div class="grid gap-5 grid-cols-dir md:grid-cols-dir-full mx-4 text-lg">
+	<div
+		class="grid gap-5 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] mx-4 text-lg"
+	>
 		{#if data.manifest.directories != null}
 			{@const directories = data.manifest.directories.sort((a, b) => a.name.localeCompare(b.name))}
 			{#if !reverseMode}

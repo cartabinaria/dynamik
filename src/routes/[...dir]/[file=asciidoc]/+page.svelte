@@ -36,7 +36,7 @@
 	></script>
 </svelte:head>
 
-<main class="container m-auto grid gap-4 grid-cols-[4fr,1fr]">
+<main class="container m-auto grid gap-4 grid-cols-[4fr_1fr]">
 	<section class="prose m-auto" id="markdown" bind:this={docContainer} role="document"></section>
 	<section class="prose" id="toc" role="contentinfo"></section>
 </main>
