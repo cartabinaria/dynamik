@@ -5,13 +5,9 @@
 
 @plugin 'daisyui';
 
-@plugin "daisyui" {
-	themes: halloween, autumn, dracula;
-}
-
 @plugin "daisyui/theme" {
-	name: 'cartabinaria_dark';
-	default: true;
+	name: 'dark';
+	default: true; /* set as default */
 	prefersdark: true;
 
 	--color-primary: '#EA8C55';
@@ -24,9 +20,8 @@
 }
 
 @plugin "daisyui/theme" {
-	name: 'cartabinaria_light';
+	name: 'light';
 	default: true;
-	prefersdark: false;
 
 	--color-secondary: '#971327';
 	--color-primary: '#EA8C55';
@@ -35,6 +30,11 @@
 	--color-base-100: '#F1FAEE';
 	--color-neutral: '#DBE3D8';
 }
+
+@plugin "daisyui" {
+	themes: halloween, autumn, dracula;
+}
+
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
