@@ -55,7 +55,7 @@
 		"shiki": "^3.6.0",
 		"svelte": "^5.33.2",
 		"svelte-check": "^4.2.1",
-		"svelte-eslint-parser": "^0.43.0",
+		"svelte-eslint-parser": "^1.2.0",
 		"svelte-local-storage-store": "^0.6.4",
 		"tailwindcss": "^4.1.8",
 		"tocbot": "^4.36.3",
