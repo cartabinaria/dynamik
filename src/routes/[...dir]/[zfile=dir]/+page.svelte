@@ -9,8 +9,10 @@
 	import FuzzySearch from './FuzzySearch.svelte';
 
 	import type { PageData } from './$types';
+	import type { StatikEntry } from '$lib/api';
 
 	let { data }: { data: PageData } = $props();
+	let { manifest } = $derived(data);
 
 	function kebabToTitle(str: string) {
 		return str
@@ -92,16 +94,28 @@
 	let degree = $derived(guessDegree(urlParts[0]));
 
 	// Done file status
-	let isDone = $derived(anyFileDone(data.manifest.files?.map((f) => f.url) ?? []));
+	let isDone = $derived(anyFileDone(manifest.files?.map((f) => f.url) ?? []));
 
 	function cleanDone() {
 		doneFiles.update((old) => {
-			data.manifest.files?.forEach((f) => {
+			manifest.files?.forEach((f) => {
 				old[f.url] = false;
 			});
 			return old;
 		});
 	}
+
+	const prepareForDisplay = (statikEntries: StatikEntry[]) => {
+		const sortedEntries = statikEntries.sort((a, b) => a.name.localeCompare(b.name));
+		if (reverseMode) {
+			return sortedEntries.reverse();
+		} else {
+			return sortedEntries;
+		}
+	};
+
+	let directories = $derived(prepareForDisplay(data.manifest.directories ?? []));
+	let files = $derived(prepareForDisplay(data.manifest.files ?? []));
 </script>
 
 <svelte:head>
@@ -134,29 +148,15 @@
 	<div
 		class="grid gap-5 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] mx-4 text-lg"
 	>
-		{#if data.manifest.directories != null}
-			{@const directories = data.manifest.directories.sort((a, b) => a.name.localeCompare(b.name))}
-			{#if !reverseMode}
-				{#each directories.reverse() as dir}
-					<Line data={dir} />
-				{/each}
-			{:else}
-				{#each directories as dir}
-					<Line data={dir} />
-				{/each}
-			{/if}
+		{#if directories != null}
+			{#each directories as dir (dir.url)}
+				<Line data={dir} />
+			{/each}
 		{/if}
-		{#if data.manifest.files != null}
-			{@const files = data.manifest.files.sort((a, b) => a.name.localeCompare(b.name))}
-			{#if !reverseMode}
-				{#each files.reverse() as file}
-					<Line data={file} />
-				{/each}
-			{:else}
-				{#each files as file}
-					<Line data={file} />
-				{/each}
-			{/if}
+		{#if files != null}
+			{#each files as file (file.url)}
+				<Line data={file} />
+			{/each}
 		{/if}
 	</div>
 </main>

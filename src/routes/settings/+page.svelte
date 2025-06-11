@@ -25,7 +25,7 @@
 			<label for="theme-select" class="label-text font-medium">Theme</label>
 			<select id="theme-select" class="select select-primary w-full" bind:value={$settings.theme}>
 				<option disabled selected>{$settings.theme}</option>
-				{#each $themes as theme}
+				{#each $themes as theme (theme)}
 					<option>{theme}</option>
 				{/each}
 			</select>
@@ -66,7 +66,7 @@
 				bind:value={$settings.defaultCourse}
 			>
 				<option value={DEFAULT_COURSE_KEY}>- No preference - </option>
-				{#each DEGREES as course}
+				{#each DEGREES as course (course.id)}
 					<option value={course.id}>{course.name}</option>
 				{/each}
 			</select>
