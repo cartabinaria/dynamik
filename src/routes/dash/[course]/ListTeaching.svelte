@@ -45,7 +45,7 @@
 {/snippet}
 
 <ul class="menu p-2">
-	{#each years as year}
+	{#each years as year (year.year)}
 		{#if year.teachings.length > 0}
 			{@const type = year.year != 0 ? year.year.toString() + ' anno' : 'Generali'}
 			<li class="menu-title">
@@ -53,7 +53,7 @@
 			</li>
 			<div class="divider mt-0"></div>
 			<div class="flex flex-row flex-wrap">
-				{#each year.teachings as t}
+				{#each year.teachings as t (t.name)}
 					{#if t}
 						{@render teaching(t)}
 					{/if}

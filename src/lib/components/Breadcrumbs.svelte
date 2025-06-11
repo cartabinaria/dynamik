@@ -91,7 +91,7 @@
 						</a>
 					</li>
 				{/if}
-				{#each urlParts as part}
+				{#each urlParts as part, i (i)}
 					{@const href = getPartHref(path, part) + '?' + searchParams}
 					<li><a {href} class="flex flex-wrap whitespace-normal">{part}</a></li>
 				{/each}

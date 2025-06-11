@@ -80,7 +80,7 @@
 			<div class="divider mt-0 mb-2"></div>
 
 			<ul class="menu p-2" bind:this={resultList}>
-				{#each results as result, i}
+				{#each results as result, i (result.item.path)}
 					{@const href = getFuzzyHref(result.item)}
 					<li>
 						<a {href} class:focus={i === focusIdx} class="flex">
