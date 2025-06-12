@@ -81,7 +81,7 @@
 	<ListTeaching
 		years={reorganizedTeachings.mandatory}
 		activeYears={namesToTeachings(activeYears)}
-		title={''}
+		title=""
 		from={data.degree.id}
 	/>
 	<ListTeaching

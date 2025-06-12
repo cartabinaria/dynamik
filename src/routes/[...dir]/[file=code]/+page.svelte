@@ -19,22 +19,28 @@
 		return selectedLangs[0].id;
 	});
 
+	let formattedCode = $state('');
+
 	$effect(() => {
 		if (selectedLang == null) return;
 
 		codeToHtml(data.body, {
 			lang: selectedLang,
 			theme: 'dark-plus'
-		}).then((html) => {
-			container.innerHTML = html;
-		});
+		})
+			.then((html) => {
+				formattedCode = html;
+			})
+			.catch((error) => {
+				console.error('Error formatting code:', error);
+				formattedCode = `Error formatting code: ${error.message}`;
+			});
 	});
-
-	let container: HTMLElement;
 </script>
 
-<div bind:this={container}>
-	<pre>{data.body}</pre>
+<div>
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	<pre>{@html formattedCode}</pre>
 </div>
 
 <style>
