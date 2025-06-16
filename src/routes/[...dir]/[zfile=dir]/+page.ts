@@ -1,3 +1,9 @@
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+// SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { getFuzzy, getManifest } from '$lib/api';
 import { DEGREES, TEACHINGS } from '$lib/teachings';
 import type { PageLoad } from './$types';

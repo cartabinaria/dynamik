@@ -1,3 +1,10 @@
+// SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+// SPDX-FileCopyrightText: 2024 Stefano Volpe <stefano.volpe@student.uva.nl>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import nodeAdapter from '@sveltejs/adapter-node';
 

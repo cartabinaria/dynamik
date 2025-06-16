@@ -1,3 +1,14 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Stefano Volpe <stefano.volpe@student.uva.nl>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca.tagliavini5@studio.unibo.it>
+SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { teachingsFilter } from '$lib/teachings';

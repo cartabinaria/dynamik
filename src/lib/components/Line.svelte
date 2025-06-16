@@ -1,3 +1,14 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
