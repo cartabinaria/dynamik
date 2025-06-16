@@ -1,3 +1,15 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+SPDX-FileCopyrightText: 2023 - 2024 Samuele Musiani <samu@teapot.ovh>
+SPDX-FileCopyrightText: 2023 - 2025 VaiTon <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { page } from '$app/state';
 

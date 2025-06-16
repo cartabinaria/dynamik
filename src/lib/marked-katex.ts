@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+// SPDX-FileCopyrightText: 2023 VaiTon <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // taken from: https://github.com/UziTech/marked-katex-extension/issues/42#issuecomment-1445240740
 import katex, { type KatexOptions } from 'katex';
 import type { TokenizerAndRendererExtension, Tokens } from 'marked';

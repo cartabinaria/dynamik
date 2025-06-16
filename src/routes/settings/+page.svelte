@@ -1,3 +1,12 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2025 VaiTon <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+SPDX-FileCopyrightText: 2023 Angelo Huang <63465494+Flecart@users.noreply.github.com>
+SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { derived } from 'svelte/store';
 	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';

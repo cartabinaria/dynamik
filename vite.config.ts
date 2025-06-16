@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+// SPDX-FileCopyrightText: 2023 VaiTon <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { sveltekit } from '@sveltejs/kit/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { defineConfig } from 'vite';

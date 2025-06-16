@@ -1,3 +1,14 @@
+// SPDX-FileCopyrightText: 2023 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+// SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
+// SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+// SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+// SPDX-FileCopyrightText: 2023 VaiTon <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+// SPDX-FileCopyrightText: 2023 manuandru <34137244+manuandru@users.noreply.github.com>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { getManifest } from '$lib/api';
 import { filterAsync } from './filter';
 

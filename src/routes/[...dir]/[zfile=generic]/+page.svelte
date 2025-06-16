@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2025 VaiTon <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+SPDX-FileCopyrightText: 2024 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
