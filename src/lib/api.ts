@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Luca <luca.tagliavini5@studio.unibo.it>
+// SPDX-FileCopyrightText: 2023 VaiTon <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { FUZZY_URL, STATIK_URL } from '$lib/const';
 
 export interface Statik extends Directory {

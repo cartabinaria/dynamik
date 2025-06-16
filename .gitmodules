@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2023 VaiTon <eyadlorenzo@gmail.com>
+# SPDX-FileCopyrightText: 2024 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 [submodule "src/config"]
 	path = src/config
 	url = https://github.com/cartabinaria/config.git

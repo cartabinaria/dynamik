@@ -1,3 +1,13 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <74602443+ali-benny@users.noreply.github.com>
+SPDX-FileCopyrightText: 2023 - 2024 VaiTon <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import type { Teaching } from '$lib/teachings';
 	import { base } from '$app/paths';
