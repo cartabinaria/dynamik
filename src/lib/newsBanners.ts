@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
+// SPDX-FileCopyrightText: 2024 Alice Benatti <alice17bee@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { persisted } from 'svelte-local-storage-store';
 import { derived } from 'svelte/store';
 

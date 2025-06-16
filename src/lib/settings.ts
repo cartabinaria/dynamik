@@ -1,3 +1,10 @@
+// SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+// SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { persisted } from 'svelte-local-storage-store';
 
 export const themes = ['halloween', 'autumn', 'dracula', 'light', 'dark'] as const;

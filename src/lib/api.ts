@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { FUZZY_URL, STATIK_URL } from '$lib/const';
 
 export type StatikEntry = {

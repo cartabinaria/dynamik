@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const UPDL_URL = import.meta.env.VITE_UPLD_URL;
 
 if (UPDL_URL == null) {

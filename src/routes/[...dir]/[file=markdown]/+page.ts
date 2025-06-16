@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { PageLoad } from './$types';
 import { ASSET_URL } from '$lib/const';
 import { marked } from 'marked';
