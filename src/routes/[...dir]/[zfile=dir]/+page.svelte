@@ -1,35 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
-	import Line from '$lib/components/Line.svelte';
-	import type { Degree, Year } from '$lib/teachings';
-	import { EDIT_URLS } from '$lib/const';
+	import { teachingsFilter, type Degree } from '$lib/teachings';
 	import { doneFiles, anyFileDone } from '$lib/todo-file';
 
-	import type { PageData } from './$types';
+	import Line from '$lib/components/Line.svelte';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import FuzzySearch from './FuzzySearch.svelte';
-	export let data: PageData;
 
-	let fuzzy: FuzzySearch;
+	import type { PageData } from './$types';
 
-	let editUrls = EDIT_URLS($page.url.pathname);
-
-	// -- breadcrumbs --
-	let breadcrumbMobile = true;
-	function mobileBreadcrumb() {
-		breadcrumbMobile = !breadcrumbMobile;
-	}
-
-	$: urlParts = $page.url.pathname
-		.split('/')
-		.slice(1)
-		.filter((p) => p !== ''); // otherwise we get an empty string at the end
-
-	const getPartHref = (part: string) =>
-		$page.url.pathname
-			.split('/')
-			.slice(0, $page.url.pathname.split('/').indexOf(part) + 1)
-			.join('/');
+	let { data }: { data: PageData } = $props();
 
 	function kebabToTitle(str: string) {
 		return str
@@ -58,10 +39,19 @@
 		}
 	}
 
-	$: title = genTitle(urlParts);
+	let fuzzy: FuzzySearch;
+
+	let urlParts = $derived(
+		page.url.pathname
+			.split('/')
+			.slice(1)
+			.filter((p) => p !== '') // otherwise we get an empty string at the end
+	);
+
+	let title = $derived(genTitle(urlParts));
 
 	// --- Sorting ---
-	let reverseMode = true; // partiamo in ordine A-Z
+	let reverseMode = $state(true); // partiamo in ordine A-Z
 
 	/**
 	 * Inverte l'ordine di visualizzazione delle risorse
@@ -70,25 +60,16 @@
 		reverseMode = !reverseMode;
 	}
 
-	// Computes either all mandatory teachings or elective teachings for a year
-	function getTeachings(y: Year, electives: boolean): string[] | undefined {
-		if (!y) return undefined;
-		const studyDiagram = y.teachings;
-		if (!studyDiagram) return undefined;
-		return electives ? studyDiagram.electives : studyDiagram.mandatory;
-	}
-
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
-		const years = degree.years;
-		if (!years) return false;
-		return !!years.find((y) => getTeachings(y, elective)?.includes(teachingName));
+		if (degree.teachings != null) return false;
+		return teachingsFilter(degree, undefined, !elective).includes(teachingName);
 	}
 
 	// Skims through degrees looking for a given teaching
 	function skimDegrees(teachingName: string, electives: boolean): string | undefined {
 		const degree = data.degrees.find((d) => isInDegree(teachingName, d, electives));
-		return degree ? degree.id : undefined;
+		return degree != null ? degree.id : undefined;
 	}
 
 	// Picks a containing degree for this teaching
@@ -100,18 +81,18 @@
 		if (teaching?.degree) return teaching.degree;
 		// Plan C: any degree featuring this teaching as mandatory
 		const mandatoryDegree = skimDegrees(teachingName, false);
-		if (mandatoryDegree) return mandatoryDegree;
+		if (mandatoryDegree != null) return mandatoryDegree;
 		// Plan D: any degree featuring this teaching as an elective
 		const electiveDegree = skimDegrees(teachingName, true);
-		if (electiveDegree) return electiveDegree;
+		if (electiveDegree != null) return electiveDegree;
 		// Plan E: give up
 		return null;
 	}
 
-	$: degree = guessDegree(urlParts[0]);
+	let degree = $derived(guessDegree(urlParts[0]));
 
 	// Done file status
-	$: isDone = anyFileDone(data.manifest.files?.map((f) => f.url) ?? []);
+	let isDone = $derived(anyFileDone(data.manifest.files?.map((f) => f.url) ?? []));
 
 	function cleanDone() {
 		doneFiles.update((old) => {
@@ -129,85 +110,31 @@
 </svelte:head>
 
 <main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<div class="navbar flex bg-base-200 rounded-box shadow-sm px-5 mb-5">
-		<div class="sm:hidden flex justify-start items-center">
-			<button class="sm:hidden flex btn btn-ghost btn-sm" on:click={mobileBreadcrumb}>
-				<span
-					class="sm:hidden flex text-2xl items-center text-accent icon-[solar--folder-path-connect-bold-duotone]"
-				>
-				</span>
-				<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
-			</button>
-		</div>
-		<div class="navbar min-h-0 p-0 justify-start items-center">
-			<div
-				class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
-				class:hidden={breadcrumbMobile}
-			>
-				<ul>
-					<li>
-						<a class="ml-1 flex items-center" href="/">
-							<span class="text-xl icon-[akar-icons--home-alt1]"></span>
-						</a>
-					</li>
-					{#if degree}
-						<li>
-							<a class="flex items-center" href={'/dash/' + degree}>
-								<span class="text-xl icon-[ic--round-school]"></span>
-							</a>
-						</li>
-					{/if}
-					{#each urlParts as part}
-						{@const href = getPartHref(part) + '?' + $page.url.searchParams}
-						<li><a {href} class="flex flex-wrap whitespace-normal">{part}</a></li>
-					{/each}
-				</ul>
-			</div>
-		</div>
-		<div class="navbar-end">
-			<div class="flex flex-1 justify-end">
-				<a
-					class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost flex-shrink-0 w-8"
-					href={editUrls.github_repo}
-				>
-					<span class="text-2xl icon-[akar-icons--github-fill]"></span>
-				</a>
-			</div>
-		</div>
-		<div class="flex flex-1 justify-end mr-2">
-			<button
-				title="Search"
-				class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
-				on:click|preventDefault={() => fuzzy.show()}
-			>
-				<span class="text-primary icon-[akar-icons--search] align-middle"></span>
-				<span class="hidden md:inline">
-					<kbd class="kbd-sm">Ctrl</kbd>+
-					<kbd class="kbd-sm">K</kbd>
-				</span>
-			</button>
-		</div>
-	</div>
-	<div class="flex flex-1 justify-start mr-4 mb-3">
+	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
+
+	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
 				class="lg:ml-2 p-1 flex mr-2 items-center"
-				on:click={cleanDone}
+				onclick={cleanDone}
 				title="Clean all done files in this page"
+				aria-label="Clean all done files in this page"
 			>
 				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
-		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" on:click={toggleReverse}>
+		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" onclick={toggleReverse}>
 			Nome
 			<span class="ms-2 text-xl icon-[solar--sort-vertical-bold-duotone]" class:flip={reverseMode}
 			></span>
 		</button>
 	</div>
 
-	<div class="grid gap-5 grid-cols-dir md:grid-cols-dir-full mx-4 text-lg">
-		{#if data.manifest.directories}
+	<div
+		class="grid gap-5 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] mx-4 text-lg"
+	>
+		{#if data.manifest.directories != null}
 			{@const directories = data.manifest.directories.sort((a, b) => a.name.localeCompare(b.name))}
 			{#if !reverseMode}
 				{#each directories.reverse() as dir}
@@ -219,7 +146,7 @@
 				{/each}
 			{/if}
 		{/if}
-		{#if data.manifest.files}
+		{#if data.manifest.files != null}
 			{@const files = data.manifest.files.sort((a, b) => a.name.localeCompare(b.name))}
 			{#if !reverseMode}
 				{#each files.reverse() as file}

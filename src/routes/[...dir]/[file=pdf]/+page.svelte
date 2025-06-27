@@ -412,7 +412,7 @@
 					{/if}
 				</div>
 			</div>
-			<!-- 
+			<!--
 			{#if showReplyBoxFor == index}
 				<div class="fixed bottom-0 w-full z-10"></div>
 			{/if} -->

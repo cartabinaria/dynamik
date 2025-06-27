@@ -4,49 +4,32 @@
 	import type { File, Directory } from '$lib/api';
 	import { formatDate } from '$lib/date';
 	import { getDoneStatus } from '$lib/todo-file';
+	import { GH_PAGES_BASE_URL } from '$lib/const';
 
-	export let data: File | Directory;
+	let { data }: { data: File | Directory } = $props();
 	// export let customUrl: string | undefined = undefined;
 
-	$: base = $page.url.pathname.split('?')[0];
-	$: isFile = 'mime' in data;
-	$: external = 'mime' in data ? data.mime === 'text/statik-link' : false;
-
 	/**
-	 * Check if the statik url for the data uses an external link to 'csunibo.github.io'
+	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
 	 *
 	 * This function is especially created for '/libri/'.
 	 */
 	function isUsingExternalBase(data: File | Directory) {
-		if (data.url.startsWith('https://csunibo.github.io')) {
+		if (data.url.startsWith(GH_PAGES_BASE_URL)) {
 			return false;
 		}
 		return true;
 	}
 
-	let isSpinning = false;
-	async function downloadFile() {
-		isSpinning = true;
-		const url = data.url;
-		const response = await fetch(url);
-		const blob = await response.blob();
-		const urlObject = window.URL.createObjectURL(new Blob([blob]));
-		const a = document.createElement('a');
-		a.href = urlObject;
-		a.download = data.name;
-		document.body.appendChild(a);
-		a.click();
-		a.remove();
-		isSpinning = false;
-		URL.revokeObjectURL(urlObject);
-	}
-
-	$: isDone = getDoneStatus(data.url);
-
 	function splitDate(date: string) {
 		const [day, month, year, time] = date.split(' ');
 		return { day, month, year, time };
 	}
+
+	let base = $derived($page.url.pathname.split('?')[0]);
+	let isFile = $derived('mime' in data);
+	let external = $derived('mime' in data ? data.mime === 'text/statik-link' : false);
+	let isDone = $derived(getDoneStatus(data.url));
 </script>
 
 <div class="contents">
@@ -65,9 +48,10 @@
 			{:else if isFile}
 				<button
 					class="flex text-xl mr-2 align-center"
-					on:click={() => isDone.toggle()}
+					onclick={() => isDone.toggle()}
 					type="button"
 					title="Click to mark as done"
+					aria-label="Click to mark as done"
 				>
 					<span
 						class="text-bold icon-[solar--file-bold-duotone]"
@@ -101,15 +85,17 @@
 			{#if isFile}
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}
-					<button class="flex text-lg ml-3" on:click={downloadFile}>
-						<span
-							class="text-accent text-3xl {isSpinning
-								? 'icon-[eos-icons--loading]'
-								: 'icon-[solar--download-square-bold]'}"
-						></span>
-					</button>
+					<a
+						aria-label="Download"
+						class="flex text-lg ml-3"
+						href={GH_PAGES_BASE_URL + base + '/' + data.name}
+						download
+						target="_blank"
+					>
+						<span class="text-accent text-3xl icon-[solar--download-square-bold]"></span>
+					</a>
 				{:else}
-					<button disabled class="flex text-lg ml-3" on:click={downloadFile}>
+					<button disabled class="flex text-lg ml-3" aria-label="Download">
 						<span class="text-neutral text-3xl icon-[solar--download-square-bold]"></span>
 					</button>
 				{/if}

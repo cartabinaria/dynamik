@@ -10,21 +10,22 @@ export type Teaching = {
 	degree?: string;
 };
 
-export type YearStudyDiagram = {
-	mandatory?: string[];
-	electives?: string[];
-};
-
 export type Year = {
 	year: number;
 	chat?: string;
-	teachings: YearStudyDiagram;
+};
+
+export type DegreeTeaching = {
+	name: string;
+	year?: number;
+	mandatory: boolean;
 };
 
 export type Degree = {
 	id: string;
 	name: string;
 	icon: string;
+	teachings?: DegreeTeaching[];
 	years?: Year[];
 	chat?: string;
 };
@@ -42,11 +43,18 @@ export async function isTeachingActive(fetch: typeof window.fetch, teaching: Tea
 	return isTeachingActiveFromName(fetch, teaching.url);
 }
 
-export function yearToFlatTeachings(y: Year): string[] {
+export function teachingsFilter(d: Degree, year?: number, mandatory?: boolean): string[] {
 	let res: string[] = [];
-	const studyDiagram = y.teachings;
-	if (studyDiagram.mandatory) res = res.concat(studyDiagram.mandatory);
-	if (studyDiagram.electives) res = res.concat(studyDiagram.electives);
+
+	d.teachings?.forEach((x) => {
+		if (
+			(year == undefined || (x.year && x.year == year) || (!x.year && year == 0)) &&
+			(mandatory == undefined || x.mandatory == mandatory)
+		) {
+			res = res.concat(x.name);
+		}
+	});
+
 	return res;
 }
 
@@ -54,9 +62,9 @@ export async function getActiveTeachings(
 	fetch: typeof window.fetch,
 	degree: Degree
 ): Promise<string[]> {
-	const years = degree.years;
+	const years = degree.teachings;
 	if (!years) return [];
-	const allTeachings = years.flatMap(yearToFlatTeachings);
+	const allTeachings = teachingsFilter(degree);
 	const activeTeachings = await filterAsync(allTeachings, (t) =>
 		isTeachingActiveFromName(fetch, t)
 	);

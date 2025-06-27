@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	$: error = $page.error;
+	import { page } from '$app/state';
+
+	let { error, status } = $derived(page);
 </script>
 
 <div class="flex justify-center h-screen items-center">
 	<div class="text-center">
-		<h1 class="text-5xl mb-6 font-mono">{$page.status}</h1>
+		<h1 class="text-5xl mb-6 font-mono">{status}</h1>
 
 		<p class="text-xl font-mono text-base-content">
 			{#if error == null}
@@ -15,7 +16,13 @@
 			{/if}
 		</p>
 
-		<button class="btn btn-ghost mt-10" on:click|preventDefault={() => history.back()}>
+		<button
+			class="btn btn-ghost mt-10"
+			onclick={(e) => {
+				e.preventDefault();
+				history.back();
+			}}
+		>
 			Go back to previous page
 		</button>
 	</div>

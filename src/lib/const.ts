@@ -1,6 +1,6 @@
-const ORG = 'csunibo';
+const ORG = 'cartabinaria';
 export const RISORSE_BASE_URL =
-	import.meta.env.VITE_RISORSE_BASE_URL || 'https://risorse.students.cs.unibo.it';
+	import.meta.env.VITE_RISORSE_BASE_URL || 'https://dynamik.vercel.app/';
 export const GH_PAGES_BASE_URL = `https://${ORG}.github.io`;
 const GH_BASE_URL = `https://github.com/${ORG}`;
 const GH_DEV_BASE_URL = `https://github.dev/${ORG}`;
@@ -19,8 +19,11 @@ export const EDIT_URLS = (path: string) => {
 };
 
 // const POLLEG_BASE_URL = 'https://polleg.students.cs.unibo.it`'
-const POLLEG_BASE_URL = 'http://localhost:3000';
+const POLLEG_BASE_URL = import.meta.env.VITE_POLLEG_BASE_URL || 'https://polleg.students.cs.unibo.it';
 export const DOCUMENT_URL = (id: string) => `${POLLEG_BASE_URL}/documents/${id}`;
 export const QUESTION_URL = (id: number) => `${POLLEG_BASE_URL}/questions/${id}`;
 export const ANSWER_URL = (id: number) => `${POLLEG_BASE_URL}/answers/${id}`;
 export const VOTE_URL = (id: number) => `${ANSWER_URL(id)}/vote`;
+
+
+export const MAX_YEARS_FOR_DEGREE = 3;

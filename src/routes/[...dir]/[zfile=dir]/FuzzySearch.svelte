@@ -3,24 +3,21 @@
 	import type { Fuzzy, FuzzyFile } from '$lib/api';
 	import Fuse from 'fuse.js';
 
-	export let data: Fuzzy;
+	let { data }: { data: Fuzzy } = $props();
 
 	/** If the search modal is visible */
-	let visible = false;
+	let visible = $state(false);
+	let query = $state('');
 
-	$: fuse = new Fuse(data, { keys: ['name'] });
-	let query = '';
-	$: results = fuse ? fuse.search(query, { limit: 7 }) : [];
+	let fuse = $derived(new Fuse(data, { keys: ['name'] }));
+	let results = $derived(fuse ? fuse.search(query, { limit: 7 }) : []);
 
-	let focusIdx = 0;
-	$: {
-		// every time the search query changes, reset the active element
-		query;
-		focusIdx = 0;
-	}
+	let focusIdx = $state(0);
+	const resetFocus = () => (focusIdx = 0);
 
-	let queryInput: HTMLInputElement;
+	// svelte-ignore non_reactive_update
 	let resultList: HTMLUListElement;
+	let queryInput: HTMLInputElement;
 
 	export function show() {
 		visible = !visible;
@@ -53,7 +50,7 @@
 		} else if (e.key === 'ArrowUp' && resultList) {
 			e.preventDefault();
 			focusIdx = focusIdx > 0 ? focusIdx - 1 : 0;
-		} else if (e.key === 'Enter' && resultList) {
+		} else if (e.key === 'Enter' && resultList != null) {
 			e.preventDefault();
 			const activeEL = resultList.children[focusIdx] as HTMLLIElement;
 			const aEl = activeEL.querySelector('a') as HTMLAnchorElement;
@@ -64,18 +61,19 @@
 	}
 </script>
 
-<svelte:body on:keydown={keydown} />
+<svelte:body onkeydown={keydown} />
 
 <input type="checkbox" id="my-modal" class="modal-toggle" checked={visible} />
 
 <label for="my-modal" class="modal cursor-pointer" role="search">
 	<label class="modal-box relative p-2">
 		<input
-			class="input input-ghost w-full focus:outline-none focus:border-0 mb-0"
+			class="input input-ghost w-full focus:outline-hidden focus:border-0 mb-0"
 			type="text"
 			placeholder="Search..."
 			bind:this={queryInput}
 			bind:value={query}
+			oninput={resetFocus}
 		/>
 
 		{#if results.length !== 0}
