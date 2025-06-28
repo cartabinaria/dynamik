@@ -2,10 +2,13 @@
 	import { base } from '$app/paths';
 	import { browser } from '$app/environment';
 
-	import type { Degree } from '$lib/teachings';
 	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+	import UserBadge from '$lib/components/UserBadge.svelte';
 
-	let { data }: { data: { degrees: Degree[] } } = $props();
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
+	let { degrees, user } = $derived(data);
 </script>
 
 <svelte:head>
@@ -44,6 +47,10 @@
 	</div>
 {/if}
 
+<div class="flex items-center justify-end p-2">
+	<UserBadge user={data.user} />
+</div>
+
 {#snippet line(name: string, href: string, icon: string)}
 	<li>
 		<a class="py-8 justify-center text-center border-base-content border-2 mb-4" {href}>
@@ -75,7 +82,7 @@
 		</div>
 
 		<ul class="menu p-2 text-lg mt-8 w-full">
-			{#each data.degrees as degree}
+			{#each degrees as degree (degree.id)}
 				{#if degree.teachings != null}
 					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
 				{:else}
