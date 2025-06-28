@@ -3,7 +3,9 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			github_access_token?: string;
+		}
 		// interface PageData {}
 		// interface Platform {}
 	}

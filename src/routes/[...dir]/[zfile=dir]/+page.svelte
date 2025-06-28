@@ -110,7 +110,12 @@
 </svelte:head>
 
 <main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
+	<Breadcrumbs
+		{degree}
+		url={page.url}
+		onfuzzy={() => fuzzy.show()}
+		uploadUrl={page.url.pathname + '/upload'}
+	/>
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
@@ -137,11 +142,11 @@
 		{#if data.manifest.directories != null}
 			{@const directories = data.manifest.directories.sort((a, b) => a.name.localeCompare(b.name))}
 			{#if !reverseMode}
-				{#each directories.reverse() as dir}
+				{#each directories.reverse() as dir (dir.path)}
 					<Line data={dir} />
 				{/each}
 			{:else}
-				{#each directories as dir}
+				{#each directories as dir (dir.path)}
 					<Line data={dir} />
 				{/each}
 			{/if}
@@ -149,11 +154,11 @@
 		{#if data.manifest.files != null}
 			{@const files = data.manifest.files.sort((a, b) => a.name.localeCompare(b.name))}
 			{#if !reverseMode}
-				{#each files.reverse() as file}
+				{#each files.reverse() as file (file.name)}
 					<Line data={file} />
 				{/each}
 			{:else}
-				{#each files as file}
+				{#each files as file (file.name)}
 					<Line data={file} />
 				{/each}
 			{/if}

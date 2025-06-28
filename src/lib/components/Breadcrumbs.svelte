@@ -6,9 +6,10 @@
 		degree?: string | null;
 		onfuzzy?: (e: Event) => void;
 		borderRadius?: string | null;
+		uploadUrl?: string | null;
 	};
 
-	let { url, degree, onfuzzy, borderRadius = 'rounded-box' }: Props = $props();
+	let { url, degree, onfuzzy, borderRadius = 'rounded-box', uploadUrl = null }: Props = $props();
 
 	let path = $derived(url.pathname);
 	let searchParams = $derived(url.searchParams);
@@ -99,7 +100,13 @@
 		</div>
 	</div>
 	<div class="navbar-end">
-		<div class="flex flex-1 justify-end">
+		<div class="flex flex-1 justify-end items-center gap-2">
+			{#if uploadUrl}
+				<a class="btn btn-primary btn-sm" href={uploadUrl} title="Upload a file">
+					<span class="icon-[mdi--upload]"></span>
+					Upload
+				</a>
+			{/if}
 			<a
 				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
 				aria-label="GitHub Repository"

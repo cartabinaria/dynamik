@@ -1,23 +1,20 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
-	import { getLoginUrl, getWhoAmI } from '$lib/upld';
+
 	import ListTeaching from './ListTeaching.svelte';
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
+	import UserBadge from '$lib/components/UserBadge.svelte';
 
-	let { data }: { data: PageData } = $props();
+	let { data }: PageProps = $props();
 
 	let activeYears: string[] = $state([]);
 
-	type LoginState = { username: string; name: string; avatarUrl: string } | { error: string };
-	let loginState: Promise<LoginState> | undefined = $state(undefined);
-
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		loginState = getWhoAmI(fetch);
 	});
 
 	function namesToTeachings(names: string[]): Teaching[] {
@@ -66,26 +63,28 @@
 			</h1>
 		</div>
 
-		<div class="navbar-end">
-			{#if loginState != null}
-				{#await loginState then login}
-					{#if 'error' in login}
-						<a class="btn btn-square btn-ghost" href={getLoginUrl(page.url)}> Login </a>
-					{:else}
-						<img src={login.avatarUrl} alt="User avatar" class="w-10 rounded-xl" />
-					{/if}
-				{/await}
+		<div class="navbar-end flex items-center gap-2">
+			{#if !data.user}
+				<a
+					class="btn btn-outline btn-sm"
+					href="/login?redirect={encodeURIComponent(page.url.pathname + page.url.search)}"
+				>
+					<span class="icon-[ic--round-login]"></span>
+					Login
+				</a>
+			{:else}
+				<UserBadge user={data.user} transparentBg={true} />
 			{/if}
 		</div>
 	</nav>
 	<ListTeaching
 		years={reorganizedTeachings.mandatory}
 		activeYears={namesToTeachings(activeYears)}
-		title={''}
+		title="Mandatory"
 		from={data.degree.id}
 	/>
 	<ListTeaching
-		title="facoltativi"
+		title="Electives"
 		years={reorganizedTeachings.electives}
 		activeYears={namesToTeachings(activeYears)}
 		from={data.degree.id}
