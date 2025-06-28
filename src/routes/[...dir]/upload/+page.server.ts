@@ -1,10 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import {
-	GITHUB_APP_ID,
-	GITHUB_APP_PRIVATE_KEY,
-	GITHUB_APP_INSTALLATION_ID
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { fetchRepoFolders, getUserInfo } from '$lib/server/github/githubApi';
 
 const GITHUB_OWNER = 'cartabinaria';
@@ -41,6 +37,10 @@ export const load: PageServerLoad = async ({ params, locals, fetch, url }) => {
 
 export const actions: Actions = {
 	default: async ({ request, locals, fetch }) => {
+		if (!env.GITHUB_APP_ID || !env.GITHUB_APP_PRIVATE_KEY || !env.GITHUB_APP_INSTALLATION_ID) {
+			error(500, 'GitHub App credentials are not configured');
+		}
+
 		const formData = await request.formData();
 		const repo = formData.get('repo') as string;
 		const folder = formData.get('folder') as string;
@@ -53,9 +53,9 @@ export const actions: Actions = {
 			throw error(400, 'Missing required fields');
 		}
 
-		const appId = GITHUB_APP_ID;
-		const privateKey = GITHUB_APP_PRIVATE_KEY?.replace(/\\n/g, '\n');
-		const installationId = GITHUB_APP_INSTALLATION_ID;
+		const appId = env.GITHUB_APP_ID;
+		const privateKey = env.GITHUB_APP_PRIVATE_KEY?.replace(/\\n/g, '\n');
+		const installationId = env.GITHUB_APP_INSTALLATION_ID;
 
 		if (!appId || !privateKey || !installationId) {
 			throw error(500, 'GitHub App credentials are not configured');
