@@ -14,7 +14,7 @@ export function setGithubTokens(
 	cookies.set(GITHUB_ACCESS_TOKEN_COOKIE, accessToken, {
 		path: '/',
 		httpOnly: true,
-		sameSite: 'lax',
+		sameSite: 'strict',
 		secure: true,
 		maxAge: 60 * 60 * 24 * 7, // 1 week
 		...(options || {})
@@ -23,7 +23,7 @@ export function setGithubTokens(
 		cookies.set(GITHUB_REFRESH_TOKEN_COOKIE, refreshToken, {
 			path: '/',
 			httpOnly: true,
-			sameSite: 'lax',
+			sameSite: 'strict',
 			secure: true,
 			maxAge: 60 * 60 * 24 * 30, // 30 days
 			...(options || {})
