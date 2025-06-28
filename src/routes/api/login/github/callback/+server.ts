@@ -19,6 +19,12 @@ export const GET = async ({ url, cookies, fetch }) => {
 		return new Response('Missing code or PKCE verifier', { status: 400 });
 	}
 
+	// Try to get redirect param from cookie or URL, and filter to prevent open redirect
+	let redirectTo = cookies.get('github_post_login_redirect') || url.searchParams.get('redirect') || '/';
+	if (redirectTo && !redirectTo.startsWith('/')) {
+		redirectTo = '/';
+	}
+
 	let tokenData;
 	try {
 		tokenData = await exchangeCodeForToken({
@@ -39,10 +45,12 @@ export const GET = async ({ url, cookies, fetch }) => {
 
 	// Clean up the PKCE verifier cookie
 	cookies.delete('github_code_verifier', { path: '/' });
+	// Clean up the redirect cookie if present
+	cookies.delete('github_post_login_redirect', { path: '/' });
 
 	// Store the GitHub access and refresh tokens as secure, HTTP-only cookies
 	setGithubTokens(cookies, tokenData.access_token, tokenData.refresh_token);
 
-	// Redirect to homepage
-	throw redirect(302, '/');
+	// Redirect to the intended page
+	throw redirect(302, redirectTo);
 };

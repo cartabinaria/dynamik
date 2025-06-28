@@ -9,10 +9,15 @@ import { fetchRepoFolders, getUserInfo } from '$lib/server/github/githubApi';
 
 const GITHUB_OWNER = 'cartabinaria';
 
-export const load: PageServerLoad = async ({ params, locals, fetch }) => {
+import { redirect } from '@sveltejs/kit';
+
+export const load: PageServerLoad = async ({ params, locals, fetch, url }) => {
+	if (!locals.github_access_token) {
+		throw redirect(302, `/login?redirect=${encodeURIComponent(url.pathname + url.search)}`);
+	}
 	const repo = params.dir?.split('/')[0] || '';
 	let repoContents: { path: string }[] = [];
-	if (repo && locals.github_access_token) {
+	if (repo) {
 		try {
 			repoContents = await fetchRepoFolders({
 				owner: GITHUB_OWNER,
@@ -20,8 +25,8 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
 				token: locals.github_access_token,
 				fetch
 			});
-		} catch {
-			error(500, 'Failed to fetch repository contents');
+		} catch (e) {
+			repoContents = [];
 		}
 	}
 	return {
