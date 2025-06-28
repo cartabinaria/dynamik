@@ -102,11 +102,7 @@
 	<div class="navbar-end">
 		<div class="flex flex-1 justify-end items-center gap-2">
 			{#if uploadUrl}
-				<a
-					class="btn btn-primary btn-sm"
-					href={uploadUrl}
-					title="Upload a file"
-				>
+				<a class="btn btn-primary btn-sm" href={uploadUrl} title="Upload a file">
 					<span class="icon-[mdi--upload]"></span>
 					Upload
 				</a>
