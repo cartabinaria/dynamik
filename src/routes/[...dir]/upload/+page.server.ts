@@ -15,20 +15,25 @@ export const load: PageServerLoad = async ({ params, locals, fetch, url }) => {
 	if (!locals.github_access_token) {
 		throw redirect(302, `/login?redirect=${encodeURIComponent(url.pathname + url.search)}`);
 	}
+
 	const repo = params.dir?.split('/')[0] || '';
-	let repoContents: { path: string }[] = [];
-	if (repo) {
-		try {
-			repoContents = await fetchRepoFolders({
-				owner: GITHUB_OWNER,
-				repo,
-				token: locals.github_access_token,
-				fetch
-			});
-		} catch (e) {
-			repoContents = [];
-		}
+	if (!repo) {
+		throw error(400, 'Repository name is required');
 	}
+
+	let repoContents: { path: string }[] = [];
+	try {
+		repoContents = await fetchRepoFolders({
+			owner: GITHUB_OWNER,
+			repo,
+			token: locals.github_access_token,
+			fetch
+		});
+	} catch (e) {
+		console.error('Failed to fetch repository contents', { e });
+		error(500, 'Failed to fetch repository contents');
+	}
+
 	return {
 		repoContents
 	};
