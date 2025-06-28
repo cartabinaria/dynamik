@@ -1,60 +1,34 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
 
-	let { data } = $props();
+	let { data, form } = $props();
 
-	let repoContents = $derived(data.repoContents ?? []);
-	let selectedFolder = $state('');
-	let fileName = $state('');
-	let file = $state<File | null>(null);
+	let { repoContents } = $derived(data);
+
 	let uploadStatus = $state('');
 	let isLoading = $state(false);
 
 	// Get the repo name from the URL (cartabinaria/<name>)
 	let repoName = $derived(page.params.dir?.split('/')[0] || '');
-
-	function handleFileChange(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if (input.files && input.files.length > 0) {
-			file = input.files[0];
-		}
-	}
-
-	async function handleUpload() {
-		if (!repoName || !selectedFolder || !fileName || !file) {
-			uploadStatus = 'Please select a folder, enter a file name, and choose a file.';
-			return;
-		}
-		uploadStatus = 'Uploading...';
-		isLoading = true;
-
-		const formData = new FormData();
-		formData.append('repo', repoName);
-		formData.append('folder', selectedFolder);
-		formData.append('fileName', fileName);
-		formData.append('file', file);
-
-		const res = await fetch('./upload', {
-			method: 'POST',
-			body: formData
-		});
-		isLoading = false;
-		if (res.ok) {
-			uploadStatus = 'Upload successful! Pull request created.';
-			setTimeout(() => goto('/'), 2000);
-		} else {
-			const err = await res.text();
-			uploadStatus = 'Upload failed: ' + err;
-		}
-	}
 </script>
 
 <svelte:head>
 	<title>Upload file to cartabinaria/{repoName}</title>
 </svelte:head>
 
-<div class="max-w-xl mx-auto mt-10 p-6 bg-base-200 rounded-xl shadow">
+<form
+	method="POST"
+	enctype="multipart/form-data"
+	class="max-w-xl mx-auto mt-10 p-6 bg-base-200 rounded-xl shadow"
+	use:enhance={() => {
+		isLoading = true;
+		return async ({ update }) => {
+			isLoading = false;
+			update();
+		};
+	}}
+>
 	<a href={'/' + repoName} class="btn btn-sm btn-outline mb-4">
 		<span class="icon-[ic--round-arrow-back]"></span>
 		Back to {repoName} main page
@@ -63,14 +37,23 @@
 		Upload a file to <span class="text-primary">cartabinaria/{repoName}</span>
 	</h1>
 
-	{#if isLoading}
-		<div class="mb-4 text-info">Loading...</div>
+	<input type="hidden" name="repo" value={repoName} />
+
+	{#if form?.error != null}
+		<div class="mb-4 alert alert-error">
+			<strong>Error:</strong>
+			{form.error}
+		</div>
+	{/if}
+
+	{#if repoContents.length === 0}
+		<div class="mb-4 alert alert-warning">No folders found in this repository.</div>
 	{/if}
 
 	{#if repoContents.length > 0}
 		<div class="mb-4">
 			<label for="select-folder" class="block font-semibold mb-1">Select folder</label>
-			<select id="select-folder" bind:value={selectedFolder} class="select select-bordered w-full">
+			<select name="folder" id="select-folder" class="select select-bordered w-full">
 				<option value="" disabled selected>Select a folder</option>
 				{#each repoContents as folder (folder.path)}
 					<option value={folder.path}>{folder.path}</option>
@@ -82,9 +65,9 @@
 	<div class="mb-4">
 		<label for="file-name-input" class="block font-semibold mb-1">File name</label>
 		<input
+			name="fileName"
 			id="file-name-input"
 			type="text"
-			bind:value={fileName}
 			placeholder="example.pdf"
 			class="input input-bordered w-full"
 		/>
@@ -92,19 +75,22 @@
 
 	<div class="mb-4">
 		<label for="file-input" class="block font-semibold mb-1">Choose file</label>
-		<input
-			id="file-input"
-			type="file"
-			onchange={handleFileChange}
-			class="file-input file-input-bordered w-full"
-		/>
+		<input name="file" id="file-input" type="file" class="file-input file-input-bordered w-full" />
 	</div>
 
-	<button class="btn btn-primary w-full" onclick={handleUpload} disabled={isLoading}>
+	<button class="btn btn-primary w-full" disabled={isLoading} type="submit">
 		{isLoading ? 'Uploading...' : 'Upload & Create Pull Request'}
 	</button>
 
 	{#if uploadStatus}
 		<div class="mt-4 alert alert-info">{uploadStatus}</div>
 	{/if}
-</div>
+
+	{#if form?.prUrl != null}
+		<div class="mt-4 alert alert-success">
+			Pull request created: <a href={form.prUrl} target="_blank" class="link">
+				{form.prUrl}
+			</a>
+		</div>
+	{/if}
+</form>
