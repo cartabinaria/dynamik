@@ -1,10 +1,14 @@
-import { GITHUB_APP_ID } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { redirect } from '@sveltejs/kit';
 import crypto from 'crypto';
 
 const GITHUB_AUTHORIZE_URL = 'https://github.com/login/oauth/authorize';
 
 export const POST = async ({ url, cookies, request }) => {
+	if (!env.GITHUB_APP_ID || !env.GITHUB_APP_SECRET) {
+		throw new Error('GitHub app credentials are not configured');
+	}
+
 	// PKCE code verifier and challenge
 	const code_verifier = crypto.randomBytes(32).toString('base64url');
 	const code_challenge = code_verifier
@@ -34,7 +38,7 @@ export const POST = async ({ url, cookies, request }) => {
 	}
 
 	const params = new URLSearchParams({
-		client_id: GITHUB_APP_ID,
+		client_id: env.GITHUB_APP_ID,
 		redirect_uri: `${url.origin}/api/login/github/callback`,
 		scope: 'read:user user:email',
 		response_type: 'code',
