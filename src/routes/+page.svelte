@@ -75,7 +75,7 @@
 		</div>
 
 		<ul class="menu p-2 text-lg mt-8 w-full">
-			{#each data.degrees as degree}
+			{#each data.degrees as degree (degree.id)}
 				{#if degree.teachings != null}
 					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
 				{:else}
