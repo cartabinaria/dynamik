@@ -1,50 +1,58 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	import { bundledLanguagesInfo, codeToHtml } from 'shiki';
+	import {
+		bundledLanguagesInfo,
+		codeToTokens,
+		type BundledLanguage,
+		type SpecialLanguage,
+		type TokensResult
+	} from 'shiki';
 
-	let { data }: { data: PageData } = $props();
+	let { data }: PageProps = $props();
+	let { extension } = $derived(data);
 
-	let selectedLang = $derived.by(() => {
-		const lang = data.extension;
-		const selectedLangs = bundledLanguagesInfo.filter(
-			(bundle) => bundle.id === lang || bundle.aliases?.includes(lang)
-		);
-
-		if (selectedLangs.length === 0) {
-			console.error(`Language not found: ${lang}`);
-			return null;
-		}
-
-		return selectedLangs[0].id;
-	});
-
-	let formattedCode = $state('');
+	let formattedTokens: TokensResult | null = $state(null);
+	let errorMessage: string | null = $state(null);
 
 	$effect(() => {
-		if (selectedLang == null) return;
+		let language: BundledLanguage | SpecialLanguage = 'plaintext';
 
-		codeToHtml(data.body, {
-			lang: selectedLang,
+		const selectedLangs = bundledLanguagesInfo.filter(
+			(bundle) => bundle.id === extension || bundle.aliases?.includes(extension)
+		);
+
+		if (selectedLangs.length !== 0) {
+			language = selectedLangs[0].id as BundledLanguage;
+		}
+
+		codeToTokens(data.body, {
+			lang: language,
 			theme: 'dark-plus'
 		})
-			.then((html) => {
-				formattedCode = html;
-			})
+			.then((it) => (formattedTokens = it))
 			.catch((error) => {
 				console.error('Error formatting code:', error);
-				formattedCode = `Error formatting code: ${error.message}`;
+				errorMessage = `Error formatting code: ${error.message}`;
 			});
 	});
 </script>
 
 <div>
-	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	<pre>{@html formattedCode}</pre>
+	{#if errorMessage != null}
+		<p class="error-message">{errorMessage}</p>
+	{:else if formattedTokens != null}
+		<div class="font-mono p-4">
+			<div class="font-mono p-4 whitespace-pre">
+				{#each formattedTokens.tokens as tokenArr, i (i)}
+					<span class="inline-block w-10 text-right select-none opacity-60 mr-2">{i + 1}</span
+					>{#each tokenArr as token, j (j)}<span
+							style="color: {token.color}; font-style: {token.fontStyle};">{token.content}</span
+						>{/each}<br />
+				{/each}
+			</div>
+		</div>
+	{:else}
+		<p class="text-4xl font-bold flex justify-center items-center h-64">Loading...</p>
+	{/if}
 </div>
-
-<style>
-	:global(pre) {
-		padding: 1rem;
-	}
-</style>
