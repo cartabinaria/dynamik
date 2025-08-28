@@ -1,4 +1,4 @@
-interface Answer {
+export interface Answer {
   id: number;
   created_at: string;
   updated_at: string;
@@ -10,7 +10,7 @@ interface Answer {
   replies: Answer[];
 }
 
-interface Question {
+export interface Question {
   id: number;
   created_at: string;
   updated_at: string;
@@ -21,7 +21,7 @@ interface Question {
   answers: Answer[];
 }
 
-interface Document {
+export interface Document {
   id: string;
   questions: Question[];
   url: string;
