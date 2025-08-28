@@ -1,3 +1,14 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
@@ -6,15 +17,11 @@
 	import { getDoneStatus } from '$lib/todo-file';
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
-	export let data: File | Directory;
+	let { data }: { data: File | Directory } = $props();
 	// export let customUrl: string | undefined = undefined;
 
-	$: base = $page.url.pathname.split('?')[0];
-	$: isFile = 'mime' in data;
-	$: external = 'mime' in data ? data.mime === 'text/statik-link' : false;
-
 	/**
-	 * Check if the statik url for the data uses an external link to 'csunibo.github.io'
+	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
 	 *
 	 * This function is especially created for '/libri/'.
 	 */
@@ -25,12 +32,15 @@
 		return true;
 	}
 
-	$: isDone = getDoneStatus(data.url);
-
 	function splitDate(date: string) {
 		const [day, month, year, time] = date.split(' ');
 		return { day, month, year, time };
 	}
+
+	let base = $derived($page.url.pathname.split('?')[0]);
+	let isFile = $derived('mime' in data);
+	let external = $derived('mime' in data ? data.mime === 'text/statik-link' : false);
+	let isDone = $derived(getDoneStatus(data.url));
 </script>
 
 <div class="contents">
@@ -49,9 +59,10 @@
 			{:else if isFile}
 				<button
 					class="flex text-xl mr-2 align-center"
-					on:click={() => isDone.toggle()}
+					onclick={() => isDone.toggle()}
 					type="button"
 					title="Click to mark as done"
+					aria-label="Click to mark as done"
 				>
 					<span
 						class="text-bold icon-[solar--file-bold-duotone]"
@@ -86,6 +97,7 @@
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}
 					<a
+						aria-label="Download"
 						class="flex text-lg ml-3"
 						href={GH_PAGES_BASE_URL + base + '/' + data.name}
 						download
@@ -94,7 +106,7 @@
 						<span class="text-accent text-3xl icon-[solar--download-square-bold]"></span>
 					</a>
 				{:else}
-					<button disabled class="flex text-lg ml-3">
+					<button disabled class="flex text-lg ml-3" aria-label="Download">
 						<span class="text-neutral text-3xl icon-[solar--download-square-bold]"></span>
 					</button>
 				{/if}

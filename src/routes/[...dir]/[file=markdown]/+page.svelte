@@ -1,5 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import tocbot from 'tocbot';
 	// @ts-expect-error - katex auto-render is not typed
@@ -9,15 +15,18 @@
 	import { EDIT_URLS } from '../../../lib/const';
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
-	export let data: PageData;
+
+	import 'katex/dist/katex.css';
+
+	let { data }: { data: PageData } = $props();
 
 	let markdown: HTMLElement;
 	let toc: HTMLElement;
 	let tocContainer: HTMLElement;
 
-	let menuOpen = false;
+	let menuOpen = $state(false);
 
-	onMount(async () => {
+	$effect(() => {
 		autoRender(markdown, {
 			delimiters: [
 				{ left: '$$', right: '$$', display: true },
@@ -41,16 +50,16 @@
 	<div class="overflow-y-scroll max-h-screen grow">
 		<div class="flex float-right sticky top-5 justify-end m-5">
 			<button
-				on:click={() => {
+				onclick={() => {
 					if (!menuOpen) tocContainer.scrollTo(0, 0);
 					menuOpen = !menuOpen;
 				}}
 				class="btn btn-ghost text-2xl"
 			>
 				{#if menuOpen}
-					<span class="icon-[material-symbols--close-rounded]" />
+					<span class="icon-[material-symbols--close-rounded]"></span>
 				{:else}
-					<span class="icon-[material-symbols--menu-rounded]" />
+					<span class="icon-[material-symbols--menu-rounded]"></span>
 				{/if}
 			</button>
 		</div>
@@ -89,13 +98,11 @@
 		bind:this={tocContainer}
 		class:tocHidden={!menuOpen}
 	>
-		<section class="prose mt-10" id="toc" bind:this={toc} role="contentinfo" />
+		<section class="prose mt-10" id="toc" bind:this={toc} role="contentinfo"></section>
 	</div>
 </main>
 
 <style>
-	@import 'katex/dist/katex.css';
-
 	.tocHidden {
 		max-width: 0;
 		margin: 0;

@@ -1,21 +1,28 @@
+// SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+// SPDX-FileCopyrightText: 2024 Stefano Volpe <stefano.volpe@student.uva.nl>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import vercelAdapter from '@sveltejs/adapter-vercel';
 import nodeAdapter from '@sveltejs/adapter-node';
 
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const BASE_PATH = process.env.BASE_PATH || '';
-const CSUNIBO_DEPLOY = process.env.CSUNIBO_DEPLOY === 'true';
+const CARTABINARIA_DEPLOY = process.env.CARTABINARIA_DEPLOY === 'true';
 
 /**
  *
  * @returns {import('@sveltejs/kit').Adapter}
  */
 function chooseAdapter() {
-  if (CSUNIBO_DEPLOY) {
-    return nodeAdapter();
-  } else {
-    return vercelAdapter();
-  }
+	if (CARTABINARIA_DEPLOY) {
+		return nodeAdapter();
+	} else {
+		return vercelAdapter();
+	}
 }
 
 /** @type {import('@sveltejs/kit').Config} */

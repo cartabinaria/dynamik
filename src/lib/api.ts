@@ -1,30 +1,38 @@
+// SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { FUZZY_URL, STATIK_URL } from '$lib/const';
 
-export interface Statik extends Directory {
-	directories?: Directory[];
-	files?: File[];
-}
-
-export interface Directory {
+export type StatikEntry = {
 	name: string;
 	path: string;
 	size: string;
 	time: string;
 	url: string;
-}
+};
 
-export interface File extends Directory {
+export type Directory = StatikEntry;
+
+export type Statik = Directory & {
+	directories?: Directory[];
+	files?: File[];
+};
+
+export type File = Directory & {
 	mime: string;
-}
+};
 
-export type Fuzzy = FuzzyFile[];
-
-export interface FuzzyFile {
+export type FuzzyFile = {
 	mime: string;
 	name: string;
 	path: string;
 	url: string;
-}
+};
+
+export type Fuzzy = FuzzyFile[];
+
 export async function getManifest(fetch: typeof window.fetch, path: string): Promise<Statik> {
 	const res = await fetch(STATIK_URL(path));
 	if (!res.ok) {
@@ -33,6 +41,7 @@ export async function getManifest(fetch: typeof window.fetch, path: string): Pro
 	const manifest: Statik = await res.json();
 	return manifest;
 }
+
 export async function getFuzzy(fetch: typeof window.fetch, path: string): Promise<Fuzzy> {
 	const res = await fetch(FUZZY_URL(path));
 	if (!res.ok) {

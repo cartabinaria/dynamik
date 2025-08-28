@@ -1,17 +1,26 @@
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { Degree } from '$lib/teachings';
-	import Line from './Line.svelte';
-	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
 	import { browser } from '$app/environment';
 
-	export let data: {
-		degrees: Degree[];
-	};
+	import type { Degree } from '$lib/teachings';
+	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+
+	let { data }: { data: { degrees: Degree[] } } = $props();
 </script>
 
 <svelte:head>
-	<title>Risorse CSUnibo</title>
+	<title>Risorse CartaBinaria</title>
 	<!-- OG meta graph -->
 	<meta name="title" property="og:title" content="Dashboard" />
 	<meta
@@ -38,8 +47,9 @@
 				></span>
 			</p>
 			<button
-				class="text-content hover:text-error focus:outline-none"
-				on:click={() => setBannerClosed()}
+				class="text-content hover:text-error focus:outline-hidden"
+				onclick={() => setBannerClosed()}
+				aria-label="Chiudi banner"
 			>
 				<span class="text-xl icon-[akar-icons--x-small]"></span>
 			</button>
@@ -47,27 +57,80 @@
 	</div>
 {/if}
 
+{#snippet line(name: string, href: string, icon: string)}
+	<li>
+		<a class="py-8 justify-center text-center border-base-content border-2 mb-4" {href}>
+			{icon}
+			{name}
+			{icon}
+		</a>
+	</li>
+{/snippet}
+
 <div class="flex justify-center">
 	<div class="container max-w-5xl">
-		<div class="m-10">
-			<h1 class="text-4xl font-semibold text-center">Risorse</h1>
-			<h3 class="text-2 font-semibold text-center">
-				Raccolte di materiali per lo studio da <span class="underline"
-					><a href="https://csunibo.students.cs.unibo.it">CSUnibo</a></span
-				>
-			</h3>
+		<div class="mt-10 mx-auto text-center">
+			<h1 class="mb-4 text-4xl font-bold">Risorse</h1>
+			<p>
+				Materiali di studio condivisi e creati da studenti per studenti, gestiti da
+				<span class="underline">
+					<a href="https://cartabinaria.students.cs.unibo.it"> CartaBinaria </a>
+				</span>
+			</p>
 		</div>
-		<ul class="menu p-2 text-lg">
-			{#each data.degrees as degree}
+		<div class="divider"></div>
+
+		<div class="prose sm:mx-auto mx-4">
+			<p>
+				Seleziona il tuo corso di laurea per accedere ai materiali di studio condivisi e creati da
+				studenti per studenti.
+			</p>
+		</div>
+
+		<ul class="menu p-2 text-lg mt-8 w-full">
+			{#each data.degrees as degree (degree.id)}
 				{#if degree.teachings != null}
-					<Line name={degree.name} icon={degree.icon} href="{base}/dash/{degree.id}" />
+					{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
 				{:else}
-					<Line name={degree.name} icon={degree.icon} href="{base}/{degree.id}" />
+					{@render line(degree.name, `${base}/${degree.id}`, degree.icon)}
 				{/if}
 			{/each}
 
-			<Line name="Impostazioni" icon="🔧" href="{base}/settings" />
-			<Line name="Stato" icon="📊" href="{base}/build" />
+			<div class="divider"></div>
+
+			<div class="grid grid-cols-2 gap-8">
+				{@render line('Impostazioni', `${base}/settings`, '🔧')}
+				{@render line('Stato', `${base}/build`, '📊')}
+			</div>
 		</ul>
+
+		<div class="alert alert-warning md:mx-4 md:my-8 grow mx-2 sm:mx-auto" role="alert">
+			<span class="icon-[ph--hand-palm-fill] text-4xl"></span>
+			<div>
+				<p class="block font-bold">
+					<strong>Disclaimer</strong>
+				</p>
+				<p class="text-xs mb-2">
+					Questo sito è stato pensato, creato e mantenuto da studenti.
+					<strong>
+						Non è in alcun modo ufficiale e non è affiliato con l'Università di Bologna.
+					</strong>
+				</p>
+				<p class="text-xs">
+					I materiali presenti sono stati creati da studenti e non sono verificati o approvati da
+					docenti o dal dipartimento. Per segnalare errori, problemi o richieste di rimozione di
+					materiale, contattaci su <a class="link" href="https://t.me/cartabinaria">Telegram.</a>
+				</p>
+			</div>
+		</div>
+
+		<div class="my-8">
+			<p class="text-center">
+				<a href="https://t.me/cartabinaria" class="btn btn-ghost">
+					<span class="icon-[ph--telegram-logo-fill] text-2xl"></span>
+					Contattaci su Telegram
+				</a>
+			</p>
+		</div>
 	</div>
 </div>

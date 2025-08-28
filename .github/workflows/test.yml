@@ -1,7 +1,17 @@
-name: PR Checks
+# SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: CI
+
+permissions:
+  contents: read
 
 on:
   pull_request:
+    branches: [main]
+
+  push:
     branches: [main]
 
 env:
@@ -13,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository recursively
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
 

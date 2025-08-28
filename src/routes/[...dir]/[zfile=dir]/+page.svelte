@@ -1,21 +1,30 @@
-<script lang="ts">
-	import { page } from '$app/stores';
+<!--
+SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2024 Samuele Musiani <samu@teapot.ovh>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
+SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
 
-	import Line from '$lib/components/Line.svelte';
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<script lang="ts">
+	import { page } from '$app/state';
+
 	import { teachingsFilter, type Degree } from '$lib/teachings';
-	import { EDIT_URLS } from '$lib/const';
 	import { doneFiles, anyFileDone } from '$lib/todo-file';
 
-	import type { PageData } from './$types';
+	import Line from '$lib/components/Line.svelte';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import FuzzySearch from '$lib/components/FuzzySearch.svelte';
-	import Navbar from '$lib/components/Navbar.svelte';
-	export let data: PageData;
-	let fuzzy: FuzzySearch;
 
-	$: urlParts = $page.url.pathname
-		.split('/')
-		.slice(1)
-		.filter((p) => p !== ''); // otherwise we get an empty string at the end
+	import type { PageData } from './$types';
+	import type { StatikEntry } from '$lib/api';
+
+	let { data }: { data: PageData } = $props();
+	let { manifest } = $derived(data);
 
 	function kebabToTitle(str: string) {
 		return str
@@ -44,7 +53,26 @@
 		}
 	}
 
-	$: title = genTitle(urlParts);
+	let fuzzy: FuzzySearch;
+
+	let urlParts = $derived(
+		page.url.pathname
+			.split('/')
+			.slice(1)
+			.filter((p) => p !== '') // otherwise we get an empty string at the end
+	);
+
+	let title = $derived(genTitle(urlParts));
+
+	// --- Sorting ---
+	let reverseMode = $state(true); // partiamo in ordine A-Z
+
+	/**
+	 * Inverte l'ordine di visualizzazione delle risorse
+	 */
+	function toggleReverse() {
+		reverseMode = !reverseMode;
+	}
 
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
@@ -75,29 +103,31 @@
 		return null;
 	}
 
-	$: degree = guessDegree(urlParts[0]);
-
-	// --- Sorting ---
-	let reverseMode = true; // partiamo in ordine A-Z
-
-	/**
-	 * Inverte l'ordine di visualizzazione delle risorse
-	 */
-	function toggleReverse() {
-		reverseMode = !reverseMode;
-	}
+	let degree = $derived(guessDegree(urlParts[0]));
 
 	// Done file status
-	$: isDone = anyFileDone(data.manifest.files?.map((f) => f.url) ?? []);
+	let isDone = $derived(anyFileDone(manifest.files?.map((f) => f.url) ?? []));
 
 	function cleanDone() {
 		doneFiles.update((old) => {
-			data.manifest.files?.forEach((f) => {
+			manifest.files?.forEach((f) => {
 				old[f.url] = false;
 			});
 			return old;
 		});
 	}
+
+	const prepareForDisplay = (statikEntries: StatikEntry[]) => {
+		const sortedEntries = statikEntries.sort((a, b) => a.name.localeCompare(b.name));
+		if (reverseMode) {
+			return sortedEntries.reverse();
+		} else {
+			return sortedEntries;
+		}
+	};
+
+	let directories = $derived(prepareForDisplay(data.manifest.directories ?? []));
+	let files = $derived(prepareForDisplay(data.manifest.files ?? []));
 </script>
 
 <svelte:head>
@@ -106,52 +136,44 @@
 </svelte:head>
 
 <main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<Navbar {title} {fuzzy} {degree} />
-	<div class="flex flex-1 justify-start mr-4 mb-3">
+	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
+
+	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
 				class="lg:ml-2 p-1 flex mr-2 items-center"
-				on:click={cleanDone}
+				onclick={cleanDone}
 				title="Clean all done files in this page"
+				aria-label="Clean all done files in this page"
 			>
 				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
-		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" on:click={toggleReverse}>
+		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" onclick={toggleReverse}>
 			Nome
 			<span class="ms-2 text-xl icon-[solar--sort-vertical-bold-duotone]" class:flip={reverseMode}
 			></span>
 		</button>
 	</div>
 
-	<div class="grid gap-5 grid-cols-dir md:grid-cols-dir-full mx-4 text-lg">
-		{#if data.manifest.directories != null}
-			{@const directories = data.manifest.directories.sort((a, b) => a.name.localeCompare(b.name))}
-			{#if !reverseMode}
-				{#each directories.reverse() as dir}
-					<Line data={dir} />
-				{/each}
-			{:else}
-				{#each directories as dir}
-					<Line data={dir} />
-				{/each}
-			{/if}
+	<div
+		class="grid gap-5 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] mx-4 text-lg"
+	>
+		{#if directories != null}
+			{#each directories as dir (dir.url)}
+				<Line data={dir} />
+			{/each}
 		{/if}
-		{#if data.manifest.files != null}
-			{@const files = data.manifest.files.sort((a, b) => a.name.localeCompare(b.name))}
-			{#if !reverseMode}
-				{#each files.reverse() as file}
-					<Line data={file} />
-				{/each}
-			{:else}
-				{#each files as file}
-					<Line data={file} />
-				{/each}
-			{/if}
+		{#if files != null}
+			{#each files as file (file.url)}
+				<Line data={file} />
+			{/each}
 		{/if}
 	</div>
 </main>
+
+<FuzzySearch data={data.fuzzy} bind:this={fuzzy} />
 
 <style>
 	.flip {
