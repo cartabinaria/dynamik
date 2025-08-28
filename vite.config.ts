@@ -9,5 +9,8 @@ export default defineConfig({
       /* other pwa options */
     })
   ],
+  build: {
+    sourcemap: true
+  },
   optimizeDeps: {}
 });

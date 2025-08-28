@@ -4,6 +4,7 @@
 	import settings from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { checkAuth } from '$lib/stores/auth';
 
 	onMount(() => {
 		settings.subscribe(() => {
@@ -12,6 +13,7 @@
 		if (window.location.pathname === '/' && isKnownCourse($settings.defaultCourse)) {
 			window.location.href = `/dash/${$settings.defaultCourse}`;
 		}
+    	checkAuth();
 	});
 
 	const isKnownCourse = (course: string) => {

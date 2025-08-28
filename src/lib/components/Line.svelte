@@ -64,7 +64,7 @@
 					class="flex link link-hover sm:flex-wrap text-primary"
 					class:line-through={$isDone}
 					href="{base}/{data.name}?{$page.url.searchParams}"
-					target={$settings.newTab ? '_blank' : '_self'}
+					target={$settings.newTab ? '_blank' : null}
 				>
 					{data.name}
 				</a>

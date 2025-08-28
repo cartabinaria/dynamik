@@ -7,29 +7,15 @@
 	import { doneFiles, anyFileDone } from '$lib/todo-file';
 
 	import type { PageData } from './$types';
-	import FuzzySearch from './FuzzySearch.svelte';
+	import FuzzySearch from '$lib/components/FuzzySearch.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
 	export let data: PageData;
-
 	let fuzzy: FuzzySearch;
-
-	let editUrls = EDIT_URLS($page.url.pathname);
-
-	// -- breadcrumbs --
-	let breadcrumbMobile = true;
-	function mobileBreadcrumb() {
-		breadcrumbMobile = !breadcrumbMobile;
-	}
 
 	$: urlParts = $page.url.pathname
 		.split('/')
 		.slice(1)
 		.filter((p) => p !== ''); // otherwise we get an empty string at the end
-
-	const getPartHref = (part: string) =>
-		$page.url.pathname
-			.split('/')
-			.slice(0, $page.url.pathname.split('/').indexOf(part) + 1)
-			.join('/');
 
 	function kebabToTitle(str: string) {
 		return str
@@ -59,16 +45,6 @@
 	}
 
 	$: title = genTitle(urlParts);
-
-	// --- Sorting ---
-	let reverseMode = true; // partiamo in ordine A-Z
-
-	/**
-	 * Inverte l'ordine di visualizzazione delle risorse
-	 */
-	function toggleReverse() {
-		reverseMode = !reverseMode;
-	}
 
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
@@ -101,6 +77,16 @@
 
 	$: degree = guessDegree(urlParts[0]);
 
+	// --- Sorting ---
+	let reverseMode = true; // partiamo in ordine A-Z
+
+	/**
+	 * Inverte l'ordine di visualizzazione delle risorse
+	 */
+	function toggleReverse() {
+		reverseMode = !reverseMode;
+	}
+
 	// Done file status
 	$: isDone = anyFileDone(data.manifest.files?.map((f) => f.url) ?? []);
 
@@ -120,75 +106,7 @@
 </svelte:head>
 
 <main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<div class="navbar flex bg-base-200 rounded-box shadow-sm px-5 mb-5">
-		<div class="sm:hidden flex justify-start items-center">
-			<button class="sm:hidden flex btn btn-ghost btn-sm" on:click={mobileBreadcrumb}>
-				<span
-					class="sm:hidden flex text-2xl items-center text-accent icon-[solar--folder-path-connect-bold-duotone]"
-				>
-				</span>
-				<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
-			</button>
-		</div>
-		<div class="navbar min-h-0 p-0 justify-start items-center">
-			<div
-				class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
-				class:hidden={breadcrumbMobile}
-			>
-				<ul>
-					<li>
-						<a class="ml-1 flex items-center" href="/">
-							<span class="text-xl icon-[akar-icons--home-alt1]"></span>
-						</a>
-					</li>
-					{#if degree != null}
-						<li>
-							<a class="flex items-center" href={'/dash/' + degree}>
-								<span class="text-xl icon-[ic--round-school]"></span>
-							</a>
-						</li>
-					{/if}
-					{#each urlParts as part}
-						{@const href = getPartHref(part) + '?' + $page.url.searchParams}
-						<li><a {href} class="flex flex-wrap whitespace-normal">{part}</a></li>
-					{/each}
-				</ul>
-			</div>
-		</div>
-<<<<<<< HEAD
-		<div class="navbar-end">
-			<div class="flex flex-1 justify-end">
-				<a
-					class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost flex-shrink-0 w-8"
-					href={editUrls.github_repo}
-				>
-					<span class="text-2xl icon-[akar-icons--github-fill]"></span>
-				</a>
-			</div>
-		</div>
-		<div class="flex flex-1 justify-end mr-2">
-			<button
-				title="Search"
-				class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
-				on:click|preventDefault={() => fuzzy.show()}
-			>
-				<span class="text-primary icon-[akar-icons--search] align-middle"></span>
-				<span class="hidden md:inline">
-					<kbd class="kbd-sm">Ctrl</kbd>+
-					<kbd class="kbd-sm">K</kbd>
-				</span>
-=======
-		<div class="flex flex-1 justify-end mr-2">
-			<button
-				class="lg:ml-2 p-1 bg-base-300 rounded-lg btn-ghost"
-				title="ctrl + k"
-				on:click|preventDefault={() => viewMobileFinder()}
-			>
-				🔍 <kbd class="kbd-sm hidden lg:inline-block">ctrl + k </kbd>
->>>>>>> 919c126 (style: answers flexy)
-			</button>
-		</div>
-	</div>
+	<Navbar {title} {fuzzy} {degree} />
 	<div class="flex flex-1 justify-start mr-4 mb-3">
 		{#if $isDone}
 			<button
@@ -235,41 +153,8 @@
 	</div>
 </main>
 
-<<<<<<< HEAD
-<FuzzySearch data={data.fuzzy} bind:this={fuzzy} />
-
 <style>
 	.flip {
 		transform: scaleX(-1) scaleY(-1);
 	}
 </style>
-=======
-<input type="checkbox" id="my-modal" class="modal-toggle" checked={searchActive} />
-
-<label for="my-modal" class="modal cursor-pointer" role="search">
-	<label class="modal-box relative">
-		<input
-			class="input input-bordered input-primary w-full mb-2"
-			type="text"
-			placeholder="Search..."
-			bind:this={searchInput}
-			bind:value={searchQuery}
-		/>
-		{#if searchQuery != ''}
-			<ul class="menu p-2" bind:this={resultList}>
-				{#each fuseResult as result, i}
-					{@const href =
-						result.item.mime === 'text/statik-link'
-							? result.item.url
-							: base + result.item.url.split(GH_PAGES_BASE_URL)[1]}
-					<li>
-						<a {href} class:active={i === active}>
-							{result.item.name}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</label>
-</label>
->>>>>>> 919c126 (style: answers flexy)

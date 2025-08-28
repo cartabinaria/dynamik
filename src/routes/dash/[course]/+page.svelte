@@ -3,21 +3,15 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
-	import { getLoginUrl, getWhoAmI } from '$lib/upld';
 	import ListTeaching from './ListTeaching.svelte';
 	import type { TeachingsBatch } from './ListTeaching.svelte';
-	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
+	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL, LOGIN_URL, WHOAMI_URL } from '$lib/const';
 
 	export let data: PageData;
 	let activeYears: string[] = [];
 
-	let login:
-		| Promise<{ error: string } | { username: string; name: string; avatarUrl: string }>
-		| undefined;
-
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		login = getWhoAmI(fetch);
 	});
 
 	function namesToTeachings(names: string[]): Teaching[] {
@@ -55,17 +49,6 @@
 <div class="max-w-5xl p-4 mx-auto">
 	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-sm px-5 mb-5">
 		<div class="navbar-start">
-			{#if login != null}
-				{#await login then login}
-					{#if 'error' in login}
-						<a class="btn btn-square btn-ghost" href={getLoginUrl($page.url)}> Login </a>
-					{:else}
-						<img src={login.avatarUrl} alt="User avatar" class="w-10 rounded-xl" />
-					{/if}
-				{/await}
-			{/if}
-		</div>
-		<div class="navbar min-h-0 p-0 justify-center items-center">
 			<h1 class="flex flex-wrap text-xl text-center font-semibold text-base-content">
 				{data.degree.name}
 			</h1>
