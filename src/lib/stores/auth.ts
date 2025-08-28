@@ -1,52 +1,59 @@
 import { WHOAMI_URL, LOGOUT_URI } from '$lib/const';
 import { writable } from 'svelte/store';
-import { page } from '$app/stores';
 
 export const AUTHENTICATED = 'authenticated';
 export const UNAUTHENTICATED = 'unauthenticated';
 
 interface AuthenticatedState {
-  state: 'authenticated',
-  user: Whoami
+	state: 'authenticated';
+	user: Whoami;
 }
 
 interface UnauthenticatedState {
-  state: 'unauthenticated'
+	state: 'unauthenticated';
 }
 
+export type AuthState = AuthenticatedState | UnauthenticatedState;
+
+export const isAuthenticated = (state: AuthState): state is AuthenticatedState => {
+	return state.state === 'authenticated';
+};
+
 const defaultState: UnauthenticatedState = {
-  state: 'unauthenticated',
+	state: 'unauthenticated'
 };
 
 interface Error {
-  error: string
+	error: string;
 }
 
 interface Whoami {
-  username: string
-  avatarUrl: string
-  name: string
-  email: string
-  admin: boolean
+	username: string;
+	avatarUrl: string;
+	name: string;
+	email: string;
+	admin: boolean;
 }
 
-const store = writable<UnauthenticatedState | AuthenticatedState>(defaultState);
+const store = writable<AuthState>(defaultState);
 
 export const checkAuth = async () => {
-  const req = await fetch(WHOAMI_URL, { credentials: 'include' })
-  const res: Whoami | Error = await req.json();
-  if (!('error' in res)) {
-    const state: AuthenticatedState = {
-      state: AUTHENTICATED,
-      user: res
-    };
-    store.set(state);
-  }
-}
+	const req = await fetch(WHOAMI_URL, { credentials: 'include' });
+	const res: Whoami | Error = await req.json();
+	if (!('error' in res)) {
+		const state: AuthenticatedState = {
+			state: 'authenticated',
+			user: res
+		};
+		store.set(state);
+	}
+};
 
-export const logout = async () => {
-  await fetch(LOGOUT_URI(page.url), { credentials: 'include' })
-  store.set(defaultState);
-}
+export const logout = async (url?: string) => {
+	if (url) {
+		await fetch(LOGOUT_URI(url), { credentials: 'include' });
+	}
+	store.set(defaultState);
+};
 
 export const auth = store;

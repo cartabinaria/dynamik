@@ -13,13 +13,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import { WHOAMI_URL } from '$lib/const';
-	
+
 	export let data: PageData;
-	
+
 	let editMode: boolean = false;
-	
+
 	async function removePdfCutter(dataRet: PageData) {
 		editMode = false;
 		data.questions = dataRet.questions;
@@ -27,16 +26,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			data.questions = [];
 		}
 	}
-	
+
 	function setEditMode(flag: boolean) {
 		editMode = flag;
 	}
-	
+
 	function genTitle(url: string) {
 		const part = url.split('/');
 		return part[part.length - 1].split('?')[0];
 	}
-	
+
 	$: title = genTitle(data.url);
 </script>
 
@@ -45,41 +44,39 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<Breadcrumbs url={$page.url} borderRadius={null} />
+<div class="flex flex-col h-screen overflow-hidden">
+	<!-- Fixed navbar -->
+	<div class="flex-shrink-0 z-10">
+		<Breadcrumbs url={$page.url} borderRadius={null} />
+	</div>
 
-<main class="max-w-6xl min-w-fit p-4 mx-auto">
-	<Navbar title={$page.params.file} />
-	
-	{#if data.questions !== undefined}
-		<!-- Polleg functionality for exam PDFs -->
-		<PDFViewer {data} questions={data.questions} />
-		{#if data.questions?.length !== 0 && false}
-			<!-- If the questions aren't present show instructions and pdf -->
-			<Instructions isAdmin={user?.admin} {setEditMode} />
-			<PdfViewer url={data.url} width={'90%'} height={'900vh'} />
-			{#if editMode}
-				<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} />
+	<!-- Scrollable content area -->
+	<div class="flex-1 overflow-y-auto overflow-x-hidden">
+		<main class="max-w-6xl min-w-fit p-4 mx-auto h-full">
+			{#if data.questions !== undefined}
+				<!-- Polleg functionality for exam PDFs -->
+				<PDFViewer {data} questions={data.questions} />
+				{#if data.questions?.length !== 0 && false}
+					<!-- If the questions aren't present show instructions and pdf -->
+					<Instructions isAdmin={user?.admin} {setEditMode} />
+					<PdfViewer url={data.url} width={'90%'} height={'900vh'} />
+					{#if editMode}
+						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} />
+					{/if}
+				{/if}
+			{:else}
+				<!-- Simple PDF viewer for regular PDFs -->
+				<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"
+				></iframe>
 			{/if}
-		{/if}
-	{:else}
-		<!-- Simple PDF viewer for regular PDFs -->
-		<iframe 
-			title="Embedded resource" 
-			src={data.url} 
-			class="h-full w-full border rounded-lg"
-		></iframe>
-	{/if}
-</main>
+		</main>
+	</div>
+</div>
 
 <style>
 	canvas {
 		width: var(--width);
 		height: var(--height);
 		border-radius: 0.5rem;
-	}
-	
-	:global(html),
-	:global(body) {
-		height: 100%;
 	}
 </style>

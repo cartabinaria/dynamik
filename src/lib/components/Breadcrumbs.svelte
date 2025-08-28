@@ -5,7 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { EDIT_URLS } from '$lib/const';
+	import { EDIT_URLS, LOGIN_URL } from '$lib/const';
+	import { auth, logout, AUTHENTICATED } from '$lib/stores/auth';
 
 	type Props = {
 		url: URL;
@@ -103,34 +104,52 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{/each}
 			</ul>
 		</div>
+		<a
+			class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
+			aria-label="GitHub Repository"
+			href={editUrls.github_repo}
+		>
+			<span class="text-2xl icon-[akar-icons--github-fill] hover:text-primary"></span>
+		</a>
 	</div>
-	<div class="navbar-end">
+	<div class="navbar-end gap-2">
 		<div class="flex flex-1 justify-end">
-			<a
-				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
-				aria-label="GitHub Repository"
-				href={editUrls.github_repo}
-			>
-				<span class="text-2xl icon-[akar-icons--github-fill]"></span>
-			</a>
+			{#if onfuzzy != null}
+				<button
+					title="Search"
+					class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
+					onclick={(e) => {
+						e.preventDefault();
+						onfuzzy(e);
+					}}
+				>
+					<span class="text-primary icon-[akar-icons--search] align-middle"></span>
+					<span class="hidden md:inline">
+						<kbd class="kbd-sm">Ctrl</kbd>+
+						<kbd class="kbd-sm">K</kbd>
+					</span>
+				</button>
+			{/if}
 		</div>
-	</div>
-	<div class="flex flex-1 justify-end mr-2">
-		{#if onfuzzy != null}
-			<button
-				title="Search"
-				class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
-				onclick={(e) => {
-					e.preventDefault();
-					onfuzzy(e);
-				}}
-			>
-				<span class="text-primary icon-[akar-icons--search] align-middle"></span>
-				<span class="hidden md:inline">
-					<kbd class="kbd-sm">Ctrl</kbd>+
-					<kbd class="kbd-sm">K</kbd>
-				</span>
-			</button>
-		{/if}
+		<div class="flex flex-1 justify-end mr-2">
+			{#if $auth.state == AUTHENTICATED}
+				<button class="btn" onclick={() => logout(url.toString())}>
+					Logout
+					<div class="avatar">
+						<div class="w-8 rounded-full">
+							<img src={$auth.user.avatarUrl} alt="User avatar" />
+						</div>
+					</div>
+				</button>
+			{:else}
+				<button
+					class="btn btn-wide btn-primary sm:ml-2 p-1 flex flex-shrink-0"
+					onclick={() => (window.location.href = LOGIN_URL(url.toString()))}
+				>
+					<span class="icon-[akar-icons--github-fill]"></span>
+					Login with GitHub</button
+				>
+			{/if}
+		</div>
 	</div>
 </div>

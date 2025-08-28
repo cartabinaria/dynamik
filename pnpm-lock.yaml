@@ -99,6 +99,9 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.16
     version: 0.5.16(tailwindcss@4.1.12)
+  '@types/canvas-size':
+    specifier: ^1.2.2
+    version: 1.2.2
   '@types/jsdom':
     specifier: ^21.1.7
     version: 21.1.7
@@ -2691,6 +2694,10 @@ packages:
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.1.12
+    dev: true
+
+  /@types/canvas-size@1.2.2:
+    resolution: {integrity: sha512-yuTXFWC4tHV3lt5ZtbIP9VeeMNbDYm5mPyqaQnaMuSSx2mjsfZGXMNmHTnfdsR5qZdB6dtbaV5IP2PKv79vmKg==}
     dev: true
 
   /@types/cookie@0.6.0:

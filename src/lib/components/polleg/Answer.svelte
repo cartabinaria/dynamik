@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { ANSWER_URL, VOTE_URL } from '$lib/const';
 	import Reply from '$lib/components/polleg/Reply.svelte';
-  import { auth } from '$lib/stores/auth';
+	import { auth } from '$lib/stores/auth';
 
 	export let answer;
 	export let index;
 	export let question;
 	export let removeAnswer;
+	export let data; // Add data prop for question data
 
 	$: showReplyBoxFor = null;
 	let unfinishedReplies: string[] = [];
@@ -59,7 +60,7 @@
 			data.answers[index].vote = newVote;
 			//customSort();
 		}
-  };
+	};
 </script>
 
 <div class="w-full flex flex-row rounded-lg bg-base-100 border-secondary shadow-md p-6">
@@ -75,7 +76,7 @@
 		</button>
 
 		<!-- Vote Count -->
-		<span class="text-xl p-2 font-semibold">{answer.upvotes-answer.downvotes}</span>
+		<span class="text-xl p-2 font-semibold">{answer.upvotes - answer.downvotes}</span>
 
 		<!-- Downvote Button -->
 		<button
@@ -121,7 +122,7 @@
 					}}><span class="icon-[solar--reply-outline] text-primary text-3xl"></span></button
 				>
 			{/if}
-			{#if $auth.user?.username == answer?.user || user?.admin}
+			{#if $auth.user?.username == answer?.user || $auth.user?.admin}
 				<button class="btn ml-5" on:click|preventDefault={() => deleteAnswer(answer.id)}>
 					<span class="icon-[solar--trash-bin-minimalistic-bold] text-error text-3xl"></span>
 				</button>
@@ -130,8 +131,8 @@
 
 		{#if showReplyBoxFor === index}
 			<div class="w-full z-10">
-        TODO: reply box I guess
-        <!--
+				TODO: reply box I guess
+				<!--
 				<ReplyBox
 					closeCallback={() => {
 						showReplyBoxFor = null;
@@ -150,7 +151,7 @@
 
 		<div class="mt-12">
 			{#each answer.replies || [] as reply, index}
-				<Reply {answer} {reply} {index}/>
+				<Reply {answer} {reply} {index} />
 			{/each}
 		</div>
 	</div>
