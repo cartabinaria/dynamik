@@ -38,7 +38,7 @@
 			}
 			const box = boxes[boxI];
 
-			// TODO: we may need to handle splits going across multiple pages
+			// TODO: we need to handle splits going across multiple pages
 			// Although it is probably very unlikely
 			const newBoxes = [];
 			const b1h = start - box.y;

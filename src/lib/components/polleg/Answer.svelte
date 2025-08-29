@@ -1,30 +1,57 @@
 <script lang="ts">
 	import { ANSWER_URL, VOTE_URL } from '$lib/const';
 	import Reply from '$lib/components/polleg/Reply.svelte';
-	import { auth } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 
 	export let answer;
 	export let index;
 	export let question;
-	export let removeAnswer;
 	export let data; // Add data prop for question data
+	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
 
 	$: showReplyBoxFor = null;
 	let unfinishedReplies: string[] = [];
+	let isDeleting = false;
+
+	// Reactive variables for auth
+	$: user = isAuthenticated($auth) ? $auth.user : null;
 
 	const deleteAnswer = async (id: number) => {
-		let res = await fetch(ANSWER_URL(id), {
-			method: 'DELETE',
-			credentials: 'include'
-		});
-
-		if (res.status == 200) {
-			let newAns = data?.answers?.filter(function (item: any) {
-				return item.id != id;
+		if (isDeleting) return; // Prevent double clicks
+		
+		isDeleting = true;
+		try {
+			const res = await fetch(ANSWER_URL(id), {
+				method: 'DELETE',
+				credentials: 'include'
 			});
-			data.answers = newAns;
-		} else {
-			res = await res.json();
+
+			if (res.status === 200) {
+				// Reload answers from server to ensure UI is in sync
+				if (reloadAnswers) {
+					await reloadAnswers();
+				} else {
+					// Fallback: update local data if reload function not available
+					const newAns = data?.answers?.filter(function (item: any) {
+						return item.id != id;
+					});
+					data.answers = newAns;
+				}
+			} else {
+				// Error - try to parse response for error details
+				let errorMessage = `Failed to delete answer. Status: ${res.status}`;
+				try {
+					const errorData = await res.text();
+					console.error('Delete failed:', errorMessage, errorData);
+				} catch (parseError) {
+					console.error('Delete failed:', errorMessage);
+				}
+			}
+		} catch (error) {
+			console.error('Error deleting answer:', error);
+		} finally {
+			isDeleting = false;
 		}
 	};
 	const vote = async (index: number, answerId: number, newVote: number) => {
@@ -91,16 +118,18 @@
 	<div class="flex flex-1 flex-col">
 		<div class="flex justify-end">
 			<div class="text-sm flex justify-center items-center">
-				<a href="https://github.com/{answer.user}">
+				<a href="https://github.com/{answer.user}" target="_blank" rel="noopener noreferrer">
 					{answer.user}
 				</a>
 			</div>
 
-			<a href="https://github.com/{answer.user}">
+			<a href="https://github.com/{answer.user}" target="_blank" rel="noopener noreferrer">
 				<img
 					class="w-8 h-8 rounded-full ml-3"
 					src={'https://github.com/' + answer.user + '.png'}
 					alt={answer.user + ' profile picture'}
+					loading="lazy"
+					referrerpolicy="no-referrer"
 				/>
 			</a>
 		</div>
@@ -110,9 +139,10 @@
 		</div>
 
 		<div class="flex justify-end">
-			{#if $auth.user}
+			{#if user}
 				<button
 					class="btn"
+					aria-label="Reply to this answer"
 					on:click|preventDefault={() => {
 						if (showReplyBoxFor != null) {
 							showReplyBoxFor = null;
@@ -122,17 +152,25 @@
 					}}><span class="icon-[solar--reply-outline] text-primary text-3xl"></span></button
 				>
 			{/if}
-			{#if $auth.user?.username == answer?.user || $auth.user?.admin}
-				<button class="btn ml-5" on:click|preventDefault={() => deleteAnswer(answer.id)}>
-					<span class="icon-[solar--trash-bin-minimalistic-bold] text-error text-3xl"></span>
+			{#if user?.username == answer?.user || user?.admin}
+				<button 
+					class="btn ml-5" 
+					aria-label="Delete this answer"
+					on:click|preventDefault={() => deleteAnswer(answer.id)}
+					disabled={isDeleting}
+				>
+					<span class="icon-[solar--trash-bin-minimalistic-bold] text-error text-3xl {isDeleting ? 'opacity-50' : ''}"></span>
+					{#if isDeleting}
+						<span class="text-sm ml-1">Deleting...</span>
+					{/if}
 				</button>
 			{/if}
 		</div>
 
 		{#if showReplyBoxFor === index}
 			<div class="w-full z-10">
-				TODO: reply box I guess
-				<!--
+				<!-- TODO: broken submit -->
+				
 				<ReplyBox
 					closeCallback={() => {
 						showReplyBoxFor = null;
@@ -142,10 +180,10 @@
 					sendAnswerCallback={() => {
 						showReplyBoxFor = null;
 					}}
-					parentAuthor={answer.user}
 					parentAnswerId={answer.id}
+					{reloadAnswers}
 				/>
-        -->
+       
 			</div>
 		{/if}
 

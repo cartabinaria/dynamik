@@ -66,7 +66,7 @@
 <div class="flex items-center flex-col pb-6">
 	{#if expanded}
 		{#if loading}
-			<span bind:this={spinner} class="loading loading-spinner loading-md my-4" />
+			<span bind:this={spinner} class="loading loading-spinner loading-md my-4"></span>
 		{:else}
 			{#each question.answers as answer, index}
 				<AnswerComponent
@@ -75,6 +75,7 @@
 					{question}
 					removeAnswer={deleteAnswer}
 					data={{ answers: question.answers }}
+					reloadAnswers={load}
 				/>
 			{/each}
 		{/if}

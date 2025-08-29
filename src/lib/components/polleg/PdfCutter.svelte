@@ -308,8 +308,8 @@
 />
 
 <div id="container" style="text-align: center;">
-	<canvas bind:this={pageCanvas} style="display: none" />
-	<canvas bind:this={fullCanvas} class="canvasFixed" />
+	<canvas bind:this={pageCanvas} style="display: none"></canvas>
+	<canvas bind:this={fullCanvas} class="canvasFixed"></canvas>
 	<canvas bind:this={editCanvas} class="canvasFixed"></canvas>
 	<canvas bind:this={opacityCanvas} on:mousedown={ev_mousedown} class="canvasFixed"></canvas>
 </div>

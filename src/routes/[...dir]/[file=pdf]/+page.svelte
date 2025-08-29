@@ -11,6 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Instructions from '$lib/components/polleg/Instructions.svelte';
 	import PDFViewer from '$lib/components/polleg/PDFViewer.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
 	import { WHOAMI_URL } from '$lib/const';
@@ -19,11 +20,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let editMode: boolean = false;
 
+	// Reactive variables for auth
+	$: user = isAuthenticated($auth) ? $auth.user : null;
+	$: isAdmin = user?.admin || false;
+
 	async function removePdfCutter(dataRet: PageData) {
 		editMode = false;
 		data.questions = dataRet.questions;
 		if (data.questions == null) {
-			data.questions = [];
+			data.questions = [] as any;
 		}
 	}
 
@@ -55,11 +60,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<main class="max-w-6xl min-w-fit p-4 mx-auto h-full">
 			{#if data.questions !== undefined}
 				<!-- Polleg functionality for exam PDFs -->
-				<PDFViewer {data} questions={data.questions} />
-				{#if data.questions?.length !== 0 && false}
+				{#if data.questions?.length > 0}
+					<PDFViewer {data} questions={data.questions} />
+				{:else}
 					<!-- If the questions aren't present show instructions and pdf -->
-					<Instructions isAdmin={user?.admin} {setEditMode} />
-					<PdfViewer url={data.url} width={'90%'} height={'900vh'} />
+					<Instructions {isAdmin} {setEditMode} />
+					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"></iframe>
 					{#if editMode}
 						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} />
 					{/if}
@@ -72,11 +78,3 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</main>
 	</div>
 </div>
-
-<style>
-	canvas {
-		width: var(--width);
-		height: var(--height);
-		border-radius: 0.5rem;
-	}
-</style>

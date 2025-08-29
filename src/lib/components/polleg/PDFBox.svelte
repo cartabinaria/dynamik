@@ -31,6 +31,6 @@
 			class="h-full w-full"
 			style={`display: ${visible ? 'block' : 'none'}`}
 			bind:this={canvas}
-		/>
+		></canvas>
 	</div>
 </IntersectionObserver>

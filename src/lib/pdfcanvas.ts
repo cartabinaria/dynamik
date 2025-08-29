@@ -1,5 +1,4 @@
 import type { PageViewport, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
-import * as canvasSize from 'canvas-size';
 
 export const SCALE = 3;
 
@@ -47,9 +46,12 @@ export interface FullPDF {
 }
 
 export const extractFullPDF = async (pdf: PDFDocumentProxy): Promise<FullPDF> => {
+	// Use a sensible default max height for canvas (common browser limit)
+	const MAX_CANVAS_HEIGHT = 32767;
+	
 	const result: FullPDF = {
 		pdf,
-		maxHeight: (await canvasSize.maxArea()).height,
+		maxHeight: MAX_CANVAS_HEIGHT,
 		canvases: [],
 		pages: [],
 		width: 0,
@@ -118,8 +120,19 @@ export const renderBox = (pdf: FullPDF, canvas: HTMLCanvasElement, box: Box) => 
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 	const canvasI = Math.floor(box.y / pdf.maxHeight);
 	const off = box.y % pdf.maxHeight;
+	
+	// Add safety checks to prevent the TypeError
+	if (!pdf.canvases[canvasI]) {
+		console.error(`Canvas at index ${canvasI} is undefined`);
+		return;
+	}
+	
 	if (off + box.height > pdf.maxHeight) {
 		// This box sits between two canvases
+		if (!pdf.canvases[canvasI + 1]) {
+			console.error(`Canvas at index ${canvasI + 1} is undefined`);
+			return;
+		}
 		ctx.drawImage(pdf.canvases[canvasI], 0, -off);
 		ctx.drawImage(pdf.canvases[canvasI + 1], 0, pdf.maxHeight - off);
 	} else {

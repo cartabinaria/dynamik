@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { EDIT_URLS, LOGIN_URL } from '$lib/const';
-	import { auth, logout, AUTHENTICATED } from '$lib/stores/auth';
+	import { EDIT_URLS, LOGIN_URL, LOGOUT_URL } from '$lib/const';
+	import { auth, AUTHENTICATED } from '$lib/stores/auth';
 
 	type Props = {
 		url: URL;
@@ -133,22 +133,23 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 		<div class="flex flex-1 justify-end mr-2">
 			{#if $auth.state == AUTHENTICATED}
-				<button class="btn" onclick={() => logout(url.toString())}>
+				<a class="btn" href={encodeURI(LOGOUT_URL(url))}>
+					<!-- TODO: fancy user menu -->
 					Logout
 					<div class="avatar">
 						<div class="w-8 rounded-full">
 							<img src={$auth.user.avatarUrl} alt="User avatar" />
 						</div>
 					</div>
-				</button>
+				</a>
 			{:else}
-				<button
+				<a
 					class="btn btn-wide btn-primary sm:ml-2 p-1 flex flex-shrink-0"
-					onclick={() => (window.location.href = LOGIN_URL(url.toString()))}
+					href={encodeURI(LOGIN_URL(url))}
 				>
 					<span class="icon-[akar-icons--github-fill]"></span>
-					Login with GitHub</button
-				>
+					Login with GitHub
+				</a>
 			{/if}
 		</div>
 	</div>
