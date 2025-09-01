@@ -48,7 +48,7 @@ export interface FullPDF {
 export const extractFullPDF = async (pdf: PDFDocumentProxy): Promise<FullPDF> => {
 	// Use a sensible default max height for canvas (common browser limit)
 	const MAX_CANVAS_HEIGHT = 32767;
-	
+
 	const result: FullPDF = {
 		pdf,
 		maxHeight: MAX_CANVAS_HEIGHT,
@@ -120,13 +120,13 @@ export const renderBox = (pdf: FullPDF, canvas: HTMLCanvasElement, box: Box) => 
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 	const canvasI = Math.floor(box.y / pdf.maxHeight);
 	const off = box.y % pdf.maxHeight;
-	
+
 	// Add safety checks to prevent the TypeError
 	if (!pdf.canvases[canvasI]) {
 		console.error(`Canvas at index ${canvasI} is undefined`);
 		return;
 	}
-	
+
 	if (off + box.height > pdf.maxHeight) {
 		// This box sits between two canvases
 		if (!pdf.canvases[canvasI + 1]) {

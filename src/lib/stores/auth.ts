@@ -47,6 +47,6 @@ export const checkAuth = async () => {
 		};
 		store.set(state);
 	}
-}
+};
 
 export const auth = store;

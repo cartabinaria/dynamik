@@ -4,12 +4,14 @@
 
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import localeIt from 'dayjs/locale/it';
 
 import type { Settings } from '$lib/settings';
 
 dayjs.locale(localeIt);
 dayjs.extend(localizedFormat);
+dayjs.extend(relativeTime);
 
 export const formatDate = (settings: Settings, date: string) => {
 	const dayjsDate = dayjs(date);
@@ -17,5 +19,22 @@ export const formatDate = (settings: Settings, date: string) => {
 		return dayjsDate.toISOString().substring(0, 19);
 	} else {
 		return dayjsDate.format('LLL');
+	}
+};
+
+/**
+ * Formats timestamp in hybrid format: "Oggi 14:30", "Ieri 09:15", "29 Aug 2025, 16:22"
+ */
+export const formatRelativeTime = (timestamp: string) => {
+	const date = dayjs(timestamp);
+	const now = dayjs();
+	const diffHours = now.diff(date, 'hour');
+
+	if (diffHours < 24) {
+		return `Oggi ${date.format('HH:mm')}`;
+	} else if (diffHours < 48) {
+		return `Ieri ${date.format('HH:mm')}`;
+	} else {
+		return `${date.format('DD MMM YYYY')}, ${date.format('HH:mm')}`;
 	}
 };

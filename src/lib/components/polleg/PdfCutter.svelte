@@ -274,7 +274,7 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(data),
-			method: 'PUT',
+			method: 'POST',
 			credentials: 'include'
 		});
 		let objRet = await res.json();

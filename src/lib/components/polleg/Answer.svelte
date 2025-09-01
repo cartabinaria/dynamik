@@ -3,23 +3,49 @@
 	import Reply from '$lib/components/polleg/Reply.svelte';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
+	import { formatRelativeTime } from '$lib/date';
 
 	export let answer;
 	export let index;
 	export let question;
 	export let data; // Add data prop for question data
 	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
+	export let onAnswerUpdate: (() => Promise<void>) | undefined = undefined;
 
-	$: showReplyBoxFor = null;
+	let showReplyBoxFor = null;
 	let unfinishedReplies: string[] = [];
 	let isDeleting = false;
+	let showReplies = false;
+	let repliesContainer: HTMLElement;
 
 	// Reactive variables for auth
 	$: user = isAuthenticated($auth) ? $auth.user : null;
 
+	// Sort replies by creation time (newest first, oldest last)
+	$: sortedReplies = answer.replies
+		? [...answer.replies].sort((a, b) => {
+				// Primary sort: by created_at if available
+				if (a.created_at && b.created_at) {
+					const dateA = new Date(a.created_at);
+					const dateB = new Date(b.created_at);
+					return dateB.getTime() - dateA.getTime(); // Inverted: newest first
+				}
+				// Fallback: sort by ID (assuming sequential IDs) - newest first
+				return b.id - a.id; // Inverted: higher ID first
+			})
+		: [];
+
 	const deleteAnswer = async (id: number) => {
 		if (isDeleting) return; // Prevent double clicks
-		
+
+		// Check if answer has replies and ask for confirmation
+		if (sortedReplies && sortedReplies.length > 0) {
+			const confirmMessage = `This answer has ${sortedReplies.length} reply(ies). Are you sure you want to delete it? This action cannot be undone.`;
+			if (!confirm(confirmMessage)) {
+				return; // User cancelled
+			}
+		}
+
 		isDeleting = true;
 		try {
 			const res = await fetch(ANSWER_URL(id), {
@@ -27,7 +53,8 @@
 				credentials: 'include'
 			});
 
-			if (res.status === 200) {
+			// Success status codes: 200 (OK), 204 (No Content), 202 (Accepted)
+			if (res.ok || res.status === 204) {
 				// Reload answers from server to ensure UI is in sync
 				if (reloadAnswers) {
 					await reloadAnswers();
@@ -44,12 +71,15 @@
 				try {
 					const errorData = await res.text();
 					console.error('Delete failed:', errorMessage, errorData);
+					alert(`Failed to delete answer: ${errorMessage}`);
 				} catch (parseError) {
 					console.error('Delete failed:', errorMessage);
+					alert(`Failed to delete answer: ${errorMessage}`);
 				}
 			}
 		} catch (error) {
 			console.error('Error deleting answer:', error);
+			alert('Network error while deleting answer. Please try again.');
 		} finally {
 			isDeleting = false;
 		}
@@ -88,109 +118,185 @@
 			//customSort();
 		}
 	};
+
+	// Function to handle new reply submission with animation
+	const handleNewReply = async (newReplyId: number) => {
+		// Open replies section if closed
+		if (!showReplies) {
+			showReplies = true;
+		}
+
+		// Wait for DOM update and then scroll to new reply
+		setTimeout(() => {
+			if (repliesContainer && newReplyId) {
+				const newReply = repliesContainer.querySelector(`[data-reply-id="${newReplyId}"]`);
+				if (newReply) {
+					newReply.scrollIntoView({
+						behavior: 'smooth',
+						block: 'center'
+					});
+
+					// Add a brief highlight animation
+					newReply.classList.add('animate-pulse');
+					setTimeout(() => {
+						newReply.classList.remove('animate-pulse');
+					}, 2000);
+				}
+			}
+		}, 300);
+	};
 </script>
 
-<div class="w-full flex flex-row rounded-lg bg-base-100 border-secondary shadow-md p-6">
-	<!-- Voting Section -->
-	<div class="flex flex-col items-center p-2">
-		<!-- Upvote Button -->
-		<button
-			class={'flex items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-success focus:outline-none ' +
-				(answer?.vote == 1 ? 'bg-success' : 'bg-neutral-content')}
-			on:click={() => vote(index, answer.id, 1)}
-		>
-			<span class="icon-[material-symbols--arrow-upward] text-neutral"></span>
-		</button>
-
-		<!-- Vote Count -->
-		<span class="text-xl p-2 font-semibold">{answer.upvotes - answer.downvotes}</span>
-
-		<!-- Downvote Button -->
-		<button
-			class={'flex items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-error focus:outline-none ' +
-				(answer?.vote == -1 ? 'bg-error' : 'bg-neutral-content')}
-			on:click={() => vote(index, answer.id, -1)}
-		>
-			<span class="icon-[material-symbols--arrow-downward] text-neutral"></span>
-		</button>
-	</div>
-	<!-- Answer Content -->
-	<div class="flex flex-1 flex-col">
-		<div class="flex justify-end">
-			<div class="text-sm flex justify-center items-center">
-				<a href="https://github.com/{answer.user}" target="_blank" rel="noopener noreferrer">
-					{answer.user}
-				</a>
-			</div>
-
-			<a href="https://github.com/{answer.user}" target="_blank" rel="noopener noreferrer">
-				<img
-					class="w-8 h-8 rounded-full ml-3"
-					src={'https://github.com/' + answer.user + '.png'}
-					alt={answer.user + ' profile picture'}
-					loading="lazy"
-					referrerpolicy="no-referrer"
-				/>
-			</a>
-		</div>
-		<div class="flex flex-1 ml-2">
-			<p>{answer.content}</p>
-			<!-- <CartaViewer bind:value={answer.content} {carta} />  -->
-		</div>
-
-		<div class="flex justify-end">
-			{#if user}
+<!-- Answer Card with Glass Effect -->
+<div
+	data-answer-id={answer.id}
+	class="m-4 w-full card bg-base-200/30 backdrop-blur-md border border-base-300/30 shadow-lg rounded-xl transition-all duration-300"
+>
+	<div class="card-body p-4">
+		<!-- Answer Layout: Left voting, Right content -->
+		<div class="flex gap-8 w-full">
+			<!-- Left Voting Column -->
+			<div class="flex flex-col items-center gap-3 min-w-[4rem] pt-2">
+				<!-- Upvote Button -->
 				<button
-					class="btn"
-					aria-label="Reply to this answer"
-					on:click|preventDefault={() => {
-						if (showReplyBoxFor != null) {
-							showReplyBoxFor = null;
-						} else {
-							showReplyBoxFor = index;
-						}
-					}}><span class="icon-[solar--reply-outline] text-primary text-3xl"></span></button
+					class={'btn btn-circle btn-sm transition-colors ' +
+						(answer?.vote == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
+					on:click={() => vote(index, answer.id, 1)}
 				>
-			{/if}
-			{#if user?.username == answer?.user || user?.admin}
-				<button 
-					class="btn ml-5" 
-					aria-label="Delete this answer"
-					on:click|preventDefault={() => deleteAnswer(answer.id)}
-					disabled={isDeleting}
-				>
-					<span class="icon-[solar--trash-bin-minimalistic-bold] text-error text-3xl {isDeleting ? 'opacity-50' : ''}"></span>
-					{#if isDeleting}
-						<span class="text-sm ml-1">Deleting...</span>
-					{/if}
+					<span class="icon-[material-symbols--arrow-upward] text-xl"></span>
 				</button>
-			{/if}
-		</div>
 
-		{#if showReplyBoxFor === index}
-			<div class="w-full z-10">
-				<!-- TODO: broken submit -->
-				
-				<ReplyBox
-					closeCallback={() => {
-						showReplyBoxFor = null;
-					}}
-					bind:unfinishedReply={unfinishedReplies[index]}
-					questionId={question}
-					sendAnswerCallback={() => {
-						showReplyBoxFor = null;
-					}}
-					parentAnswerId={answer.id}
-					{reloadAnswers}
-				/>
-       
+				<!-- Vote Count -->
+				<span class="text-xl font-bold py-1 min-w-[2rem] text-center"
+					>{answer.upvotes - answer.downvotes}</span
+				>
+
+				<!-- Downvote Button -->
+				<button
+					class={'btn btn-circle btn-sm transition-colors ' +
+						(answer?.vote == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
+					on:click={() => vote(index, answer.id, -1)}
+				>
+					<span class="icon-[material-symbols--arrow-downward] text-xl"></span>
+				</button>
 			</div>
-		{/if}
 
-		<div class="mt-12">
-			{#each answer.replies || [] as reply, index}
-				<Reply {answer} {reply} {index} />
-			{/each}
+			<!-- Right Content Column -->
+			<div class="flex-1 min-w-0">
+				<!-- Header with user info and timestamp -->
+				<div class="flex items-center gap-4 mb-6">
+					<img
+						class="w-10 h-10 rounded-full ring-2 ring-base-300/50"
+						src={answer.user_avatar_url}
+						alt={answer.user + ' profile picture'}
+						loading="lazy"
+						referrerpolicy="no-referrer"
+					/>
+					<div class="flex items-center gap-3 text-base">
+						{answer.user}
+						<span class="text-base-content/60">•</span>
+						<span class="text-base-content/70">
+							{formatRelativeTime(answer.created_at)}
+						</span>
+					</div>
+				</div>
+
+				<!-- Answer Content -->
+				<div class="prose max-w-none mb-8">
+					<p class="leading-relaxed text-base">{answer.content}</p>
+				</div>
+
+				<!-- Bottom Actions Bar -->
+				<div class="flex items-center gap-3 text-sm flex-wrap">
+					<!-- Replies Button -->
+					{#if sortedReplies && sortedReplies.length > 0}
+						<button class="btn btn-ghost btn-sm" on:click={() => (showReplies = !showReplies)}>
+							{#if showReplies}
+								<span class="icon-[solar--alt-arrow-up-outline]"></span>
+								Hide replies
+							{:else}
+								<span class="icon-[solar--alt-arrow-down-outline]"></span>
+								{sortedReplies.length} Replies
+							{/if}
+						</button>
+						<div class="divider divider-horizontal mx-0"></div>
+					{/if}
+
+					<!-- Reply Button -->
+					{#if user}
+						<button
+							class="btn btn-ghost btn-sm"
+							on:click|preventDefault={() => {
+								if (showReplyBoxFor != null) {
+									showReplyBoxFor = null;
+								} else {
+									showReplyBoxFor = index;
+								}
+							}}
+						>
+							<span class="icon-[solar--reply-outline]"></span>
+							Reply
+						</button>
+						<div class="divider divider-horizontal mx-0"></div>
+					{/if}
+
+					<!-- Delete Button (Far right for safety) -->
+					{#if user?.username == answer?.user || user?.admin}
+						<button
+							class="btn btn-ghost btn-sm text-error hover:btn-error"
+							on:click|preventDefault={() => deleteAnswer(answer.id)}
+							disabled={isDeleting}
+						>
+							<span
+								class="icon-[solar--trash-bin-minimalistic-bold] {isDeleting ? 'opacity-50' : ''}"
+							></span>
+							{#if isDeleting}
+								Deleting...
+							{/if}
+						</button>
+					{/if}
+				</div>
+
+				<!-- Reply Box (attached to main answer) -->
+				{#if showReplyBoxFor === index}
+					<div class="mt-8 mr-8 pt-6 border-t border-base-300 w-full">
+						<ReplyBox
+							closeCallback={() => {
+								showReplyBoxFor = null;
+							}}
+							bind:unfinishedReply={unfinishedReplies[index]}
+							questionId={question}
+							sendAnswerCallback={async () => {
+								showReplyBoxFor = null;
+								// Call external callback to update parent component
+								if (onAnswerUpdate) {
+									await onAnswerUpdate();
+								}
+							}}
+							parentAnswerId={answer.id}
+							{reloadAnswers}
+							onSubmitSuccess={handleNewReply}
+						/>
+					</div>
+				{/if}
+
+				<!-- Replies Section with Timeline -->
+				{#if showReplies && sortedReplies && sortedReplies.length > 0}
+					<div class="mt-8 pt-6 w-full">
+						<div class="flex flex-col" bind:this={repliesContainer}>
+							{#each sortedReplies as reply, replyIndex}
+								<Reply
+									{answer}
+									{reply}
+									index={replyIndex}
+									isLast={replyIndex === sortedReplies.length - 1}
+									{reloadAnswers}
+								/>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			</div>
 		</div>
 	</div>
 </div>

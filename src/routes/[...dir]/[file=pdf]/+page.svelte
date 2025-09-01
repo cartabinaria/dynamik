@@ -65,7 +65,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{:else}
 					<!-- If the questions aren't present show instructions and pdf -->
 					<Instructions {isAdmin} {setEditMode} />
-					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"></iframe>
+					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"
+					></iframe>
 					{#if editMode}
 						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} />
 					{/if}
