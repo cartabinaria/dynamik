@@ -16,6 +16,7 @@
 	let body: string = '';
 	let disabled: boolean = false;
 	let mounted = true;
+	let isAnonymous: boolean = false; // Default: not anonymous
 
 	// Check authentication
 	$: user = isAuthenticated($auth) ? $auth.user : null;
@@ -25,8 +26,9 @@
 	});
 
 	// Props for the original usage (Question.svelte)
-	export let submit: ((body: string, parent?: number | null) => Promise<boolean>) | undefined =
-		undefined;
+	export let submit:
+		| ((body: string, parent?: number | null, anonymous?: boolean) => Promise<boolean>)
+		| undefined = undefined;
 
 	// Props for the new usage (Answer.svelte)
 	export let closeCallback: (() => void) | undefined = undefined;
@@ -51,7 +53,7 @@
 		try {
 			if (submit) {
 				// Original usage (Question.svelte)
-				const success = await submit(body, parentAnswerId || null);
+				const success = await submit(body, parentAnswerId || null, isAnonymous);
 				if (success) {
 					body = '';
 				}
@@ -61,7 +63,7 @@
 					question: questionId.id,
 					content: body,
 					parent: parentAnswerId,
-					anonymous: true
+					anonymous: isAnonymous
 				};
 
 				const req = await fetch(ANSWERS_URL, {
@@ -136,10 +138,26 @@
 		<div class="flex-1 bg-base-200 backdrop-blur-sm rounded-lg p-4 min-w-0 mr-4">
 			{#if user}
 				<!-- Header -->
-				<div class="flex items-center gap-3 mb-4">
+				<div class="flex items-center justify-between mb-4">
 					<div class="flex items-center gap-2 text-sm text-base-content/70">
 						<span class="icon-[solar--chat-round-dots-bold] text-accent/70"></span>
 						Reply to this answer
+					</div>
+					<!-- Anonymous Toggle -->
+					<div class="flex items-center gap-3">
+						<label class="label cursor-pointer gap-2">
+							<input
+								type="checkbox"
+								bind:checked={isAnonymous}
+								class="toggle toggle-sm toggle-primary"
+							/>
+							<span
+								class="label-text text-sm hover:text-primary {isAnonymous ? 'text-primary' : ''}"
+							>
+								<span class="icon-[solar--incognito-bold] opacity-70"></span>
+								Post anonymously
+							</span>
+						</label>
 					</div>
 				</div>
 
@@ -170,10 +188,27 @@
 		<div class="w-full bg-base-200/30 backdrop-blur-sm rounded-lg p-4">
 			{#if user}
 				<!-- Header -->
-				<div class="flex items-center gap-3 mb-4">
+				<div class="flex items-center justify-between gap-3 mb-4">
 					<div class="flex items-center gap-2 text-sm text-base-content/70">
 						<span class="icon-[solar--lightbulb-bold] text-primary/70"></span>
 						Share your answer
+					</div>
+
+					<!-- Anonymous Toggle -->
+					<div class="flex items-center gap-3">
+						<label class="label cursor-pointer gap-2">
+							<input
+								type="checkbox"
+								bind:checked={isAnonymous}
+								class="toggle toggle-sm toggle-primary"
+							/>
+							<span
+								class="label-text text-sm hover:text-primary {isAnonymous ? 'text-primary' : ''}"
+							>
+								<span class="icon-[solar--incognito-bold] opacity-70"></span>
+								Post anonymously
+							</span>
+						</label>
 					</div>
 				</div>
 
@@ -195,7 +230,7 @@
 				</div>
 			{:else}
 				<div class="text-center text-base-content/60 py-4">
-					<p>Please log in to write a reply</p>
+					<p>Please log in to write an answer</p>
 				</div>
 			{/if}
 		</div>
