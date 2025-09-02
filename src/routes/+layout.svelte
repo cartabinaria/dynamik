@@ -29,6 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 
 	import '../app.css';
+	import 'katex/dist/katex.css';
 	import favicon from '$lib/assets/cartabinaria.png';
 	import ogImage from '$lib/assets/cartabinaria-opengraph.png';
 </script>

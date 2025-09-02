@@ -16,8 +16,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 
-	import 'katex/dist/katex.css';
-
 	let { data }: { data: PageData } = $props();
 
 	let markdown: HTMLElement;

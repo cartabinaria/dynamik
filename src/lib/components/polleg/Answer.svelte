@@ -4,6 +4,8 @@
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { formatRelativeTime } from '$lib/date';
+	import { carta } from '$lib/carta-config';
+	import { Markdown } from 'carta-md';
 
 	export let answer;
 	export let index;
@@ -195,7 +197,9 @@
 
 				<!-- Answer Content -->
 				<div class="prose max-w-none mb-8">
-					<p class="leading-relaxed text-base">{answer.content}</p>
+					<p class="leading-relaxed text-base">
+						<Markdown {carta} value={answer.content} />
+					</p>
 				</div>
 
 				<!-- Bottom Actions Bar -->

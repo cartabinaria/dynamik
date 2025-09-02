@@ -51,5 +51,5 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </main>
 
 <style>
-	@import 'katex/dist/katex.css';
+	/* KaTeX CSS is now imported globally in +layout.svelte */
 </style>

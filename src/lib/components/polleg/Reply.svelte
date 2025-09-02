@@ -3,6 +3,8 @@
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { ANSWER_URL } from '$lib/const';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
+	import { carta } from '$lib/carta-config';
+	import { Markdown } from 'carta-md';
 
 	export let answer;
 	export let reply;
@@ -161,7 +163,7 @@
 
 		<!-- Reply Content -->
 		<div class="leading-normal mb-4">
-			{reply.content}
+			<Markdown {carta} value={reply.content} />
 		</div>
 
 		<!-- Bottom Actions Bar (similar to Answer component) -->

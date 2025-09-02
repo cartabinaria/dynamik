@@ -1,17 +1,10 @@
 <script lang="ts">
-	import { Carta, CartaEditor } from 'carta-md';
-	import { emoji } from '@cartamd/plugin-emoji';
-	import { code } from '@cartamd/plugin-code';
-	import { math } from '@cartamd/plugin-math';
+	import { MarkdownEditor } from 'carta-md';
 	import { onDestroy } from 'svelte';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
-	import  settings from '$lib/settings';
+	import settings from '$lib/settings';
 	import { ANSWERS_URL } from '$lib/const';
-
-	const carta = new Carta({
-		extensions: [emoji(), code(), math()],
-		sanitizer: false
-	});
+	import { carta } from '$lib/carta-config';
 
 	let body: string = '';
 	let disabled: boolean = false;
@@ -128,9 +121,7 @@
 
 			<!-- Timeline dot with Plus icon -->
 			<div
-				class="w-8 h-8 bg-accent/10 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0"
-			>
-				<span class="icon-[solar--add-bold] text-accent/70 text-sm"></span>
+				class="w-8 h-8 text-accent/50 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0 icon-[solar--add-circle-line-duotone] ">
 			</div>
 		</div>
 
@@ -160,10 +151,10 @@
 						</label>
 					</div>
 				</div>
-				
+
 				<!-- Editor -->
 				<div class="mb-4">
-					<CartaEditor bind:value={body} mode="tabs" theme="github"  {carta} />
+					<MarkdownEditor bind:value={body} mode="tabs" theme="github" {carta} />
 				</div>
 
 				<!-- Buttons -->
@@ -212,10 +203,10 @@
 					</div>
 				</div>
 				<!-- TODO: aspettare di avere user da anonimo per sapere se posso cancellare answer/reply -->
-				
+
 				<!-- Editor -->
 				<div class="mb-4">
-					<CartaEditor bind:value={body} mode="tabs" theme="github"  {carta} />
+					<MarkdownEditor bind:value={body} mode="tabs" theme="github" {carta} />
 				</div>
 
 				<!-- Buttons -->
