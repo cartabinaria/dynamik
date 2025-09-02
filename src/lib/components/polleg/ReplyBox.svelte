@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { MarkdownEditor } from 'carta-md';
+	import { MarkdownEditor, Carta } from 'carta-md';
 	import { onDestroy } from 'svelte';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
-	import settings from '$lib/settings';
 	import { ANSWERS_URL } from '$lib/const';
-	import { carta } from '$lib/carta-config';
+	import { getCartaConfig } from '$lib/carta-config';
+
+	const carta = new Carta(getCartaConfig());
 
 	let body: string = '';
 	let disabled: boolean = false;
@@ -121,8 +122,8 @@
 
 			<!-- Timeline dot with Plus icon -->
 			<div
-				class="w-8 h-8 text-accent/50 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0 icon-[solar--add-circle-line-duotone] ">
-			</div>
+				class="w-8 h-8 text-accent/50 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0 icon-[solar--add-circle-line-duotone]"
+			></div>
 		</div>
 
 		<!-- Reply Box Content -->

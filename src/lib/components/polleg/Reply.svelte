@@ -3,8 +3,10 @@
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { ANSWER_URL } from '$lib/const';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
-	import { carta } from '$lib/carta-config';
-	import { Markdown } from 'carta-md';
+	import { Markdown, Carta } from 'carta-md';
+	import { getCartaConfig } from '$lib/carta-config';
+
+	const carta = new Carta(getCartaConfig());
 
 	export let answer;
 	export let reply;
@@ -172,7 +174,10 @@
 			<div class="flex items-center gap-3 text-sm flex-wrap">
 				<!-- Nested Replies Button -->
 				{#if sortedNestedReplies && sortedNestedReplies.length > 0}
-					<button class="btn btn-ghost btn-xs" on:click={() => (showNestedReplies = !showNestedReplies)}>
+					<button
+						class="btn btn-ghost btn-xs"
+						on:click={() => (showNestedReplies = !showNestedReplies)}
+					>
 						{#if showNestedReplies}
 							<span class="icon-[solar--alt-arrow-up-outline]"></span>
 							Hide replies

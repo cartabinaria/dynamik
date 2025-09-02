@@ -4,8 +4,10 @@
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { formatRelativeTime } from '$lib/date';
-	import { carta } from '$lib/carta-config';
-	import { Markdown } from 'carta-md';
+	import { Markdown, Carta } from 'carta-md';
+	import { getCartaConfig } from '$lib/carta-config';
+
+	const carta = new Carta(getCartaConfig());
 
 	export let answer;
 	export let index;
