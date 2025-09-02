@@ -107,41 +107,42 @@
 	onMount(() => {
 		// Rimuoviamo tutti i listener di scroll
 	});
+
 	const splitBoxes = (boxes: Box[], cuts: Question[]) => {
 		cuts.sort((a, b) => (a.start > b.start ? 1 : -1));
 
 		let boxI = 0;
-		for (const cut of cuts) {
+		for (const [i, cut] of cuts.entries()) {
 			const start = cut.start * SCALE;
 			const end = cut.end * SCALE;
-			
+
 			// Find the box containing the start of the cut
 			while (boxI < boxes.length) {
 				const box = boxes[boxI];
 				if (box.y <= start && start <= box.y + box.height) break;
 				else boxI++;
 			}
-			
+
 			if (boxI >= boxes.length) continue; // Skip if no box found
-			
+
 			const startBox = boxes[boxI];
-			
+
 			// Check if the cut extends beyond the current box (crosses pages)
 			if (end > startBox.y + startBox.height) {
 				// Handle cross-page cuts: merge all affected boxes into one
 				let endBoxI = boxI;
 				let totalHeight = 0;
 				let affectedBoxes = [];
-				
+
 				// Find all boxes that the cut spans across
 				while (endBoxI < boxes.length && boxes[endBoxI].y < end) {
 					const currentBox = boxes[endBoxI];
-					
+
 					// Calculate how much of this box is included in the cut
 					const boxStart = Math.max(currentBox.y, start);
 					const boxEnd = Math.min(currentBox.y + currentBox.height, end);
 					const includedHeight = boxEnd - boxStart;
-					
+
 					if (includedHeight > 0) {
 						affectedBoxes.push({
 							box: currentBox,
@@ -152,7 +153,7 @@
 					}
 					endBoxI++;
 				}
-				
+
 				// Create the merged box for the question
 				const mergedQuestionBox = {
 					x: startBox.x,
@@ -161,9 +162,9 @@
 					height: totalHeight,
 					question: cut
 				};
-				
+
 				const newBoxes = [];
-				
+
 				// Add the part before the cut (if any)
 				// const beforeHeight = start - startBox.y;
 				// if (beforeHeight > 0) {
@@ -172,15 +173,15 @@
 				// 		height: beforeHeight
 				// 	});
 				// }
-				
+
 				// Add the merged question box
 				newBoxes.push(mergedQuestionBox);
-				
+
 				// Add remaining parts of boxes after the cut
 				for (let i = boxI; i < endBoxI; i++) {
 					const currentBox = boxes[i];
 					const boxEnd = currentBox.y + currentBox.height;
-					
+
 					if (boxEnd > end) {
 						// This box extends beyond the cut
 						const remainingHeight = boxEnd - end;
@@ -194,10 +195,9 @@
 						break; // No more boxes to process for this cut
 					}
 				}
-				
+
 				// Replace the affected boxes with the new ones
 				boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(endBoxI)];
-				
 			} else {
 				// Handle single-box cuts (original logic, but fixed)
 				const newBoxes = [];
@@ -222,8 +222,7 @@
 				};
 				newBoxes.push(questionBox);
 
-				// Part after the cut
-				if (b3h > 0) {
+				if (cuts.length >= i + 1 && startBox.y + startBox.height > cuts[i + 1].start * SCALE) {
 					newBoxes.push({
 						...startBox,
 						y: end,
@@ -234,7 +233,7 @@
 				boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(boxI + 1)];
 			}
 		}
-		boxes.splice(boxes.length-1, 1);
+		boxes.splice(boxes.length - 1, 1);
 		return boxes;
 	};
 
