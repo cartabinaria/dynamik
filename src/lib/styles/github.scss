@@ -1,3 +1,5 @@
+// TODO: aggiungere altri temi in base al tema selezionato [quando c'è molto tempo]
+
 .carta-theme__github {
 	// Core styles
 	$background: #0d1117;
@@ -29,6 +31,7 @@
 		.carta-font-code {
 			font-family: 'Fira Code', monospace;
 			caret-color: white;
+			color: white;
 		}
 
 		.carta-toolbar {

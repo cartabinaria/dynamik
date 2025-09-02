@@ -20,7 +20,7 @@ dependencies:
     specifier: ^4.1.1
     version: 4.3.0(carta-md@4.11.1)
   '@cartamd/plugin-math':
-    specifier: ^4.0.4
+    specifier: ^4.3.1
     version: 4.3.1(carta-md@4.11.1)(svelte@5.38.6)
   '@zerodevx/svelte-toast':
     specifier: ^0.9.5

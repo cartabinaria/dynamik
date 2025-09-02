@@ -38,14 +38,6 @@
 	const deleteAnswer = async (id: number) => {
 		if (isDeleting) return; // Prevent double clicks
 
-		// Check if answer has replies and ask for confirmation
-		if (sortedReplies && sortedReplies.length > 0) {
-			const confirmMessage = `This answer has ${sortedReplies.length} reply(ies). Are you sure you want to delete it? This action cannot be undone.`;
-			if (!confirm(confirmMessage)) {
-				return; // User cancelled
-			}
-		}
-
 		isDeleting = true;
 		try {
 			const res = await fetch(ANSWER_URL(id), {
@@ -291,6 +283,9 @@
 									index={replyIndex}
 									isLast={replyIndex === sortedReplies.length - 1}
 									{reloadAnswers}
+									{question}
+									{onAnswerUpdate}
+									depth={0}
 								/>
 							{/each}
 						</div>

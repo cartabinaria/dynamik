@@ -2,18 +2,37 @@
 	import { formatRelativeTime } from '$lib/date';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { ANSWER_URL } from '$lib/const';
+	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 
 	export let answer;
 	export let reply;
 	export let index;
 	export let isLast = false;
 	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
+	export let question; // Add question prop for nested replies
+	export let onAnswerUpdate: (() => Promise<void>) | undefined = undefined;
+	export let depth = 0; // Track nesting depth
 
 	let isDeleting = false;
+	let showReplyBox = false;
+	let showNestedReplies = false;
+	let nestedRepliesContainer: HTMLElement;
 
 	// Reactive variables for auth
 	$: user = isAuthenticated($auth) ? $auth.user : null;
-	$: canDelete = user && (user.id === reply.user_id || user.is_admin);
+	$: canDelete = user && (user.username === reply.user || user.is_admin);
+
+	// Sort nested replies by creation time (newest first)
+	$: sortedNestedReplies = reply.replies
+		? [...reply.replies].sort((a, b) => {
+				if (a.created_at && b.created_at) {
+					const dateA = new Date(a.created_at);
+					const dateB = new Date(b.created_at);
+					return dateB.getTime() - dateA.getTime(); // Newest first
+				}
+				return b.id - a.id; // Fallback: higher ID first
+			})
+		: [];
 
 	const deleteReply = async (replyId: number) => {
 		if (isDeleting) return; // Prevent double clicks
@@ -53,6 +72,33 @@
 		} finally {
 			isDeleting = false;
 		}
+	};
+
+	// Function to handle new nested reply submission with animation
+	const handleNewNestedReply = async (newReplyId: number) => {
+		// Open nested replies section if closed
+		if (!showNestedReplies) {
+			showNestedReplies = true;
+		}
+
+		// Wait for DOM update and then scroll to new reply
+		setTimeout(() => {
+			if (nestedRepliesContainer && newReplyId) {
+				const newReply = nestedRepliesContainer.querySelector(`[data-reply-id="${newReplyId}"]`);
+				if (newReply) {
+					newReply.scrollIntoView({
+						behavior: 'smooth',
+						block: 'center'
+					});
+
+					// Add a brief highlight animation
+					newReply.classList.add('animate-pulse');
+					setTimeout(() => {
+						newReply.classList.remove('animate-pulse');
+					}, 2000);
+				}
+			}
+		}, 300);
 	};
 </script>
 
@@ -114,8 +160,79 @@
 		</div>
 
 		<!-- Reply Content -->
-		<div class="leading-normal">
+		<div class="leading-normal mb-4">
 			{reply.content}
 		</div>
+
+		<!-- Bottom Actions Bar (similar to Answer component) -->
+		{#if depth < 3}
+			<!-- Limit nesting to 3 levels for UX -->
+			<div class="flex items-center gap-3 text-sm flex-wrap">
+				<!-- Nested Replies Button -->
+				{#if sortedNestedReplies && sortedNestedReplies.length > 0}
+					<button class="btn btn-ghost btn-xs" on:click={() => (showNestedReplies = !showNestedReplies)}>
+						{#if showNestedReplies}
+							<span class="icon-[solar--alt-arrow-up-outline]"></span>
+							Hide replies
+						{:else}
+							<span class="icon-[solar--alt-arrow-down-outline]"></span>
+							{sortedNestedReplies.length} Replies
+						{/if}
+					</button>
+					<div class="divider divider-horizontal mx-0"></div>
+				{/if}
+
+				<!-- Reply Button -->
+				{#if user}
+					<button
+						class="btn btn-ghost btn-xs"
+						on:click|preventDefault={() => {
+							showReplyBox = !showReplyBox;
+						}}
+					>
+						<span class="icon-[solar--reply-outline]"></span>
+						Reply
+					</button>
+				{/if}
+			</div>
+		{/if}
+
+		<!-- Reply Box for nested replies -->
+		{#if showReplyBox && depth < 3}
+			<div class="mt-4 pt-4 border-t border-base-300/50 w-full">
+				<ReplyBox
+					closeCallback={() => {
+						showReplyBox = false;
+					}}
+					questionId={question}
+					sendAnswerCallback={() => {
+						showReplyBox = false;
+					}}
+					parentAnswerId={reply.id}
+					{reloadAnswers}
+					onSubmitSuccess={handleNewNestedReply}
+				/>
+			</div>
+		{/if}
 	</div>
+
+	<!-- Nested Replies Section -->
+	{#if showNestedReplies && sortedNestedReplies && sortedNestedReplies.length > 0}
+		<div class="ml-4 mt-2">
+			<div class="flex flex-col" bind:this={nestedRepliesContainer}>
+				{#each sortedNestedReplies as nestedReply, nestedIndex}
+					<svelte:self
+						{answer}
+						reply={nestedReply}
+						index={nestedIndex}
+						isLast={nestedIndex === sortedNestedReplies.length - 1}
+						{reloadAnswers}
+						{question}
+						{onAnswerUpdate}
+						depth={depth + 1}
+					/>
+				{/each}
+			</div>
+		</div>
+	{/if}
 </div>

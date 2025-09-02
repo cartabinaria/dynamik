@@ -5,7 +5,7 @@
 	import { math } from '@cartamd/plugin-math';
 	import { onDestroy } from 'svelte';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
-
+	import  settings from '$lib/settings';
 	import { ANSWERS_URL } from '$lib/const';
 
 	const carta = new Carta({
@@ -35,7 +35,7 @@
 	export let unfinishedReply: string | undefined = undefined;
 	export let questionId: any = undefined;
 	export let sendAnswerCallback: (() => void) | undefined = undefined;
-	export let parentAnswerId: number | undefined = undefined; // TODO: se lo assegno all'id di una risposta esistente posso fare risposte a cascata
+	export let parentAnswerId: number | undefined = undefined; // ID of the answer/reply to reply to (enables nested replies)
 	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
 	export let onSubmitSuccess: ((newAnswerId: number) => Promise<void>) | undefined = undefined;
 
@@ -160,10 +160,10 @@
 						</label>
 					</div>
 				</div>
-
+				
 				<!-- Editor -->
 				<div class="mb-4">
-					<CartaEditor bind:value={body} mode="tabs" theme="github" {carta} />
+					<CartaEditor bind:value={body} mode="tabs" theme="github"  {carta} />
 				</div>
 
 				<!-- Buttons -->
@@ -211,10 +211,11 @@
 						</label>
 					</div>
 				</div>
-
+				<!-- TODO: aspettare di avere user da anonimo per sapere se posso cancellare answer/reply -->
+				
 				<!-- Editor -->
 				<div class="mb-4">
-					<CartaEditor bind:value={body} mode="tabs" theme="github" {carta} />
+					<CartaEditor bind:value={body} mode="tabs" theme="github"  {carta} />
 				</div>
 
 				<!-- Buttons -->

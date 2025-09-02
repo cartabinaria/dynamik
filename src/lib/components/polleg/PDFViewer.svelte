@@ -114,36 +114,127 @@
 		for (const cut of cuts) {
 			const start = cut.start * SCALE;
 			const end = cut.end * SCALE;
-			// Pick the correct box to split
+			
+			// Find the box containing the start of the cut
 			while (boxI < boxes.length) {
 				const box = boxes[boxI];
 				if (box.y <= start && start <= box.y + box.height) break;
 				else boxI++;
 			}
-			const box = boxes[boxI];
+			
+			if (boxI >= boxes.length) continue; // Skip if no box found
+			
+			const startBox = boxes[boxI];
+			
+			// Check if the cut extends beyond the current box (crosses pages)
+			if (end > startBox.y + startBox.height) {
+				// Handle cross-page cuts: merge all affected boxes into one
+				let endBoxI = boxI;
+				let totalHeight = 0;
+				let affectedBoxes = [];
+				
+				// Find all boxes that the cut spans across
+				while (endBoxI < boxes.length && boxes[endBoxI].y < end) {
+					const currentBox = boxes[endBoxI];
+					
+					// Calculate how much of this box is included in the cut
+					const boxStart = Math.max(currentBox.y, start);
+					const boxEnd = Math.min(currentBox.y + currentBox.height, end);
+					const includedHeight = boxEnd - boxStart;
+					
+					if (includedHeight > 0) {
+						affectedBoxes.push({
+							box: currentBox,
+							startOffset: boxStart - currentBox.y,
+							height: includedHeight
+						});
+						totalHeight += includedHeight;
+					}
+					endBoxI++;
+				}
+				
+				// Create the merged box for the question
+				const mergedQuestionBox = {
+					x: startBox.x,
+					y: start,
+					width: startBox.width,
+					height: totalHeight,
+					question: cut
+				};
+				
+				const newBoxes = [];
+				
+				// Add the part before the cut (if any)
+				// const beforeHeight = start - startBox.y;
+				// if (beforeHeight > 0) {
+				// 	newBoxes.push({
+				// 		...startBox,
+				// 		height: beforeHeight
+				// 	});
+				// }
+				
+				// Add the merged question box
+				newBoxes.push(mergedQuestionBox);
+				
+				// Add remaining parts of boxes after the cut
+				for (let i = boxI; i < endBoxI; i++) {
+					const currentBox = boxes[i];
+					const boxEnd = currentBox.y + currentBox.height;
+					
+					if (boxEnd > end) {
+						// This box extends beyond the cut
+						const remainingHeight = boxEnd - end;
+						if (remainingHeight > 0) {
+							newBoxes.push({
+								...currentBox,
+								y: end,
+								height: remainingHeight
+							});
+						}
+						break; // No more boxes to process for this cut
+					}
+				}
+				
+				// Replace the affected boxes with the new ones
+				boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(endBoxI)];
+				
+			} else {
+				// Handle single-box cuts (original logic, but fixed)
+				const newBoxes = [];
+				const b1h = start - startBox.y;
+				const b2h = end - start;
+				const b3h = startBox.y + startBox.height - end;
 
-			// TODO: we need to handle splits going across multiple pages
-			// Although it is probably very unlikely
-			const newBoxes = [];
-			const b1h = start - box.y;
-			const b1 = {
-				...box,
-				height: b1h,
-				question: cut
-			};
-			if (b1.height <= 0) throw Error('PDF height before question split is 0');
+				// Part before the cut
+				// if (b1h > 0) {
+				// 	newBoxes.push({
+				// 		...startBox,
+				// 		height: b1h
+				// 	});
+				// }
 
-			newBoxes.push(b1);
-			const b2 = {
-				...box,
-				y: box.y + b1h,
-				height: box.height - b1h
-			};
-			if (b2.height > 0) newBoxes.push(b2);
+				// The question box (this is where the question should be assigned)
+				const questionBox = {
+					...startBox,
+					y: start,
+					height: b2h,
+					question: cut
+				};
+				newBoxes.push(questionBox);
 
-			boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(boxI + 1)];
+				// Part after the cut
+				if (b3h > 0) {
+					newBoxes.push({
+						...startBox,
+						y: end,
+						height: b3h
+					});
+				}
+
+				boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(boxI + 1)];
+			}
 		}
-
+		boxes.splice(boxes.length-1, 1);
 		return boxes;
 	};
 
@@ -173,7 +264,7 @@
 	</main>
 {:else}
 	<!-- Horizontal Split Layout Container -->
-	<div class="flex flex-col h-full w-full max-w-6xl mx-6" bind:this={mainContainer}>
+	<div class="flex flex-col h-full w-full max-w-6xl" bind:this={mainContainer}>
 		<!-- PDF Content Area -->
 		<main
 			class="transition-all duration-300 ease-out overflow-auto flex flex-col relative"

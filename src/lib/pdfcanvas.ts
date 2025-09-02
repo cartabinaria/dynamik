@@ -118,24 +118,62 @@ export const renderBox = (pdf: FullPDF, canvas: HTMLCanvasElement, box: Box) => 
 	canvas.height = box.height;
 	canvas.width = box.width;
 	const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-	const canvasI = Math.floor(box.y / pdf.maxHeight);
 	const off = box.y % pdf.maxHeight;
+	const startCanvasI = Math.floor(box.y / pdf.maxHeight);
+	const endCanvasI = Math.floor((box.y + box.height - 1) / pdf.maxHeight);
 
 	// Add safety checks to prevent the TypeError
-	if (!pdf.canvases[canvasI]) {
-		console.error(`Canvas at index ${canvasI} is undefined`);
+	if (!pdf.canvases[startCanvasI]) {
+		console.error(`Canvas at index ${startCanvasI} is undefined`);
 		return;
 	}
 
+	if (startCanvasI === endCanvasI) {
+		// Box fits in a single canvas
+		const off = box.y % pdf.maxHeight;
+		ctx.drawImage(pdf.canvases[startCanvasI], 0, -off);
+	}
 	if (off + box.height > pdf.maxHeight) {
 		// This box sits between two canvases
-		if (!pdf.canvases[canvasI + 1]) {
-			console.error(`Canvas at index ${canvasI + 1} is undefined`);
+		if (!pdf.canvases[startCanvasI + 1]) {
+			console.error(`Canvas at index ${startCanvasI + 1} is undefined`);
 			return;
 		}
-		ctx.drawImage(pdf.canvases[canvasI], 0, -off);
-		ctx.drawImage(pdf.canvases[canvasI + 1], 0, pdf.maxHeight - off);
+		ctx.drawImage(pdf.canvases[startCanvasI], 0, -off);
+		ctx.drawImage(pdf.canvases[startCanvasI + 1], 0, pdf.maxHeight - off);
 	} else {
-		ctx.drawImage(pdf.canvases[canvasI], 0, -off);
+		// Box spans multiple canvases
+		let currentY = 0;
+		let remainingHeight = box.height;
+
+		for (let canvasI = startCanvasI; canvasI <= endCanvasI && remainingHeight > 0; canvasI++) {
+			if (!pdf.canvases[canvasI]) {
+				console.error(`Canvas at index ${canvasI} is undefined`);
+				break;
+			}
+
+			const canvasStartY = canvasI * pdf.maxHeight;
+			const boxStartInCanvas = Math.max(0, box.y - canvasStartY);
+			const boxEndInCanvas = Math.min(pdf.maxHeight, box.y + box.height - canvasStartY);
+			const heightInThisCanvas = boxEndInCanvas - boxStartInCanvas;
+
+			if (heightInThisCanvas > 0) {
+				// Draw the part of the box that belongs to this canvas
+				ctx.drawImage(
+					pdf.canvases[canvasI],
+					0, // sourceX
+					boxStartInCanvas, // sourceY
+					pdf.canvases[canvasI].width, // sourceWidth
+					heightInThisCanvas, // sourceHeight
+					0, // destX
+					currentY, // destY
+					canvas.width, // destWidth
+					heightInThisCanvas // destHeight
+				);
+
+				currentY += heightInThisCanvas;
+				remainingHeight -= heightInThisCanvas;
+			}
+		}
 	}
 };
