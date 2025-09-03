@@ -81,7 +81,7 @@
 		}
 	};
 	const vote = async (index: number, answerId: number, newVote: number) => {
-		if (data?.answers[index].vote == newVote) newVote = 0;
+		if (data?.answers[index].i_voted == newVote) newVote = 0;
 
 		let res = await (
 			await fetch(VOTE_URL(answerId), {
@@ -95,7 +95,7 @@
 		).json();
 
 		if (res) {
-			let oldVote = data.answers[index].vote;
+			let oldVote = data.answers[index].i_voted;
 			if (oldVote == 1 && (newVote == 0 || newVote == -1)) {
 				data.answers[index].upvotes--;
 			}
@@ -112,6 +112,10 @@
 			data.answers[index].count = data.answers[index].upvotes - data.answers[index].downvotes;
 			data.answers[index].vote = newVote;
 			//customSort();
+		}
+
+		if (reloadAnswers) {
+			await reloadAnswers();
 		}
 	};
 
@@ -156,7 +160,7 @@
 				<!-- Upvote Button -->
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
-						(answer?.vote == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
+						(answer?.i_voted == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
 					on:click={() => vote(index, answer.id, 1)}
 				>
 					<span class="icon-[material-symbols--arrow-upward] text-xl"></span>
@@ -170,7 +174,7 @@
 				<!-- Downvote Button -->
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
-						(answer?.vote == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
+						(answer?.i_voted == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
 					on:click={() => vote(index, answer.id, -1)}
 				>
 					<span class="icon-[material-symbols--arrow-downward] text-xl"></span>

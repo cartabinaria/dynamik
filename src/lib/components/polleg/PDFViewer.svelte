@@ -27,7 +27,7 @@
 			// Reload all questions with updated answers
 			const updatedQuestions = await Promise.all(
 				questions.map(async (q) => {
-					const res = await fetch(QUESTION_URL(q.id));
+					const res = await fetch(QUESTION_URL(q.id), { credentials: 'include' });
 					const data = await res.json();
 					if (!data.answers) data.answers = [];
 					return { ...q, answers: data.answers };

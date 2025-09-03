@@ -53,7 +53,9 @@
 	const load = async () => {
 		if (!expanded) return;
 
-		const res = await fetch(QUESTION_URL(question.id));
+		const res = await fetch(QUESTION_URL(question.id), {
+			credentials: 'include'
+		});
 		const data = await res.json();
 
 		if (!data.answers) data.answers = [];
