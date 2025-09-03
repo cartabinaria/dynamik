@@ -2,15 +2,19 @@
 	import { onMount } from 'svelte';
 	import type { OnProgressParameters } from 'pdfjs-dist';
 	import type { PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { page } from '$app/stores';
-	import { POLLEG_BASE_URL } from '$lib/const';
+	import { POLLEG_BASE_URL, PROPOSAL_URL } from '$lib/const';
+	import { toast } from '$lib/toast';
 
 	const ENDPOINT = POLLEG_BASE_URL + '/documents';
 	export let url: string;
 	export let id: string;
 	export let setEditMode: (flag: boolean) => void;
-	export let show: (string) => void;
+	export let show: (arg0: any) => void;
+	export let isAdmin: boolean = true;
+
+	// State for instructions visibility
+	let showInstructions = true;
 
 	// let url = new URL(prompt('Document URL')!);
 	// const url = new URL(
@@ -39,16 +43,6 @@
 	let initialScrollTop = 0;
 
 	onMount(async () => {
-		toast.push(
-			'Instructions: use left click to start selecting; use right click to delete a selection.',
-			{
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(244,67,54,0.9)',
-					'--toastBarBackground': '#E74C3C'
-				}
-			}
-		);
 		editContext = editCanvas.getContext('2d');
 		opacityContext = opacityCanvas.getContext('2d');
 
@@ -269,7 +263,10 @@
 
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
-		let res = await fetch(ENDPOINT, {
+		// Use different endpoint based on user type
+		const endpoint = isAdmin ? ENDPOINT : PROPOSAL_URL(parseInt(id));
+
+		let res = await fetch(endpoint, {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -279,22 +276,14 @@
 		});
 		let objRet = await res.json();
 		if (res.status == 200) {
-			toast.push('Success!', {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			});
+			const successMessage = isAdmin 
+				? 'PDF successfully prepared! Students can now answer questions.' 
+				: 'Proposal submitted successfully! Admins will review it soon.';
+			
+			toast.success(successMessage);
 			show(objRet);
 		} else {
-			toast.push('Error: ' + objRet.error, {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(244,67,54,0.9)',
-					'--toastBarBackground': '#E74C3C'
-				}
-			});
+			toast.error('Error: ' + objRet.error);
 			setEditMode(false);
 			// location.reload();
 		}
@@ -307,43 +296,50 @@
 	on:contextmenu|preventDefault={() => {}}
 />
 
-<div id="container" style="text-align: center;">
-	<canvas bind:this={pageCanvas} style="display: none"></canvas>
-	<canvas bind:this={fullCanvas} class="canvasFixed"></canvas>
-	<canvas bind:this={editCanvas} class="canvasFixed"></canvas>
-	<canvas bind:this={opacityCanvas} on:mousedown={ev_mousedown} class="canvasFixed"></canvas>
+<!-- Instructions for PDF preparation - positioned at top -->
+{#if showInstructions}
+	<div 
+		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-md bg-info rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-info/90 transition-colors" 
+		on:click={() => showInstructions = false}
+		role="button"
+		tabindex="0"
+		on:keydown={(e) => e.key === 'Enter' && (showInstructions = false)}
+	>
+		<h3 class="font-semibold mb-2 text-info-content">How to prepare a PDF:</h3>
+		<ul class="list-disc list-inside space-y-1 text-info-content">
+			<li>Use <u>left click</u> to start selecting questions</li>
+			<li>Use <u>right click</u> to delete a selection</li>
+			<li>Select each question from start to end</li>
+			<li>Click {isAdmin ? 'EXPORT' : 'PROPOSE'} when done</li>
+		</ul>
+		{#if !isAdmin}
+			<div class="mt-3 p-2 bg-warning rounded text-warning-content">
+				<strong>Note:</strong> Your preparation will be sent as a proposal for admin approval.
+			</div>
+		{/if}
+		<div class="mt-2 text-xs text-info-content/70 text-center">
+			Click to hide these instructions
+		</div>
+	</div>
+{/if}
+
+<div id="container" class="text-center">
+	<canvas bind:this={pageCanvas} class="hidden"></canvas>
+	<canvas bind:this={fullCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
+	<canvas bind:this={editCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
+	<canvas bind:this={opacityCanvas} on:mousedown={ev_mousedown} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
 </div>
 <!-- <canvas bind:this={canvasMerged} id="canvasMerged"></canvas> -->
 
-<div class="fab">
+<div class="fixed top-[90%] left-0 right-0 text-center z-[1001]">
 	<button on:click={show} type="button" class="btn btn-neutral rounded-lg border-0">CANCEL</button>
 	<button
 		on:click={exportData}
 		type="button"
 		id="exportBtn"
 		class="btn btn-primary hover:glass hover:bg-primary rounded-lg border-0"
-		>EXPORT<span class="icon-[ic--round-send]"></span></button
+		>{isAdmin ? 'EXPORT' : 'PROPOSE'}<span class="icon-[ic--round-send]"></span></button
 	>
 </div>
 
-<style>
-	.fab {
-		position: fixed;
-		top: 90%;
-		left: 0;
-		right: 0;
-		text-align: center;
-	}
 
-	.canvasFixed {
-		position: absolute;
-		flex-shrink: 0;
-		width: 100% !important;
-		top: 0;
-		margin-left: auto;
-		margin-right: auto;
-		left: 0;
-		right: 0;
-		text-align: center;
-	}
-</style>

@@ -229,7 +229,7 @@
 				};
 				newBoxes.push(questionBox);
 
-				if (cuts.length >= i + 1 && startBox.y + startBox.height > cuts[i + 1].start * SCALE) {
+				if (i + 1 < cuts.length && startBox.y + startBox.height > cuts[i + 1].start * SCALE) {
 					newBoxes.push({
 						...startBox,
 						y: end,
