@@ -241,7 +241,7 @@
 					{/if}
 
 					<!-- Delete Button (Far right for safety) -->
-					{#if user?.username == answer?.user || user?.admin}
+					{#if answer.can_i_delete}
 						<button
 							class="btn btn-ghost btn-sm text-error hover:btn-error"
 							on:click|preventDefault={() => deleteAnswer(answer.id)}
