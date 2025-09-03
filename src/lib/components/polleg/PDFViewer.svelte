@@ -53,6 +53,7 @@
 	let selectedQuestion: Question | null = null;
 	let splitMode = false;
 	let isClosing = false; // Per gestire l'animazione di chiusura
+	let isFullscreen = false; // Per gestire il fullscreen del panel Solutions
 	let mainContainer: HTMLElement;
 	let bookmarkAnimating = false; // Per animazione del bookmark
 
@@ -91,7 +92,13 @@
 			selectedQuestion = null;
 			splitMode = false;
 			isClosing = false;
+			isFullscreen = false; // Reset fullscreen quando chiudiamo
 		}, 300); // Stessa durata della transizione CSS
+	};
+
+	// Toggle fullscreen mode for Solutions panel
+	const toggleFullscreen = () => {
+		isFullscreen = !isFullscreen;
 	};
 
 	// Handle click to close split mode - solo quando in split mode e non sui bookmark!
@@ -266,8 +273,10 @@
 	<div class="flex flex-col h-full w-full max-w-6xl" bind:this={mainContainer}>
 		<!-- PDF Content Area -->
 		<main
-			class="transition-all duration-300 ease-out overflow-auto flex flex-col relative"
-			style={splitMode ? 'max-height: 50vh;' : ''}
+			class="transition-all duration-300 ease-out overflow-auto flex flex-col relative {isFullscreen
+				? 'hidden'
+				: ''}"
+			style={splitMode && !isFullscreen ? 'max-height: 50vh;' : ''}
 		>
 			{#each boxes as box, index}
 				<!-- In split mode, show only the first box (selected question's box) -->
@@ -326,8 +335,10 @@
 				class="bg-base-100/80 backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
 				splitMode
 					? 'translate-y-0 opacity-100'
-					: 'translate-y-full opacity-0'} hidden md:flex flex-col relative overflow-hidden"
-				style="height: 50vh; min-height: 20vh; max-height: 80vh;"
+					: 'translate-y-full opacity-0'} hidden md:flex flex-col relative overflow-hidden {isFullscreen
+					? 'fixed inset-0 z-50'
+					: ''}"
+				style={isFullscreen ? '' : 'height: 50vh; min-height: 20vh; max-height: 80vh;'}
 			>
 				<!-- Modern header with enhanced glass effect -->
 				<div
@@ -340,15 +351,31 @@
 						>
 					</div>
 
-					<!-- Close Button with modern styling -->
-					<button
-						class="btn btn-ghost btn-sm hover:btn-warning hover:scale-105 transition-all duration-200 ease-out"
-						on:click={closeSplitMode}
-						aria-label="Richiudi pannello soluzioni"
-						title="Richiudi pannello"
-					>
-						<span class="icon-[solar--close-circle-bold] text-xl"></span>
-					</button>
+					<div class="flex items-center gap-2">
+						<!-- Fullscreen Toggle Button -->
+						<button
+							class="btn btn-ghost btn-sm hover:btn-info hover:scale-105 transition-all duration-200 ease-out"
+							on:click={toggleFullscreen}
+							aria-label={isFullscreen ? 'Esci da schermo intero' : 'Espandi a schermo intero'}
+							title={isFullscreen ? 'Esci da schermo intero' : 'Espandi a schermo intero'}
+						>
+							{#if isFullscreen}
+								<span class="icon-[solar--minimize-square-bold] text-xl"></span>
+							{:else}
+								<span class="icon-[solar--maximize-square-bold] text-xl"></span>
+							{/if}
+						</button>
+
+						<!-- Close Button with modern styling -->
+						<button
+							class="btn btn-ghost btn-sm hover:btn-warning hover:scale-105 transition-all duration-200 ease-out"
+							on:click={closeSplitMode}
+							aria-label="Richiudi pannello soluzioni"
+							title="Richiudi pannello"
+						>
+							<span class="icon-[solar--close-circle-bold] text-xl"></span>
+						</button>
+					</div>
 				</div>
 
 				<!-- Content area -->

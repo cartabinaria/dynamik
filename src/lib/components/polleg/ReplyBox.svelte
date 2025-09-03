@@ -143,12 +143,14 @@
 								bind:checked={isAnonymous}
 								class="toggle toggle-sm toggle-primary"
 							/>
-							<span
-								class="label-text text-sm hover:text-primary {isAnonymous ? 'text-primary' : ''}"
+							<div
+								class="text-sm hover:text-primary flex items-center gap-2 {isAnonymous
+									? 'text-primary'
+									: ''}"
 							>
 								<span class="icon-[solar--incognito-bold] opacity-70"></span>
 								Post anonymously
-							</span>
+							</div>
 						</label>
 					</div>
 				</div>
@@ -194,12 +196,14 @@
 								bind:checked={isAnonymous}
 								class="toggle toggle-sm toggle-primary"
 							/>
-							<span
-								class="label-text text-sm hover:text-primary {isAnonymous ? 'text-primary' : ''}"
+							<div
+								class="text-sm hover:text-primary flex items-center gap-2 {isAnonymous
+									? 'text-primary'
+									: ''}"
 							>
 								<span class="icon-[solar--incognito-bold] opacity-70"></span>
 								Post anonymously
-							</span>
+							</div>
 						</label>
 					</div>
 				</div>

@@ -198,10 +198,8 @@
 				</div>
 
 				<!-- Answer Content -->
-				<div class="prose max-w-none mb-8">
-					<p class="leading-relaxed text-base">
-						<Markdown {carta} value={answer.content} />
-					</p>
+				<div class="leading-normal mb-4">
+					<Markdown {carta} value={answer.content} />
 				</div>
 
 				<!-- Bottom Actions Bar -->

@@ -5,15 +5,15 @@
 	import { onMount, tick } from 'svelte';
 
 	export let value: string;
-	
+
 	let mounted = false;
 	let container: HTMLDivElement;
 	let lastRenderedValue = '';
-	
+
 	onMount(() => {
 		mounted = true;
 	});
-	
+
 	// Solo re-renderizza se il valore è effettivamente cambiato
 	$: if (mounted && value && value !== lastRenderedValue) {
 		lastRenderedValue = value;

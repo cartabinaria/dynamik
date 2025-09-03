@@ -62,7 +62,11 @@
 		loading = false;
 	};
 
-	const addAnswer = async (body: string, parent?: number | null, anonymous: boolean = false): Promise<boolean> => {
+	const addAnswer = async (
+		body: string,
+		parent?: number | null,
+		anonymous: boolean = false
+	): Promise<boolean> => {
 		let answer: any = { question: question.id, content: body, anonymous: anonymous };
 		if (parent) answer.parent = parent;
 

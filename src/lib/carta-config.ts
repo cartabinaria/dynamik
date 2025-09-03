@@ -4,13 +4,24 @@ import { code } from '@cartamd/plugin-code';
 import { math } from '@cartamd/plugin-math';
 import DOMPurify from 'isomorphic-dompurify';
 import { attachment } from '@cartamd/plugin-attachment';
+import settings from '$lib/settings';
+import { get } from 'svelte/store';
+
+function getTheme() {
+	const theme = get(settings).theme;
+	if (theme == 'dark') return 'github-dark';
+	else if (theme == 'light' || theme == 'autumn') return 'github-light';
+	return theme;
+}
 
 // Shared Carta configuration for markdown rendering
 export function getCartaConfig() {
 	return {
 		extensions: [
 			emoji(),
-			code(),
+			code({
+				theme: getTheme()
+			}),
 			math(),
 			attachment({
 				async upload(file) {
@@ -56,6 +67,9 @@ export function getCartaConfig() {
 				}
 			})
 		],
+		shikiOptions: {
+			themes: ['github-dark', 'github-light', 'dracula']
+		},
 		sanitizer: DOMPurify.sanitize
 	};
 }
