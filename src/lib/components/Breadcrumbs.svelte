@@ -131,7 +131,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</button>
 			{/if}
 		</div>
-		<div class="flex flex-1 justify-end mr-2">
+		<div class="flex flex-1 justify-end mr-2 gap-2">
+			<!-- FAQ Link -->
+			<a 
+				class="btn btn-ghost btn-sm hidden sm:flex" 
+				href="/faq" 
+				title="Frequently Asked Questions"
+			>
+				<span class="icon-[solar--question-circle-bold] text-lg"></span>
+				<span class="hidden lg:inline">FAQ</span>
+			</a>
+			
 			{#if $auth.state == AUTHENTICATED}
 				<a class="btn" href={encodeURI(LOGOUT_URL(url))}>
 					<!-- TODO: fancy user menu -->

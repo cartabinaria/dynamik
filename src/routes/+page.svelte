@@ -98,7 +98,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			<div class="divider"></div>
 
-			<div class="grid grid-cols-2 gap-8">
+			<div class="grid grid-cols-3 gap-8">
+				{@render line('FAQ', `${base}/faq`, '❓')}
 				{@render line('Impostazioni', `${base}/settings`, '🔧')}
 				{@render line('Stato', `${base}/build`, '📊')}
 			</div>
