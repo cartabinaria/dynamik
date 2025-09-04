@@ -41,6 +41,13 @@
 		}
 	}
 
+	// Load all questions data with answers on mount
+	onMount(async () => {
+		if (questions && questions.length > 0) {
+			await reloadAllQuestions();
+		}
+	});
+
 	// Reactive helper function to get total answer count for a question
 	$: getTotalAnswerCount = (questionId: number) => {
 		const fullQuestion = questions?.find((q) => q.id === questionId);
