@@ -22,14 +22,22 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </script>
 
 <main class="md:container md:m-auto p-4">
-	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-xs px-5 mb-5">
+	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
 		<div class="navbar-start">
-			<h1 class="text-xl font-semibold text-base-content">Stato delle raccolte</h1>
-		</div>
-		<div class="navbar-end flex items-center">
-			<a class="btn btn-square btn-ghost" title="Indietro" href="/" aria-label="Indietro">
-				<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
-			</a>
+			<div class="navbar-start flex items-center">
+				<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+					<span class="icon-[ic--round-home]"></span>
+					Home
+				</a>
+			</div>
+			<div class="navbar-center">
+				<h1 class="text-xl font-semibold text-base-content">Stato delle raccolte</h1>
+			</div>
+			<div class="navbar-end flex items-center">
+				<a class="btn btn-square btn-ghost" title="Indietro" href="/" aria-label="Indietro">
+					<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
+				</a>
+			</div>
 		</div>
 	</nav>
 	<div class="m-8">

@@ -11,14 +11,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Instructions from '$lib/components/polleg/Instructions.svelte';
 	import PDFViewer from '$lib/components/polleg/PDFViewer.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated, checkAuth } from '$lib/stores/auth';
 	import { page } from '$app/stores';
-	import { base } from '$app/paths';
-	import { WHOAMI_URL } from '$lib/const';
 
 	export let data: PageData;
 
 	let editMode: boolean = false;
+
+	onMount(async () => {
+		await checkAuth();
+	});
 
 	// Reactive variables for auth
 	$: user = isAuthenticated($auth) ? $auth.user : null;

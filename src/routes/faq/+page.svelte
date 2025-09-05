@@ -13,17 +13,23 @@
 	let expandedIndex: string | null = null;
 
 	// Filtra le categorie e FAQ in base alla ricerca
-	$: filteredCategories = data.categories?.map(category => ({
-		...category,
-		faqs: category.faqs.filter(
-			(faq) =>
-				faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-		)
-	})).filter(category => category.faqs.length > 0) || [];
+	$: filteredCategories =
+		data.categories
+			?.map((category) => ({
+				...category,
+				faqs: category.faqs.filter(
+					(faq) =>
+						faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+						faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+				)
+			}))
+			.filter((category) => category.faqs.length > 0) || [];
 
 	// Conta il totale delle FAQ filtrate
-	$: totalFilteredFaqs = filteredCategories.reduce((total, category) => total + category.faqs.length, 0);
+	$: totalFilteredFaqs = filteredCategories.reduce(
+		(total, category) => total + category.faqs.length,
+		0
+	);
 
 	// Funzione per togglere l'accordion
 	const toggleAccordion = (id: string) => {
@@ -37,10 +43,18 @@
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
-	<!-- Language Switcher -->
-	<div class="flex justify-end mb-4">
-		<LanguageSwitcher currentLang="it" />
-	</div>
+	<nav class="navbar">
+		<div class="navbar-start flex items-center">
+			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+				<span class="icon-[ic--round-home]"></span>
+				Home
+			</a>
+		</div>
+		<!-- Language Switcher -->
+		<div class="navbar-end">
+			<LanguageSwitcher currentLang="it" />
+		</div>
+	</nav>
 
 	<!-- Header -->
 	<div class="text-center mb-8">
@@ -69,7 +83,10 @@
 	<!-- FAQ Count -->
 	{#if searchTerm}
 		<div class="mb-4 text-sm text-base-content/60">
-			{totalFilteredFaqs} risultat{totalFilteredFaqs !== 1 ? 'i' : 'o'} trovat{totalFilteredFaqs !== 1 ? 'i' : 'o'}
+			{totalFilteredFaqs} risultat{totalFilteredFaqs !== 1 ? 'i' : 'o'} trovat{totalFilteredFaqs !==
+			1
+				? 'i'
+				: 'o'}
 		</div>
 	{/if}
 
@@ -85,7 +102,7 @@
 							{category.name}
 						</h2>
 					</div>
-					
+
 					<!-- Category FAQs -->
 					{#each category.faqs as faq, faqIndex}
 						{@const accordionId = `${categoryIndex}-${faqIndex}`}
@@ -97,7 +114,8 @@
 								on:change={() => toggleAccordion(accordionId)}
 							/>
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
-								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"></span>
+								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"
+								></span>
 								{faq.question}
 							</div>
 							<div class="collapse-content">

@@ -110,12 +110,8 @@
 
 	// Handle click to close split mode - solo quando in split mode e non sui bookmark!
 	function handlePDFClick(event) {
-		// Evita di chiudere se si clicca su bookmark o altri controlli
 		if (!event.target.closest('button') && !event.target.closest('.badge')) {
-			console.log('🖱️ PDF CLICK - Closing split mode');
 			closeSplitMode();
-		} else {
-			console.log('🚫 PDF CLICK on control - NOT closing');
 		}
 	}
 	onMount(() => {

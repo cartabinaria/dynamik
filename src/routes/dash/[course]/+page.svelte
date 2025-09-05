@@ -15,21 +15,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
 	import ListTeaching from './ListTeaching.svelte';
+	import LoginButton from '$lib/components/LoginButton.svelte';
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
+	import { checkAuth } from '$lib/stores/auth';
 
 	let { data }: { data: PageData } = $props();
 
 	let activeYears: string[] = $state([]);
-
-	type LoginState = { username: string; name: string; avatarUrl: string } | { error: string };
-	let loginState: Promise<LoginState> | undefined = $state(undefined);
-
+	
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		loginState = getWhoAmI(fetch);
-	});
-
+		await checkAuth();
+	});	
+	
 	function namesToTeachings(names: string[]): Teaching[] {
 		return names.map(data.teachings.get, data.teachings).filter((x): x is Teaching => !!x);
 	}
@@ -65,7 +64,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <div class="max-w-5xl p-4 mx-auto">
 	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-xs px-5 mb-5">
 		<div class="navbar-start flex items-center">
-			<a href="/" class="btn btn-outline" title="Home" aria-label="Home">
+			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
 				<span class="icon-[ic--round-home]"></span>
 				Home
 			</a>
@@ -77,15 +76,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 
 		<div class="navbar-end">
-			{#if loginState != null}
-				{#await loginState then login}
-					{#if 'error' in login}
-						<a class="btn btn-square btn-ghost" href={getLoginUrl(page.url)}> Login </a>
-					{:else}
-						<img src={login.avatarUrl} alt="User avatar" class="w-10 rounded-xl" />
-					{/if}
-				{/await}
-			{/if}
+			<LoginButton url={page.url} />
 		</div>
 	</nav>
 	<ListTeaching

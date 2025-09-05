@@ -37,10 +37,18 @@
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
-	<!-- Language Switcher -->
-	<div class="flex justify-end mb-4">
-		<LanguageSwitcher currentLang="en" />
-	</div>
+	<nav class="navbar">
+		<div class="navbar-start flex items-center">
+			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+				<span class="icon-[ic--round-home]"></span>
+				Home
+			</a>
+		</div>
+		<!-- Language Switcher -->
+		<div class="navbar-end">
+			<LanguageSwitcher currentLang="en" />
+		</div>
+	</nav>
 
 	<!-- Header -->
 	<div class="text-center mb-8">

@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { EDIT_URLS, LOGIN_URL, LOGOUT_URL } from '$lib/const';
-	import { auth, AUTHENTICATED } from '$lib/stores/auth';
+	import { EDIT_URLS } from '$lib/const';
+	import LoginButton from '$lib/components/LoginButton.svelte';
 
 	type Props = {
 		url: URL;
@@ -70,7 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 </script>
 
-<div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
+<div class="navbar flex bg-base-200 shadow-xs px-0 sm:px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
 		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
 			<span
@@ -80,9 +80,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
 		</button>
 	</div>
-	<div class="navbar min-h-0 p-0 justify-start items-center">
+	<div class="navbar min-h-0 p-0 justify-start items-center gap-2">
 		<div
-			class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
+			class="breadcrumbs sm:flex lg:text-lg sm:items-center text-sm sm:flex-wrap font-semibold"
 			class:hidden={breadcrumbMobile}
 		>
 			<ul>
@@ -105,19 +105,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</ul>
 		</div>
 		<a
-			class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
-			aria-label="GitHub Repository"
+			class="hidden sm:inline flex items-center rounded-lg btn-ghost shrink-0 w-8"
 			href={editUrls.github_repo}
+			title="Open GitHub Repository {urlParts[0]}"
+			aria-label="Open GitHub Repository {urlParts[0]}"
 		>
 			<span class="text-2xl icon-[akar-icons--github-fill] hover:text-primary"></span>
 		</a>
 	</div>
-	<div class="navbar-end gap-2">
+	<div class="navbar-end gap-1 sm:gap-2">
 		<div class="flex flex-1 justify-end">
 			{#if onfuzzy != null}
 				<button
 					title="Search"
-					class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
+					class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost cursor-pointer"
 					onclick={(e) => {
 						e.preventDefault();
 						onfuzzy(e);
@@ -131,36 +132,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</button>
 			{/if}
 		</div>
-		<div class="flex flex-1 justify-end mr-2 gap-2">
-			<!-- FAQ Link -->
-			<a 
-				class="btn btn-ghost btn-sm hidden sm:flex" 
-				href="/faq" 
-				title="Frequently Asked Questions"
-			>
-				<span class="icon-[solar--question-circle-bold] text-lg"></span>
-				<span class="hidden lg:inline">FAQ</span>
-			</a>
-			
-			{#if $auth.state == AUTHENTICATED}
-				<a class="btn" href={encodeURI(LOGOUT_URL(url))}>
-					<!-- TODO: fancy user menu -->
-					Logout
-					<div class="avatar">
-						<div class="w-8 rounded-full">
-							<img src={$auth.user.avatarUrl} alt="User avatar" />
-						</div>
-					</div>
-				</a>
-			{:else}
-				<a
-					class="btn btn-wide btn-primary sm:ml-2 p-1 flex flex-shrink-0"
-					href={encodeURI(LOGIN_URL(url))}
-				>
-					<span class="icon-[akar-icons--github-fill]"></span>
-					Login with GitHub
-				</a>
-			{/if}
-		</div>
+		<LoginButton {url} />
 	</div>
 </div>

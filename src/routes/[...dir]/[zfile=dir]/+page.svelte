@@ -22,9 +22,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import type { PageData } from './$types';
 	import type { StatikEntry } from '$lib/api';
+	import { checkAuth } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let { manifest } = $derived(data);
+
+	onMount(async () => {
+		await checkAuth();
+	});
 
 	function kebabToTitle(str: string) {
 		return str

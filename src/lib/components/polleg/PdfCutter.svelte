@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import type { OnProgressParameters } from 'pdfjs-dist';
 	import type { PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
-	import { page } from '$app/stores';
 	import { POLLEG_BASE_URL, PROPOSAL_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
 
@@ -16,10 +15,6 @@
 	// State for instructions visibility
 	let showInstructions = true;
 
-	// let url = new URL(prompt('Document URL')!);
-	// const url = new URL(
-	// 	'https://csunibo.github.io/sistemi-operativi/prove/scritto/scritto-1999-10-15-testo.pdf'
-	// );
 	let editCanvas: HTMLCanvasElement, editContext: any;
 	let opacityCanvas: HTMLCanvasElement, opacityContext: any;
 	let fullCanvas: HTMLCanvasElement, fullContext: any;
