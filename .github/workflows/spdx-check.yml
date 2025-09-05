@@ -1,5 +1,8 @@
 name: 'SPDX Compliance Check'
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     paths:
@@ -7,7 +10,10 @@ on:
       - 'src/**/*.js'
       - 'src/**/*.svelte'
   push:
-    branches: [main]
+    paths:
+      - 'src/**/*.ts'
+      - 'src/**/*.js'
+      - 'src/**/*.svelte'
 
 jobs:
   reuse-compliance:
