@@ -11,6 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { onMount } from 'svelte';
 	import settings from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 
 	onMount(() => {
 		settings.subscribe(() => {
@@ -26,6 +27,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 
 	import '../app.css';
+	import 'katex/dist/katex.css';
 	import favicon from '$lib/assets/cartabinaria.png';
 	import ogImage from '$lib/assets/cartabinaria-opengraph.png';
 </script>
@@ -41,6 +43,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </svelte:head>
 
 <slot />
+
+<SvelteToast />
 
 <style>
 </style>

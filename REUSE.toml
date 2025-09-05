@@ -1,0 +1,34 @@
+version = 1
+SPDX-PackageName = "dynamik"
+SPDX-PackageSupplier = "Organization: Cartabinaria"
+SPDX-PackageDownloadLocation = "https://github.com/cartabinaria/dynamik"
+
+[[annotations]]
+path = ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
+precedence = "closest"
+SPDX-FileCopyrightText = "Contributors (see git history)"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["*.md", "*.json", "*.yml", "*.yaml", "*.toml"]
+precedence = "closest"
+SPDX-FileCopyrightText = "Contributors (see git history)"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["*.png", "*.jpg", "*.jpeg", "*.svg", "*.ico"]
+precedence = "closest"
+SPDX-FileCopyrightText = "Contributors (see git history)"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["node_modules/**", "dist/**", "build/**", ".git/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "NOASSERTION"
+SPDX-License-Identifier = "NOASSERTION"
+
+[[annotations]]
+path = ["package-lock.json", "pnpm-lock.yaml", "yarn.lock"]
+precedence = "closest"
+SPDX-FileCopyrightText = "NOASSERTION"
+SPDX-License-Identifier = "NOASSERTION"

@@ -16,14 +16,24 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </script>
 
 <main class="md:container md:m-auto p-4">
-	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-xs px-5 mb-5">
-		<div class="navbar-start">
-			<h1 class="text-xl font-semibold text-base-content">Impostazioni</h1>
-		</div>
-		<div class="navbar-end flex items-center">
-			<a href="/" class="btn btn-square btn-ghost" title="Indietro" aria-label="Indietro">
-				<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
+	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
+		<div class="navbar-start flex items-center">
+			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+				<span class="icon-[ic--round-home]"></span>
+				Home
 			</a>
+			<button
+				class="btn btn-ghost btn-primary rounded-lg"
+				title="Indietro"
+				aria-label="Indietro"
+				on:click={() => history.back()}
+			>
+				<span class="icon-[akar-icons--arrow-back-thick-fill]"></span>
+				Go back
+			</button>
+		</div>
+		<div class="navbar-cener">
+			<h1 class="text-xl font-semibold text-base-content">Impostazioni</h1>
 		</div>
 	</nav>
 

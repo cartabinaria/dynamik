@@ -18,13 +18,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import Line from '$lib/components/Line.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import FuzzySearch from './FuzzySearch.svelte';
+	import FuzzySearch from '$lib/components/FuzzySearch.svelte';
 
 	import type { PageData } from './$types';
 	import type { StatikEntry } from '$lib/api';
+	import { checkAuth } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let { manifest } = $derived(data);
+
+	onMount(async () => {
+		await checkAuth();
+	});
 
 	function kebabToTitle(str: string) {
 		return str

@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { EDIT_URLS } from '$lib/const';
+	import LoginButton from '$lib/components/LoginButton.svelte';
 
 	type Props = {
 		url: URL;
@@ -69,7 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 </script>
 
-<div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
+<div class="navbar flex bg-base-200 shadow-xs px-0 sm:px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
 		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
 			<span
@@ -79,9 +80,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
 		</button>
 	</div>
-	<div class="navbar min-h-0 p-0 justify-start items-center">
+	<div class="navbar min-h-0 p-0 justify-start items-center gap-2">
 		<div
-			class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
+			class="breadcrumbs sm:flex lg:text-lg sm:items-center text-sm sm:flex-wrap font-semibold"
 			class:hidden={breadcrumbMobile}
 		>
 			<ul>
@@ -103,34 +104,34 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{/each}
 			</ul>
 		</div>
+		<a
+			class="hidden sm:inline flex items-center rounded-lg btn-ghost shrink-0 w-8"
+			href={editUrls.github_repo}
+			title="Open GitHub Repository {urlParts[0]}"
+			aria-label="Open GitHub Repository {urlParts[0]}"
+		>
+			<span class="text-2xl icon-[akar-icons--github-fill] hover:text-primary"></span>
+		</a>
 	</div>
-	<div class="navbar-end">
+	<div class="navbar-end gap-1 sm:gap-2">
 		<div class="flex flex-1 justify-end">
-			<a
-				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
-				aria-label="GitHub Repository"
-				href={editUrls.github_repo}
-			>
-				<span class="text-2xl icon-[akar-icons--github-fill]"></span>
-			</a>
+			{#if onfuzzy != null}
+				<button
+					title="Search"
+					class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost cursor-pointer"
+					onclick={(e) => {
+						e.preventDefault();
+						onfuzzy(e);
+					}}
+				>
+					<span class="text-primary icon-[akar-icons--search] align-middle"></span>
+					<span class="hidden md:inline">
+						<kbd class="kbd-sm">Ctrl</kbd>+
+						<kbd class="kbd-sm">K</kbd>
+					</span>
+				</button>
+			{/if}
 		</div>
-	</div>
-	<div class="flex flex-1 justify-end mr-2">
-		{#if onfuzzy != null}
-			<button
-				title="Search"
-				class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
-				onclick={(e) => {
-					e.preventDefault();
-					onfuzzy(e);
-				}}
-			>
-				<span class="text-primary icon-[akar-icons--search] align-middle"></span>
-				<span class="hidden md:inline">
-					<kbd class="kbd-sm">Ctrl</kbd>+
-					<kbd class="kbd-sm">K</kbd>
-				</span>
-			</button>
-		{/if}
+		<LoginButton {url} />
 	</div>
 </div>
