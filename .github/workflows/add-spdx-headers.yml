@@ -26,15 +26,6 @@ jobs:
       - name: Install REUSE tool
         run: pip install reuse
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: |
-          npm install -g license-eye
-
       - name: Add SPDX headers to files
         run: |
           # Create script to add headers
