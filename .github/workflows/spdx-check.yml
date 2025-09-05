@@ -1,0 +1,37 @@
+name: 'SPDX Compliance Check'
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.ts'
+      - 'src/**/*.js'
+      - 'src/**/*.svelte'
+  push:
+    branches: [main]
+
+jobs:
+  reuse-compliance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v2
+        with:
+          args: lint
+
+      - name: Generate SPDX Report
+        if: failure()
+        run: |
+          pip install reuse
+          echo "## ❌ SPDX Compliance Issues Found" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Files missing SPDX headers:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          reuse lint | grep "missing copyright" | while read line; do
+            echo "- $line" >> $GITHUB_STEP_SUMMARY
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Run the 'Add SPDX Headers' workflow to fix these issues automatically." >> $GITHUB_STEP_SUMMARY

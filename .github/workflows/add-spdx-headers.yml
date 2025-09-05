@@ -1,0 +1,253 @@
+name: 'Add SPDX Headers'
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**/*.ts'
+      - 'src/**/*.js'
+      - 'src/**/*.svelte'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add-spdx-headers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for git log
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install REUSE tool
+        run: pip install reuse
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install -g license-eye
+
+      - name: Add SPDX headers to files
+        run: |
+          # Create script to add headers
+          cat > add_headers.sh << 'EOF'
+          #!/bin/bash
+
+          # Function to get contributors for a file with years
+          get_contributors() {
+            local file="$1"
+            git log --pretty=format:"%ad %an <%ae>" --date=format:"%Y" -- "$file" | \
+            sort | uniq | \
+            awk '{
+              year = $1
+              name_email = ""
+              for(i=2; i<=NF; i++) name_email = name_email $i " "
+              gsub(/ $/, "", name_email)
+              print "SPDX-FileCopyrightText: " year " " name_email
+            }'
+          }
+
+          # Function to merge existing and new contributors preserving year ranges
+          get_merged_contributors() {
+            local file="$1"
+            
+            # Get existing contributors with their years/ranges
+            declare -A existing_years
+            declare -A existing_names
+            
+            while IFS= read -r line; do
+              if [[ $line =~ SPDX-FileCopyrightText:[[:space:]]*([0-9]+)([[:space:]]*-[[:space:]]*[0-9]+)?[[:space:]]+(.+) ]]; then
+                local year_range="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
+                local name_email="${BASH_REMATCH[3]}"
+                existing_years["$name_email"]="$year_range"
+                existing_names["$name_email"]=1
+              fi
+            done < "$file"
+            
+            # Get all years from git for each contributor
+            declare -A git_years
+            while IFS= read -r line; do
+              if [[ $line =~ ^([0-9]+)[[:space:]]+(.+) ]]; then
+                local year="${BASH_REMATCH[1]}"
+                local name_email="${BASH_REMATCH[2]}"
+                if [[ -z "${git_years["$name_email"]}" ]]; then
+                  git_years["$name_email"]="$year"
+                else
+                  git_years["$name_email"]="${git_years["$name_email"]} $year"
+                fi
+              fi
+            done < <(git log --pretty=format:"%ad %an <%ae>" --date=format:"%Y" -- "$file" | sort | uniq)
+            
+            # Merge and output
+            declare -A processed
+            for name_email in "${!git_years[@]}"; do
+              local all_years=(${git_years["$name_email"]})
+              local min_year=${all_years[0]}
+              local max_year=${all_years[-1]}
+              
+              # If we have existing range, preserve it and extend if needed
+              if [[ -n "${existing_years["$name_email"]}" ]]; then
+                local existing="${existing_years["$name_email"]}"
+                if [[ $existing =~ ^([0-9]+)[[:space:]]*-[[:space:]]*([0-9]+)$ ]]; then
+                  local existing_min="${BASH_REMATCH[1]}"
+                  local existing_max="${BASH_REMATCH[2]}"
+                  min_year=$((min_year < existing_min ? min_year : existing_min))
+                  max_year=$((max_year > existing_max ? max_year : existing_max))
+                elif [[ $existing =~ ^([0-9]+)$ ]]; then
+                  local existing_year="${BASH_REMATCH[1]}"
+                  min_year=$((min_year < existing_year ? min_year : existing_year))
+                  max_year=$((max_year > existing_year ? max_year : existing_year))
+                fi
+              fi
+              
+              # Format output
+              if [[ $min_year -eq $max_year ]]; then
+                echo "SPDX-FileCopyrightText: $min_year $name_email"
+              else
+                echo "SPDX-FileCopyrightText: $min_year - $max_year $name_email"
+              fi
+              processed["$name_email"]=1
+            done
+            
+            # Add any existing contributors not found in git (edge case)
+            for name_email in "${!existing_names[@]}"; do
+              if [[ -z "${processed["$name_email"]}" ]]; then
+                echo "SPDX-FileCopyrightText: ${existing_years["$name_email"]} $name_email"
+              fi
+            done
+          }
+
+          # Function to add header to file
+          add_header() {
+            local file="$1"
+            local temp_file=$(mktemp)
+            local backup_file="${file}.backup"
+            local is_update=false
+            
+            # Create backup
+            cp "$file" "$backup_file"
+            
+            # Check if file already has SPDX header
+            if grep -q "SPDX-FileCopyrightText" "$file"; then
+              echo "File $file has existing SPDX header, checking if update needed..."
+              is_update=true
+              
+              # Compare merged result with current content
+              current_content=$(grep "SPDX-FileCopyrightText:" "$file" | sort)
+              merged_content=$(get_merged_contributors "$file" | sort)
+              
+              if [ "$current_content" = "$merged_content" ]; then
+                echo "SPDX header is up-to-date for $file, skipping..."
+                rm "$backup_file"
+                return
+              fi
+              
+              echo "Updating SPDX header for $file..."
+            else
+              echo "Adding new SPDX header to $file..."
+            fi
+            
+            # Get file extension for comment style
+            ext="${file##*.}"
+            
+            # Determine comment style
+            case "$ext" in
+              "svelte")
+                comment_start="<!-- "
+                comment_end=" -->"
+                ;;
+              "ts"|"js")
+                comment_start="/*"
+                comment_end="*/"
+                ;;
+              *)
+                echo "Unknown file type: $file"
+                rm "$backup_file"
+                return
+                ;;
+            esac
+            
+            # Remove existing SPDX header if present
+            if grep -q "SPDX-FileCopyrightText" "$file"; then
+              # Remove lines between comment start with SPDX and comment end
+              sed -i '/'"$comment_start"'.*SPDX-/,/'"$comment_end"'/d' "$file"
+              # Remove empty lines at the beginning
+              sed -i '/./,$!d' "$file"
+            fi
+            
+            # Generate new header
+            echo "$comment_start" > "$temp_file"
+            if [ "$is_update" = "true" ]; then
+              get_merged_contributors "$file" >> "$temp_file"
+            else
+              get_contributors "$file" >> "$temp_file"
+            fi
+            echo "" >> "$temp_file"
+            echo "SPDX-License-Identifier: AGPL-3.0-or-later" >> "$temp_file"
+            echo "$comment_end" >> "$temp_file"
+            echo "" >> "$temp_file"
+            
+            # Add original file content (after removing old header)
+            cat "$file" >> "$temp_file"
+            
+            # Replace original file
+            mv "$temp_file" "$file"
+            
+            echo "SPDX header updated for: $file"
+            rm "$backup_file"
+          }
+
+          # Find all files and process them (both add new and update existing)
+          find src -name "*.svelte" -o -name "*.ts" -o -name "*.js" | while read file; do
+            add_header "$file"
+          done
+          EOF
+
+          chmod +x add_headers.sh
+          ./add_headers.sh
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "feat: add/update SPDX headers in source files
+
+          - Added SPDX-FileCopyrightText with all contributor names and years
+          - Updated existing headers with new contributors
+          - Added SPDX-License-Identifier: AGPL-3.0-or-later
+          - Automatically generated from git history"
+          git push
+
+      - name: Create summary
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          echo "## ✅ SPDX Headers Added Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following files were updated with SPDX headers:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          git diff --name-only HEAD~1 | while read file; do
+            echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Headers include:" >> $GITHUB_STEP_SUMMARY
+          echo "- All contributors with their respective years" >> $GITHUB_STEP_SUMMARY
+          echo "- AGPL-3.0-or-later license identifier" >> $GITHUB_STEP_SUMMARY
