@@ -8,7 +8,7 @@ description: "Answers to the most common questions about Resources"
 ## How do I create an account?
 To create an account, click the "*Login*" button in the top right corner. This will redirect you to GitHub, where you can select the **registration** option or simply **login using an existing account**.
 
-You don't need to create a separate account for Resources: login happens directly through GitHub. By registering, you'll be able to use additional features like uploading documents and commenting on exercises and tests with [the Q&A system](what-is-the-Q&A-system).
+You don't need to create a separate account for Resources: login happens directly through GitHub. By registering, you'll be able to use additional features like uploading documents and commenting on exercises and tests with [the Q&A system](Q&A-System).
 
 ## I forgot my password, what should I do?
 No problem! Use GitHub's password recovery options that you can find [here](https://github.com/password_reset).
@@ -21,6 +21,26 @@ Some browsers (Firefox, Brave) block third-party cookies, which are needed for G
 Easy solutions:  
 - Enable third-party cookies in your browser settings  
 - Or try with Chrome or Edge  
+
+# Contributing
+
+## How do I add a document?
+It's very simple! Resources is a centralized system that relies on GitHub for content management. To add a document, you need to make a *pull request* (PR) to CartaBinaria's GitHub repository. You can find all the detailed instructions in our wiki on [how to contribute to a course](https://cartabinaria.students.cs.unibo.it/wiki/raccolte-di-risorse/contribuire-a-un-insegnamento/).
+
+If you need help, don't hesitate to contact us on our official channels, like the [Telegram channel](https://t.me/cartabinaria).
+
+## What file formats are accepted?
+GitHub prefers text files like Markdown (.md) or LaTeX (.tex) as they allow everyone to modify and add information directly to the file. These formats will then be automatically compiled into PDF by GitHub Actions to be displayed on this site.
+
+However, you can also upload PDF files (.pdf); keep in mind though that these files can significantly increase the repository size.
+
+## How do I add a course?
+To do this, I refer you to our wiki where you can find all the detailed instructions on [how to add a new course](https://cartabinaria.students.cs.unibo.it/wiki/raccolte-di-risorse/aggiungere-un-nuovo-insegnamento/).
+
+If you need help, don't hesitate to contact us on our official channels, like the [Telegram channel](https://t.me/cartabinaria).
+
+## I would like to add my degree too, how can I do it?
+We are excited to expand our community! 🎉 If you want to add your degree program, we'll be more than happy to welcome you with open arms! Contact us through our [Telegram channel](https://t.me/cartabinaria).
 
 # Administrators
 
@@ -47,10 +67,10 @@ You might access a PDF file that hasn't been "prepared" for the Q&A system. In t
 
 ## Can I edit or delete my answers?
 Yes, you can delete your answers using the delete button that appears on answers you've written. Editing is not currently supported, but you can delete and rewrite an answer if necessary.
-To avoid losing important contributions or comments to your comment, we decided to keep your answer with a **[deleted]** label: no one will see what you had written or that it was you.
+To avoid losing important contributions or comments to your comment, we decided to keep your answer with a **[deleted]** label: no one will be able to see the original content or know who wrote it, except administrators for moderation purposes.
 
 ## Can I reply anonymously?
-Yes, when writing an answer you can choose the "Post anonymous" option to hide your profile picture and GitHub username. Remember though that for security reasons and CartaBinaria protection, your GitHub account will still remain linked to your answer in the site's database, even if it won't be publicly visible.
+Yes, when writing an answer you can choose the "Post anonymously" option to hide your profile picture and GitHub username. Remember though that for security reasons and CartaBinaria protection, your GitHub account will still remain linked to your answer in the database, even if it won't be publicly visible.
 
 ## How does the voting system work for answers?
 You can vote on answers using the up arrow (upvote) or down arrow (downvote). Votes help identify the most useful and accurate answers for the community.

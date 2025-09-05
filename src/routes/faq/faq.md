@@ -6,9 +6,9 @@ description: "Risposte alle domande più comuni su Risorse"
 # Accesso con GitHub
 
 ## Come creo un account?
-Per creare un account clicca sul pulsante "*Accedi*" in alto a destra questo ti rimanderà a GitHub, dove puoi selezionare l'opzione di **registrazione** o semplicemente **accedere usando un account già esistente**. 
+Per creare un account clicca sul pulsante "*Accedi*" in alto a destra. Questo ti rimanderà a GitHub, dove puoi selezionare l'opzione di **registrazione** o semplicemente **accedere usando un account già esistente**. 
 
-Non è necessario creare un account separato per Risorse: il login avviene direttamente tramite GitHub. Registrandoti potrai usare funzionalità aggiuntive come caricare documenti e commentare esercizi e prove con [il sistema Q&A](cos'è-il-sistema-Q&A).
+Non è necessario creare un account separato per Risorse: il login avviene direttamente tramite GitHub. Registrandoti potrai usare funzionalità aggiuntive come caricare documenti e commentare esercizi e prove con [il sistema Q&A](Sistema-QA).
 
 ## Ho dimenticato la password, cosa faccio?
 Nessun problema! Usa le opzioni di recupero password di GitHub che trovi [qui](https://github.com/password_reset).
@@ -21,6 +21,26 @@ Alcuni browser (Firefox, Brave) bloccano i cookie di terze parti, che servono pe
 Soluzioni facili:  
 - Abilita i cookie di terze parti nelle impostazioni del browser  
 - Oppure prova con Chrome o Edge  
+
+# Contribuire
+
+## Come aggiungo un documento?
+È molto semplice! Risorse è un sistema centralizzato che si appoggia a GitHub per la gestione dei contenuti. Per aggiungere un documento, devi fare una *pull request* (PR) alla repository GitHub di CartaBinaria. Trovi tutte le istruzioni dettagliate nella nostra wiki su [come contribuire a un insegnamento](https://cartabinaria.students.cs.unibo.it/wiki/raccolte-di-risorse/contribuire-a-un-insegnamento/).
+
+Se hai bisogno di aiuto, non esitare a contattarci sui nostri canali ufficiali, come il [canale Telegram](https://t.me/cartabinaria).
+
+## Quali formati di file sono accettati?
+GitHub predilige file di testo come Markdown (.md) o LaTeX (.tex) in quanto permettono a tutti di poter modificare, aggiungere informazioni direttamente al file. Questi formati verranno poi compilati automaticamente in PDF da GitHub Actions per essere visualizzati su questo sito.
+
+Tuttavia, puoi anche caricare file PDF (.pdf); tieni presente però che questi file possono aumentare significativamente le dimensioni della repository.
+
+## Come aggiungo un insegnamento?
+Per farlo ti rimando alla nostra wiki in cui trovi tutte le istruzioni dettagliate su [come aggiungere un nuovo insegnamento](https://cartabinaria.students.cs.unibo.it/wiki/raccolte-di-risorse/aggiungere-un-nuovo-insegnamento/).
+
+Se hai bisogno di aiuto, non esitare a contattarci sui nostri canali ufficiali, come il [canale Telegram](https://t.me/cartabinaria).
+
+## Vorrei aggiungere anche il mio corso di laurea, come posso fare?
+Siamo entusiasti di espandere la nostra comunità! 🎉 Se vuoi aggiungere il tuo corso di laurea, saremo più che felici di accoglierti a braccia aperte! Contattaci tramite il nostro [canale Telegram](https://t.me/cartabinaria).
 
 # Amministratori
 
@@ -47,10 +67,10 @@ Ti capiterà di accedere ad un file PDF che non è stato "preparato" per il sist
 
 ## Posso modificare o eliminare le mie risposte?
 Sì, puoi eliminare le tue risposte utilizzando il pulsante di eliminazione che appare sulle risposte che hai scritto. Le modifiche non sono attualmente supportate, ma puoi eliminare e riscrivere una risposta se necessario.
-Per evitare di perdere contributi o commenti importanti al tuo commento, abbiamo deciso di mantenere la tua risposta con un'etichetta **[deleted]**: nessuno vedrà cosa avevi scritto o che eri tu.
+Per evitare di perdere contributi o commenti importanti al tuo commento, abbiamo deciso di mantenere la tua risposta con un'etichetta **[deleted]**: nessuno potrà vedere il contenuto originale né sapere chi l'ha scritto, tranne gli amministratori per questioni di moderazione.
 
 ## Posso rispondere anonimamente?
-Sì, quando scrivi una risposta puoi scegliere l'opzione "Post anonymous" per nascondere la tua immagine profilo e il tuo username di GitHub. Ricorda però che per motivi di sicurezza e tutela di CartaBinaria, il tuo account GitHub rimarrà comunque collegato alla tua risposta nel database del sito, anche se non sarà visibile pubblicamente.
+Sì, quando scrivi una risposta puoi scegliere l'opzione "Post anonymously" per nascondere la tua immagine profilo e il tuo username di GitHub. Ricorda però che per motivi di sicurezza e tutela di CartaBinaria, il tuo account GitHub rimarrà comunque collegato alla tua risposta nel database, anche se non sarà visibile pubblicamente.
 
 ## Come funziona il sistema di voti nelle risposte?
 Puoi votare le risposte utilizzando le frecce verso l'alto (upvote) o verso il basso (downvote). I voti aiutano a identificare le risposte più utili e accurate per la comunità.
