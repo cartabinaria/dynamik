@@ -5,15 +5,8 @@ permissions:
 
 on:
   pull_request:
-    paths:
-      - 'src/**/*.ts'
-      - 'src/**/*.js'
-      - 'src/**/*.svelte'
   push:
-    paths:
-      - 'src/**/*.ts'
-      - 'src/**/*.js'
-      - 'src/**/*.svelte'
+    branches: [main]
 
 jobs:
   reuse-compliance:
@@ -38,6 +31,11 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           reuse lint | grep "missing copyright" | while read line; do
             echo "- $line" >> $GITHUB_STEP_SUMMARY
-          done
+          done || true
+
+      - name: Success Summary
+        if: success()
+        run: |
+          echo "## ✅ SPDX Compliance Check Passed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Run the 'Add SPDX Headers' workflow to fix these issues automatically." >> $GITHUB_STEP_SUMMARY
+          echo "All files have proper SPDX headers!" >> $GITHUB_STEP_SUMMARY
