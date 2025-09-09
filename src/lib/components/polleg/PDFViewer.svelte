@@ -341,7 +341,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{#if splitMode && selectedQuestion}
 			<!-- Desktop Horizontal Panel -->
 			<div
-				class="bg-base-100/80 backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
+				class="bg-base-100/80 w-full backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
 				splitMode
 					? 'translate-y-0 opacity-100'
 					: 'translate-y-full opacity-0'} hidden md:flex flex-col relative overflow-hidden {isFullscreen
@@ -363,7 +363,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="flex items-center gap-1">
 						<!-- Fullscreen Toggle Button -->
 						<div
-							class="p-2 rounded-lg hover:bg-base-200 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
+							class="p-2 btn btn-circle hover:bg-base-200 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
 							on:click={toggleFullscreen}
 							on:keydown={(e) => e.key === 'Enter' && toggleFullscreen()}
 							role="button"
@@ -394,7 +394,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</div>
 
 				<!-- Content area -->
-				<div class="flex-1 overflow-y-auto h-full p-4">
+				<div class="flex-1 overflow-y-auto h-full w-full p-4">
 					<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>
 

@@ -41,5 +41,6 @@ export const ANSWERS_URL = `${POLLEG_BASE_URL}/answers`;
 export const DOCUMENT_URL = (id: string) => `${DOCUMENTS_URL}/${id}`;
 export const QUESTION_URL = (id: number) => `${QUESTIONS_URL}/${id}`;
 export const ANSWER_URL = (id: number) => `${ANSWERS_URL}/${id}`;
-export const VOTE_URL = (id: number) => `${ANSWER_URL(id)}/vote`;
+export const VOTE_URL = (id: number) => `${POLLEG_BASE_URL}/answer/${id}/vote`;
+export const ANSWERS_REPLIES_URL = (id: number) => `${POLLEG_BASE_URL}/answers/${id}/replies`;
 export const PROPOSAL_URL = (id: number) => `${POLLEG_BASE_URL}/proposal`;

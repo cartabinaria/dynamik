@@ -33,17 +33,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// Reactive variables for auth
 	$: user = isAuthenticated($auth) ? $auth.user : null;
 
-	// Sort replies by creation time (newest first, oldest last)
+	// Sort replies by creation time (oldest first - chronological order)
 	$: sortedReplies = answer.replies
 		? [...answer.replies].sort((a, b) => {
 				// Primary sort: by created_at if available
 				if (a.created_at && b.created_at) {
 					const dateA = new Date(a.created_at);
 					const dateB = new Date(b.created_at);
-					return dateB.getTime() - dateA.getTime(); // Inverted: newest first
+					return dateA.getTime() - dateB.getTime(); // Chronological: oldest first
 				}
-				// Fallback: sort by ID (assuming sequential IDs) - newest first
-				return b.id - a.id; // Inverted: higher ID first
+				// Fallback: sort by ID (assuming sequential IDs) - oldest first
+				return a.id - b.id; // Lower ID first
 			})
 		: [];
 
@@ -160,7 +160,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	data-answer-id={answer.id}
 	class="m-4 w-full card bg-base-200/30 backdrop-blur-md border border-base-300/30 shadow-lg rounded-xl transition-all duration-300"
 >
-	<div class="card-body p-4">
+	<div class="card-body p-4 w-full">
 		<!-- Answer Layout: Left voting, Right content -->
 		<div class="flex gap-8 w-full">
 			<!-- Left Voting Column -->
@@ -239,6 +239,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									showReplyBoxFor = null;
 								} else {
 									showReplyBoxFor = index;
+									// Scroll to bottom where ReplyBox will appear
+									setTimeout(() => {
+										const replyBoxElement = document.querySelector(`[data-answer-id="${answer.id}"] .reply-box-container`);
+										if (replyBoxElement) {
+											replyBoxElement.scrollIntoView({
+												behavior: 'smooth',
+												block: 'center'
+											});
+										}
+									}, 100);
 								}
 							}}
 						>
@@ -265,34 +275,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{/if}
 				</div>
 
-				<!-- Reply Box (attached to main answer) -->
-				{#if showReplyBoxFor === index}
-					<div class="mt-8 mr-8 pt-6 border-t border-base-300 w-full">
-						<ReplyBox
-							closeCallback={() => {
-								showReplyBoxFor = null;
-							}}
-							bind:unfinishedReply={unfinishedReplies[index]}
-							questionId={question}
-							sendAnswerCallback={async () => {
-								showReplyBoxFor = null;
-								// Call external callback to update parent component
-								if (onAnswerUpdate) {
-									await onAnswerUpdate();
-								}
-							}}
-							parentAnswerId={answer.id}
-							{reloadAnswers}
-							onSubmitSuccess={handleNewReply}
-						/>
-					</div>
-				{/if}
-
 				<!-- Replies Section with Timeline -->
 				{#if showReplies && sortedReplies && sortedReplies.length > 0}
 					<div class="mt-8 pt-6 w-full">
 						<div class="flex flex-col" bind:this={repliesContainer}>
-							{#each sortedReplies as reply, replyIndex}
+							{#each sortedReplies as reply, replyIndex (reply.id)}
 								<Reply
 									{answer}
 									{reply}
@@ -304,6 +291,44 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									depth={0}
 								/>
 							{/each}
+						</div>
+					</div>
+				{/if}
+
+				<!-- Reply Box at the bottom of the replies timeline -->
+				{#if showReplyBoxFor === index}
+					<div class="reply-box-container mt-8 pt-6 w-full">
+						<div class="bg-base-200/50 backdrop-blur-sm rounded-lg p-4 border-l-4 border-primary/30">
+							<!-- Contextual Header -->
+							<div class="flex items-center gap-2 mb-3 text-sm text-base-content/70">
+								<span class="icon-[solar--reply-outline] text-primary/70"></span>
+								<span>Replying to <strong class="text-base-content">@{answer.user}</strong></span>
+								<button
+									class="btn btn-ghost btn-xs ml-auto"
+									on:click={() => (showReplyBoxFor = null)}
+									title="Cancel reply"
+								>
+									<span class="icon-[solar--close-circle-outline]"></span>
+								</button>
+							</div>
+							
+							<ReplyBox
+								closeCallback={() => {
+									showReplyBoxFor = null;
+								}}
+								bind:unfinishedReply={unfinishedReplies[index]}
+								questionId={question}
+								sendAnswerCallback={async () => {
+									showReplyBoxFor = null;
+									// Call external callback to update parent component
+									if (onAnswerUpdate) {
+										await onAnswerUpdate();
+									}
+								}}
+								parentAnswerId={answer.id}
+								{reloadAnswers}
+								onSubmitSuccess={handleNewReply}
+							/>
 						</div>
 					</div>
 				{/if}

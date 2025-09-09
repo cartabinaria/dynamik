@@ -52,7 +52,6 @@
 					body = '';
 				}
 			} else if (questionId && sendAnswerCallback) {
-				// New usage (Answer.svelte) - reply to a specific answer
 				const answer = {
 					question: questionId.id,
 					content: body,
@@ -133,7 +132,7 @@
 				<div class="flex items-center justify-between mb-4">
 					<div class="flex items-center gap-2 text-sm text-base-content/70">
 						<span class="icon-[solar--chat-round-dots-bold] text-accent/70"></span>
-						Reply to this answer
+						Replying to this answer
 					</div>
 					<!-- Anonymous Toggle -->
 					<div class="flex items-center gap-3">

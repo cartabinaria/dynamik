@@ -57,7 +57,6 @@ export function getCartaConfig() {
 							throw new Error(`HTTP error! status: ${response.status}`);
 						}
 						const data = await response.json();
-						// console.log("File uploaded successfully:", data);
 
 						return POLLEG_BASE_URL + '/' + data.url;
 					} catch (error) {

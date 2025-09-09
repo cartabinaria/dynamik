@@ -127,7 +127,10 @@
 		{#if loading}
 			<span bind:this={spinner} class="loading loading-spinner loading-md my-4"></span>
 		{:else}
-			<div bind:this={answerContainer}>
+			<div bind:this={answerContainer} class="w-full" data-answers>
+				{#if question.answers.length === 0}
+					<p class="text-base-content/70 italic mb-4">No answers yet. Be the first to answer!</p>
+				{/if}
 				{#each question.answers as answer, index}
 					<AnswerComponent
 						{answer}
