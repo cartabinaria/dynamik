@@ -1,23 +1,20 @@
+<!-- 
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
-	import { toast } from '@zerodevx/svelte-toast';
 	import PDFBox from '$lib/components/polleg/PDFBox.svelte';
 	import QuestionComponent from '$lib/components/polleg/Question.svelte';
-	import { EDIT_URLS } from '$lib/const';
 	import type { Question } from '$lib/polleg';
 	import { type FullPDF, type Box, extractFullPDF, SCALE } from '$lib/pdfcanvas';
 	import type { OnProgressParameters } from 'pdfjs-dist';
-	import type { PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
-	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { QUESTION_URL } from '$lib/const';
 
 	export let data;
 	export let questions: Question[];
-
-	// Helper function to get full question data with all answers
-	function getFullQuestion(questionId: number) {
-		return questions?.find((q) => q.id === questionId);
-	}
 
 	// Function to reload all questions data
 	async function reloadAllQuestions() {
@@ -48,31 +45,39 @@
 		}
 	});
 
-	// Reactive helper function to get total answer count for a question
-	$: getTotalAnswerCount = (questionId: number) => {
-		const fullQuestion = questions?.find((q) => q.id === questionId);
-		// Handle case where answers might be null or undefined
-		const answersCount = fullQuestion?.answers?.length || 0;
-		return answersCount;
-	};
+	// Function get total answer count for a question
+	$: questionsMap = new Map(questions?.map((q) => [q.id, q]) || []);
+
+	const getFullQuestion = (questionId: number) => questionsMap.get(questionId);
+	const getTotalAnswerCount = (questionId: number) =>
+		questionsMap.get(questionId)?.answers?.length || 0;
 
 	// Split mode state with smooth animations
 	let selectedQuestion: Question | null = null;
 	let splitMode = false;
-	let isClosing = false; // Per gestire l'animazione di chiusura
-	let isFullscreen = false; // Per gestire il fullscreen del panel Solutions
+	let isClosing = false; // To handle closing animation
+	let isFullscreen = false; // To handle fullscreen mode for Solutions panel
 	let mainContainer: HTMLElement;
-	let bookmarkAnimating = false; // Per animazione del bookmark
-
-	// TODO: remove
-	let showReplyBoxFor: number | null = null;
-	let answers: any[] = [];
-	let values: string[] = [];
+	let bookmarkAnimating = false; // For bookmark animation
 
 	let pdf: FullPDF | null = null;
 	let boxes: Box[] = [];
 	let loaded = 0.0; // percentage
 	$: percentage = Math.floor(loaded * 100);
+
+	// Track timeouts for cleanup
+	let timeouts: ReturnType<typeof setTimeout>[] = [];
+
+	// timeouts with cleanup
+	const safeTimeout = (callback: () => void, delay: number) => {
+		const timeoutId = setTimeout(() => {
+			callback();
+			// Remove from tracking array when completed
+			timeouts = timeouts.filter((id) => id !== timeoutId);
+		}, delay);
+		timeouts.push(timeoutId);
+		return timeoutId;
+	};
 
 	// Split mode functions
 	const openSplitMode = (question: Question) => {
@@ -83,7 +88,7 @@
 
 		// Bookmark animation
 		bookmarkAnimating = true;
-		setTimeout(() => (bookmarkAnimating = false), 400);
+		safeTimeout(() => (bookmarkAnimating = false), 400);
 
 		// Use the full question data instead of the box question reference
 		selectedQuestion = getFullQuestion(question.id) || question;
@@ -91,32 +96,22 @@
 	};
 
 	const closeSplitMode = () => {
-		// Inizia l'animazione di chiusura
+		// Start closing animation
 		isClosing = true;
 
-		// Aspetta che l'animazione CSS finisca prima di rimuovere dal DOM
-		setTimeout(() => {
+		// Wait for CSS animation to finish before removing from DOM
+		safeTimeout(() => {
 			selectedQuestion = null;
 			splitMode = false;
 			isClosing = false;
-			isFullscreen = false; // Reset fullscreen quando chiudiamo
-		}, 300); // Stessa durata della transizione CSS
+			isFullscreen = false; // Reset fullscreen
+		}, 300); // Same duration as CSS transition
 	};
 
 	// Toggle fullscreen mode for Solutions panel
 	const toggleFullscreen = () => {
 		isFullscreen = !isFullscreen;
 	};
-
-	// Handle click to close split mode - solo quando in split mode e non sui bookmark!
-	function handlePDFClick(event) {
-		if (!event.target.closest('button') && !event.target.closest('.badge')) {
-			closeSplitMode();
-		}
-	}
-	onMount(() => {
-		// Rimuoviamo tutti i listener di scroll
-	});
 
 	const splitBoxes = (boxes: Box[], cuts: Question[]) => {
 		cuts.sort((a, b) => (a.start > b.start ? 1 : -1));
@@ -264,6 +259,12 @@
 	};
 
 	onMount(init);
+
+	// Cleanup timeouts when component is destroyed
+	onDestroy(() => {
+		timeouts.forEach(clearTimeout);
+		timeouts = [];
+	});
 </script>
 
 {#if pdf == null || loaded != 1}
@@ -284,7 +285,12 @@
 			{#each boxes as box, index}
 				<!-- In split mode, show only the first box (selected question's box) -->
 				{#if !splitMode || (splitMode && selectedQuestion && box.question?.id === selectedQuestion.id)}
-					<div class="relative" on:click={splitMode ? handlePDFClick : undefined}>
+					<div
+						class="relative"
+						on:click={splitMode ? closeSplitMode : undefined}
+						role={splitMode ? 'button' : undefined}
+						tabindex={splitMode ? 0 : undefined}
+					>
 						<PDFBox {pdf} {box} />
 
 						<!-- Question Bookmark Bubble -->
@@ -294,7 +300,7 @@
 								class="absolute bottom-4 right-4 w-14 h-14 bg-primary text-primary-content hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center rounded-full shadow-xl hover:shadow-2xl hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
 									? 'animate-pulse scale-125'
 									: ''}"
-								on:click={() => openSplitMode(box.question)}
+								on:click|stopPropagation={() => openSplitMode(box.question)}
 							>
 								<span class="icon-[solar--chat-round-dots-bold] text-xl"></span>
 								{#if getTotalAnswerCount(box.question.id) > 0}
@@ -309,7 +315,7 @@
 							<!-- Mobile Bookmark -->
 							<button
 								class="btn btn-primary btn-circle md:hidden shadow-lg absolute top-4 right-4"
-								on:click={() => openSplitMode(box.question)}
+								on:click|stopPropagation={() => openSplitMode(box.question)}
 							>
 								{#if getTotalAnswerCount(box.question.id) > 0}
 									<span class="badge badge-secondary badge-xs absolute -top-1 -right-1">
@@ -354,30 +360,36 @@
 						>
 					</div>
 
-					<div class="flex items-center gap-2">
+					<div class="flex items-center gap-1">
 						<!-- Fullscreen Toggle Button -->
-						<button
-							class="btn btn-ghost btn-sm hover:btn-info hover:scale-105 transition-all duration-200 ease-out"
+						<div
+							class="p-2 rounded-lg hover:bg-base-200 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
 							on:click={toggleFullscreen}
-							aria-label={isFullscreen ? 'Esci da schermo intero' : 'Espandi a schermo intero'}
-							title={isFullscreen ? 'Esci da schermo intero' : 'Espandi a schermo intero'}
+							on:keydown={(e) => e.key === 'Enter' && toggleFullscreen()}
+							role="button"
+							tabindex="0"
+							aria-label={isFullscreen ? 'Exit fullscreen' : 'Expand to fullscreen'}
+							title={isFullscreen ? 'Exit fullscreen' : 'Expand to fullscreen'}
 						>
 							{#if isFullscreen}
-								<span class="icon-[solar--minimize-square-bold] text-xl"></span>
+								<span class="icon-[solar--minimize-square-bold] text-lg text-base-content"></span>
 							{:else}
-								<span class="icon-[solar--maximize-square-bold] text-xl"></span>
+								<span class="icon-[solar--maximize-square-bold] text-lg text-base-content"></span>
 							{/if}
-						</button>
+						</div>
 
-						<!-- Close Button with modern styling -->
-						<button
-							class="btn btn-ghost btn-sm hover:btn-warning hover:scale-105 transition-all duration-200 ease-out"
+						<!-- Close Button -->
+						<div
+							class="p-2 btn btn-circle hover:bg-error/10 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
 							on:click={closeSplitMode}
-							aria-label="Richiudi pannello soluzioni"
-							title="Richiudi pannello"
+							on:keydown={(e) => e.key === 'Enter' && closeSplitMode()}
+							role="button"
+							tabindex="0"
+							aria-label="Close solutions panel"
+							title="Close solutions panel"
 						>
-							<span class="icon-[solar--close-circle-bold] text-xl"></span>
-						</button>
+							<span class="icon-[solar--close-circle-bold] text-lg text-error"></span>
+						</div>
 					</div>
 				</div>
 
@@ -403,7 +415,7 @@
 							<button
 								class="btn btn-ghost btn-sm"
 								on:click={closeSplitMode}
-								aria-label="Chiudi pannello soluzioni"
+								aria-label="Close solutions panel"
 							>
 								<span class="icon-[solar--close-circle-bold] text-xl"></span>
 							</button>

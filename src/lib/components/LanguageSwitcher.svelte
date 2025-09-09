@@ -7,15 +7,19 @@
 
 	// Determina l'URL per l'altra lingua
 	$: otherLang = currentLang === 'it' ? 'en' : 'it';
-	$: otherUrl = currentLang === 'it' ? '/en' + $page.url.pathname : $page.url.pathname.replace('/en', '');
+	$: otherUrl =
+		currentLang === 'it' ? '/en' + $page.url.pathname : $page.url.pathname.replace('/en', '');
 
 	const switchLanguage = (lang: 'it' | 'en') => {
 		// Salva la preferenza dell'utente
 		if (browser) {
 			localStorage.setItem('dynamik-language-preference', lang);
 		}
-		
-		const targetUrl = lang === 'en' ? '/en' + $page.url.pathname.replace('/en', '') : $page.url.pathname.replace('/en', '');
+
+		const targetUrl =
+			lang === 'en'
+				? '/en' + $page.url.pathname.replace('/en', '')
+				: $page.url.pathname.replace('/en', '');
 		goto(targetUrl);
 	};
 </script>

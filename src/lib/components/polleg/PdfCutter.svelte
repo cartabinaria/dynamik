@@ -271,10 +271,10 @@
 		});
 		let objRet = await res.json();
 		if (res.status == 200) {
-			const successMessage = isAdmin 
-				? 'PDF successfully prepared! Students can now answer questions.' 
+			const successMessage = isAdmin
+				? 'PDF successfully prepared! Students can now answer questions.'
 				: 'Proposal submitted successfully! Admins will review it soon.';
-			
+
 			toast.success(successMessage);
 			show(objRet);
 		} else {
@@ -293,9 +293,9 @@
 
 <!-- Instructions for PDF preparation - positioned at top -->
 {#if showInstructions}
-	<div 
-		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-md bg-info rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-info/90 transition-colors" 
-		on:click={() => showInstructions = false}
+	<div
+		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-md bg-info rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-info/90 transition-colors"
+		on:click={() => (showInstructions = false)}
 		role="button"
 		tabindex="0"
 		on:keydown={(e) => e.key === 'Enter' && (showInstructions = false)}
@@ -320,9 +320,15 @@
 
 <div id="container" class="text-center">
 	<canvas bind:this={pageCanvas} class="hidden"></canvas>
-	<canvas bind:this={fullCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
-	<canvas bind:this={editCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
-	<canvas bind:this={opacityCanvas} on:mousedown={ev_mousedown} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"></canvas>
+	<canvas bind:this={fullCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"
+	></canvas>
+	<canvas bind:this={editCanvas} class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"
+	></canvas>
+	<canvas
+		bind:this={opacityCanvas}
+		on:mousedown={ev_mousedown}
+		class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"
+	></canvas>
 </div>
 <!-- <canvas bind:this={canvasMerged} id="canvasMerged"></canvas> -->
 
@@ -336,5 +342,3 @@
 		>{isAdmin ? 'EXPORT' : 'PROPOSE'}<span class="icon-[ic--round-send]"></span></button
 	>
 </div>
-
-

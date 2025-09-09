@@ -23,12 +23,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let { data }: { data: PageData } = $props();
 
 	let activeYears: string[] = $state([]);
-	
+
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
 		await checkAuth();
-	});	
-	
+	});
+
 	function namesToTeachings(names: string[]): Teaching[] {
 		return names.map(data.teachings.get, data.teachings).filter((x): x is Teaching => !!x);
 	}

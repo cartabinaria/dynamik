@@ -12,18 +12,31 @@
 	let searchTerm = '';
 	let expandedIndex: string | null = null;
 
+	// Cache normalized search term to avoid repeated toLowerCase() calls
+	$: normalizedSearchTerm = searchTerm.toLowerCase();
+
 	// Filter categories and FAQs based on search
-	$: filteredCategories = data.categories?.map(category => ({
-		...category,
-		faqs: category.faqs.filter(
-			(faq) =>
-				faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-		)
-	})).filter(category => category.faqs.length > 0) || [];
+	$: filteredCategories =
+		data.categories
+			?.map((category) => ({
+				...category,
+				faqs: category.faqs.filter((faq) => {
+					const questionLower = faq.question.toLowerCase();
+					const answerLower = faq.answer.toLowerCase();
+
+					return (
+						questionLower.includes(normalizedSearchTerm) ||
+						answerLower.includes(normalizedSearchTerm)
+					);
+				})
+			}))
+			.filter((category) => category.faqs.length > 0) || [];
 
 	// Count total filtered FAQs
-	$: totalFilteredFaqs = filteredCategories.reduce((total, category) => total + category.faqs.length, 0);
+	$: totalFilteredFaqs = filteredCategories.reduce(
+		(total, category) => total + category.faqs.length,
+		0
+	);
 
 	// Function to toggle accordion
 	const toggleAccordion = (id: string) => {
@@ -93,7 +106,7 @@
 							{category.name}
 						</h2>
 					</div>
-					
+
 					<!-- Category FAQs -->
 					{#each category.faqs as faq, faqIndex}
 						{@const accordionId = `${categoryIndex}-${faqIndex}`}
@@ -105,7 +118,8 @@
 								on:change={() => toggleAccordion(accordionId)}
 							/>
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
-								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"></span>
+								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"
+								></span>
 								{faq.question}
 							</div>
 							<div class="collapse-content">

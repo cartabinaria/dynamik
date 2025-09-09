@@ -1,3 +1,9 @@
+<!-- 
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+ -->
+
 <script lang="ts">
 	import { Markdown, Carta } from 'carta-md';
 	import { getCartaConfig } from '$lib/carta-config';
@@ -12,16 +18,23 @@
 	let searchTerm = '';
 	let expandedIndex: string | null = null;
 
+	// Cache del termine di ricerca normalizzato per evitare toLowerCase() ripetuti
+	$: normalizedSearchTerm = searchTerm.toLowerCase();
+
 	// Filtra le categorie e FAQ in base alla ricerca
 	$: filteredCategories =
 		data.categories
 			?.map((category) => ({
 				...category,
-				faqs: category.faqs.filter(
-					(faq) =>
-						faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-						faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-				)
+				faqs: category.faqs.filter((faq) => {
+					const questionLower = faq.question.toLowerCase();
+					const answerLower = faq.answer.toLowerCase();
+
+					return (
+						questionLower.includes(normalizedSearchTerm) ||
+						answerLower.includes(normalizedSearchTerm)
+					);
+				})
 			}))
 			.filter((category) => category.faqs.length > 0) || [];
 

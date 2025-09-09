@@ -26,8 +26,6 @@
 				Propose PDF preparation
 			</button>
 		{/if}
-		<button class="btn btn-ghost" on:click|preventDefault={() => history.back()}>
-			Go back
-		</button>
+		<button class="btn btn-ghost" on:click|preventDefault={() => history.back()}> Go back </button>
 	</div>
 </div>

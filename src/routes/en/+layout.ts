@@ -6,7 +6,7 @@ export const load: LayoutLoad = async ({ url }) => {
 	if (browser) {
 		const acceptLanguage = navigator.language || navigator.languages?.[0] || 'en';
 		const isItalian = acceptLanguage.toLowerCase().startsWith('it');
-		
+
 		// Se l'utente ha preferenza italiana e sta accedendo a route inglesi
 		// e non ha mai fatto una scelta esplicita, suggerisci il redirect
 		if (isItalian && url.pathname.startsWith('/en/')) {

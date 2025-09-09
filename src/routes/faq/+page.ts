@@ -4,17 +4,20 @@ import faqContent from './faq.md?raw';
 export const load: PageLoad = async () => {
 	// Parse del contenuto markdown per estrarre categorie, domande e risposte
 	const lines = faqContent.split('\n');
-	const categories: Array<{ 
-		name: string; 
-		faqs: Array<{ question: string; answer: string }> 
+	const categories: Array<{
+		name: string;
+		faqs: Array<{ question: string; answer: string }>;
 	}> = [];
-	
+
 	let currentCategory = '';
 	let currentQuestion = '';
 	let currentAnswer = '';
 	let inAnswer = false;
-	let metadata = { title: 'FAQ - Domande Frequenti', description: 'Risposte alle domande più comuni su Dynamik' };
-	
+	let metadata = {
+		title: 'FAQ - Domande Frequenti',
+		description: 'Risposte alle domande più comuni su Dynamik'
+	};
+
 	for (const line of lines) {
 		// Parse metadata (frontmatter)
 		if (line.startsWith('title:')) {
@@ -25,11 +28,11 @@ export const load: PageLoad = async () => {
 			metadata.description = line.replace('description:', '').replace(/"/g, '').trim();
 			continue;
 		}
-		
+
 		if (line.startsWith('# ')) {
 			// Salva la domanda precedente se esiste
 			if (currentQuestion && currentAnswer) {
-				const category = categories.find(c => c.name === currentCategory);
+				const category = categories.find((c) => c.name === currentCategory);
 				if (category) {
 					category.faqs.push({
 						question: currentQuestion,
@@ -37,7 +40,7 @@ export const load: PageLoad = async () => {
 					});
 				}
 			}
-			
+
 			// Nuova categoria
 			currentCategory = line.replace('# ', '');
 			categories.push({ name: currentCategory, faqs: [] });
@@ -47,7 +50,7 @@ export const load: PageLoad = async () => {
 		} else if (line.startsWith('## ')) {
 			// Salva la domanda precedente se esiste
 			if (currentQuestion && currentAnswer) {
-				const category = categories.find(c => c.name === currentCategory);
+				const category = categories.find((c) => c.name === currentCategory);
 				if (category) {
 					category.faqs.push({
 						question: currentQuestion,
@@ -55,7 +58,7 @@ export const load: PageLoad = async () => {
 					});
 				}
 			}
-			
+
 			// Nuova domanda
 			currentQuestion = line.replace('## ', '');
 			currentAnswer = '';
@@ -65,10 +68,10 @@ export const load: PageLoad = async () => {
 			currentAnswer += line + '\n';
 		}
 	}
-	
+
 	// Aggiungi l'ultima domanda se presente
 	if (currentQuestion && currentAnswer) {
-		const category = categories.find(c => c.name === currentCategory);
+		const category = categories.find((c) => c.name === currentCategory);
 		if (category) {
 			category.faqs.push({
 				question: currentQuestion,
@@ -76,7 +79,7 @@ export const load: PageLoad = async () => {
 			});
 		}
 	}
-	
+
 	return {
 		categories,
 		metadata
