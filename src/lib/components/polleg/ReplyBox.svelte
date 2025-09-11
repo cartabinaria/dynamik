@@ -206,7 +206,6 @@
 						</label>
 					</div>
 				</div>
-				<!-- TODO: aspettare di avere user da anonimo per sapere se posso cancellare answer/reply -->
 
 				<!-- Editor -->
 				<div class="mb-4">

@@ -7,20 +7,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import PDFBox from '$lib/components/polleg/PDFBox.svelte';
 	import QuestionComponent from '$lib/components/polleg/Question.svelte';
+	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
 	import type { Question } from '$lib/polleg';
 	import { type FullPDF, type Box, extractFullPDF, SCALE } from '$lib/pdfcanvas';
 	import type { OnProgressParameters } from 'pdfjs-dist';
 	import { onMount, onDestroy } from 'svelte';
 	import { QUESTION_URL } from '$lib/const';
 
-	export let data;
-	export let questions: Question[];
+	let {
+		proposal,
+		data,
+		url,
+		questions,
+		updateProposals
+	}: { proposal?: boolean; data?: any; url?: any; questions: Question[] } = $props();
 
 	// Function to reload all questions data
 	async function reloadAllQuestions() {
 		if (!questions) return;
-
 		try {
+			// TODO: optimization: batch fetch all questions in one request
 			// Reload all questions with updated answers
 			const updatedQuestions = await Promise.all(
 				questions.map(async (q) => {
@@ -46,24 +52,24 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	});
 
 	// Function get total answer count for a question
-	$: questionsMap = new Map(questions?.map((q) => [q.id, q]) || []);
+	let questionsMap = $state(new Map(questions?.map((q) => [q.id, q]) || []));
 
 	const getFullQuestion = (questionId: number) => questionsMap.get(questionId);
 	const getTotalAnswerCount = (questionId: number) =>
 		questionsMap.get(questionId)?.answers?.length || 0;
 
 	// Split mode state with smooth animations
-	let selectedQuestion: Question | null = null;
-	let splitMode = false;
-	let isClosing = false; // To handle closing animation
-	let isFullscreen = false; // To handle fullscreen mode for Solutions panel
-	let mainContainer: HTMLElement;
-	let bookmarkAnimating = false; // For bookmark animation
+	let selectedQuestion: Question | null = $state(null);
+	let splitMode = $state(false);
+	let isClosing = $state(false); // To handle closing animation
+	let isFullscreen = $state(false); // To handle fullscreen mode for Solutions panel
+	let mainContainer: HTMLElement | undefined = $state();
+	let bookmarkAnimating = $state(false); // For bookmark animation
 
-	let pdf: FullPDF | null = null;
-	let boxes: Box[] = [];
-	let loaded = 0.0; // percentage
-	$: percentage = Math.floor(loaded * 100);
+	let pdf: FullPDF | null = $state(null);
+	let boxes: Box[] = $state([]);
+	let loaded = $state(0.0); // percentage
+	let percentage = $derived(Math.floor(loaded * 100));
 
 	// Track timeouts for cleanup
 	let timeouts: ReturnType<typeof setTimeout>[] = [];
@@ -249,13 +255,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			import.meta.url
 		).toString();
 
-		const loadingPdf = getDocument(data.url);
+		const loadingPdf = getDocument(url || data.url);
 		loadingPdf.onProgress = (params: OnProgressParameters) => {
 			loaded = params.loaded / params.total;
 		};
 		const rawPdf = await loadingPdf.promise;
 		pdf = await extractFullPDF(rawPdf);
-		boxes = splitBoxes(pdf.pages, questions || []);
+		boxes = splitBoxes(pdf.pages, questions);
 	};
 
 	onMount(init);
@@ -282,25 +288,37 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				: ''}"
 			style={splitMode && !isFullscreen ? 'max-height: 50vh;' : ''}
 		>
-			{#each boxes as box, index}
+			{#each boxes as box (box.question?.id)}
 				<!-- In split mode, show only the first box (selected question's box) -->
 				{#if !splitMode || (splitMode && selectedQuestion && box.question?.id === selectedQuestion.id)}
 					<div
 						class="relative"
-						on:click={splitMode ? closeSplitMode : undefined}
+						onclick={splitMode ? closeSplitMode : undefined}
 						role={splitMode ? 'button' : undefined}
-						tabindex={splitMode ? 0 : undefined}
 					>
-						<PDFBox {pdf} {box} />
+						<PDFBox {pdf} {box} {proposal} />
+						{#if proposal}
+							<ProposalApprove
+								p={box.question}
+								update={({ id }: { id: number }) => {
+									questions = questions.filter((q) => q.id !== id);
+									boxes = boxes.filter((b) => b.question.id !== id);
+									updateProposals(id);
+								}}
+							></ProposalApprove>
+						{/if}
 
 						<!-- Question Bookmark Bubble -->
-						{#if box.question && !splitMode}
+						{#if box.question && !splitMode && !proposal}
 							<!-- Desktop Bookmark Bubble -->
 							<button
 								class="absolute bottom-4 right-4 w-14 h-14 bg-primary text-primary-content hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center rounded-full shadow-xl hover:shadow-2xl hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
 									? 'animate-pulse scale-125'
 									: ''}"
-								on:click|stopPropagation={() => openSplitMode(box.question)}
+								onclick={(event) => {
+									event.stopPropagation();
+									openSplitMode(box.question);
+								}}
 							>
 								<span class="icon-[solar--chat-round-dots-bold] text-xl"></span>
 								{#if getTotalAnswerCount(box.question.id) > 0}
@@ -315,7 +333,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<!-- Mobile Bookmark -->
 							<button
 								class="btn btn-primary btn-circle md:hidden shadow-lg absolute top-4 right-4"
-								on:click|stopPropagation={() => openSplitMode(box.question)}
+								onclick={(event) => {
+									event.stopPropagation();
+									openSplitMode(box.question);
+								}}
 							>
 								{#if getTotalAnswerCount(box.question.id) > 0}
 									<span class="badge badge-secondary badge-xs absolute -top-1 -right-1">
@@ -338,7 +359,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</main>
 
 		<!-- Solutions Panel (Horizontal Split Mode) -->
-		{#if splitMode && selectedQuestion}
+		{#if splitMode && selectedQuestion && !proposal}
 			<!-- Desktop Horizontal Panel -->
 			<div
 				class="bg-base-100/80 w-full backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
@@ -364,8 +385,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<!-- Fullscreen Toggle Button -->
 						<div
 							class="p-2 btn btn-circle hover:bg-base-200 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
-							on:click={toggleFullscreen}
-							on:keydown={(e) => e.key === 'Enter' && toggleFullscreen()}
+							onclick={toggleFullscreen}
+							onkeydown={(e) => e.key === 'Enter' && toggleFullscreen()}
 							role="button"
 							tabindex="0"
 							aria-label={isFullscreen ? 'Exit fullscreen' : 'Expand to fullscreen'}
@@ -381,8 +402,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<!-- Close Button -->
 						<div
 							class="p-2 btn btn-circle hover:bg-error/10 cursor-pointer transition-all duration-200 ease-out hover:scale-110 opacity-70 hover:opacity-100"
-							on:click={closeSplitMode}
-							on:keydown={(e) => e.key === 'Enter' && closeSplitMode()}
+							onclick={closeSplitMode}
+							onkeydown={(e) => e.key === 'Enter' && closeSplitMode()}
 							role="button"
 							tabindex="0"
 							aria-label="Close solutions panel"
@@ -404,7 +425,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{/if}
 
 		<!-- Mobile Modal (completely separate) -->
-		{#if splitMode && selectedQuestion}
+		{#if splitMode && selectedQuestion && !proposal}
 			<div class="fixed inset-0 z-50 md:hidden">
 				<div class="modal modal-open">
 					<div class="modal-box max-w-full max-h-full h-full w-full rounded-none">
@@ -414,7 +435,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<h3 class="text-lg font-semibold">Solutions</h3>
 							<button
 								class="btn btn-ghost btn-sm"
-								on:click={closeSplitMode}
+								onclick={closeSplitMode}
 								aria-label="Close solutions panel"
 							>
 								<span class="icon-[solar--close-circle-bold] text-xl"></span>

@@ -9,8 +9,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { derived } from 'svelte/store';
+	import { page } from '$app/stores';
 	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
+	import LoginButton from '$lib/components/LoginButton.svelte';
 
 	let themes = derived(settings, ({ theme }) => allThemes.filter((t) => t != theme));
 </script>
@@ -34,6 +36,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 		<div class="navbar-cener">
 			<h1 class="text-xl font-semibold text-base-content">Impostazioni</h1>
+		</div>
+
+		<div class="navbar-end">
+			<LoginButton url={$page.url} />
 		</div>
 	</nav>
 

@@ -17,10 +17,13 @@ export interface Question {
 	created_at: string;
 	updated_at: string;
 	document: string;
+	document_path?: string;
 	start: number;
 	end: number;
 	counter: number;
 	answers: Answer[];
+	username?: string;
+	user_avatar_url?: string;
 }
 
 export interface Document {

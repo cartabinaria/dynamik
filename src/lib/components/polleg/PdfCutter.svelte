@@ -4,6 +4,7 @@
 	import type { PDFPageProxy } from 'pdfjs-dist/types/src/display/api';
 	import { POLLEG_BASE_URL, PROPOSAL_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
+	import { page } from '$app/stores';
 
 	const ENDPOINT = POLLEG_BASE_URL + '/documents';
 	export let url: string;
@@ -237,7 +238,7 @@
 	function getRelativePointFromEvent(ev: any, elem: any) {
 		// first find the bounding rect of the element
 		const bbox = elem.getBoundingClientRect();
-		// subtract the bounding rect from the client coords
+		// subtract the bounding rect from the client questions
 		const x = ev.clientX - bbox.left;
 		const y = ev.clientY - bbox.top;
 
@@ -259,7 +260,10 @@
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
 		// Use different endpoint based on user type
-		const endpoint = isAdmin ? ENDPOINT : PROPOSAL_URL(parseInt(id));
+		// TODO: edited for testing proposal
+		const endpoint = !isAdmin ? ENDPOINT : PROPOSAL_URL;
+
+		data.document_path = $page.url.pathname;
 
 		let res = await fetch(endpoint, {
 			headers: {

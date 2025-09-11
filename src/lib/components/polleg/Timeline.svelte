@@ -28,13 +28,19 @@
 	{/if}
 
 	<!-- Timeline dot - always consistent -->
-	<div class="w-8 h-8 bg-primary/10 border-2 border-primary/30 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/15 group-hover:border-primary/40 transition-all duration-200">
-		<div class="w-2 h-2 bg-primary/60 rounded-full group-hover:bg-primary/80 transition-colors"></div>
+	<div
+		class="w-8 h-8 bg-primary/10 border-2 border-primary/30 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-primary/15 group-hover:border-primary/40 transition-all duration-200"
+	>
+		<div
+			class="w-2 h-2 bg-primary/60 rounded-full group-hover:bg-primary/80 transition-colors"
+		></div>
 	</div>
 
 	<!-- Timeline connector to below - with controls -->
 	{#if !isLast || (expanded && hasNestedReplies) || hasMore}
-		<div class="relative w-0.5 flex-1 bg-primary/30 group-hover:bg-primary/40 transition-colors min-h-[2rem]">
+		<div
+			class="relative w-0.5 flex-1 bg-primary/30 group-hover:bg-primary/40 transition-colors min-h-[2rem]"
+		>
 			<!-- Expand/Collapse Control for nested replies -->
 			{#if hasNestedReplies && onToggleExpanded}
 				<button
@@ -43,9 +49,11 @@
 					title={expanded ? 'Collapse replies' : 'Show replies'}
 				>
 					{#if expanded}
-						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-[10px]"></span>
+						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-[10px]"
+						></span>
 					{:else}
-						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-[10px]"></span>
+						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-[10px]"
+						></span>
 					{/if}
 				</button>
 			{/if}

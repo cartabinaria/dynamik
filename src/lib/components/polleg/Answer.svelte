@@ -169,7 +169,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
 						(answer?.i_voted == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
-					on:click={() => vote(index, answer.id, 1)}
+					onclick={() => vote(index, answer.id, 1)}
 				>
 					<span class="icon-[material-symbols--arrow-upward] text-xl"></span>
 				</button>
@@ -183,7 +183,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
 						(answer?.i_voted == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
-					on:click={() => vote(index, answer.id, -1)}
+					onclick={() => vote(index, answer.id, -1)}
 				>
 					<span class="icon-[material-symbols--arrow-downward] text-xl"></span>
 				</button>
@@ -192,20 +192,54 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<!-- Right Content Column -->
 			<div class="flex-1 min-w-0">
 				<!-- Header with user info and timestamp -->
-				<div class="flex items-center gap-4 mb-6">
-					<img
-						class="w-10 h-10 rounded-full ring-2 ring-base-300/50"
-						src={answer.user_avatar_url}
-						alt={answer.user + ' profile picture'}
-						loading="lazy"
-						referrerpolicy="no-referrer"
-					/>
-					<div class="flex items-center gap-3 text-base">
-						{answer.user}
-						<span class="text-base-content/60">•</span>
-						<span class="text-base-content/70">
-							{formatRelativeTime(answer.created_at)}
-						</span>
+				<div class="flex items-center justify-between mb-4">
+					<div class="flex items-center gap-4">
+						<img
+							class="w-10 h-10 rounded-full ring-2 ring-base-300/50"
+							src={answer.user_avatar_url}
+							alt={answer.user + ' profile picture'}
+							loading="lazy"
+							referrerpolicy="no-referrer"
+						/>
+						<div class="flex items-center gap-3 text-base">
+							{answer.user}
+							<span class="text-base-content/60">•</span>
+							<span class="text-base-content/70">
+								{formatRelativeTime(answer.created_at)}
+							</span>
+						</div>
+					</div>
+					<div class="flex justify-end items-center gap-2">
+						<!-- TODO: report answer -->
+						<button
+							class="btn btn-ghost btn-square btn-xs text-warning hover:btn-warning opacity-60 hover:opacity-100 hover:text-base-100"
+							onclick={(e) => {
+								e.preventDefault();
+								reportAnswer(answer.id);
+							}}
+							title="Report this reply to admin"
+							aria-label="Report this reply to admin"
+						>
+							<span class="icon-[solar--shield-warning-bold] text-xl"></span>
+						</button>
+
+						<!-- Delete Button (Far right for safety) -->
+						{#if answer.can_i_delete}
+							<button
+								class="btn btn-ghost btn-square btn-sm text-error hover:btn-error"
+								onclick={() => deleteAnswer(answer.id)}
+								disabled={isDeleting}
+							>
+								<span
+									class="icon-[solar--trash-bin-minimalistic-bold] text-xl {isDeleting
+										? 'opacity-50'
+										: ''}"
+								></span>
+								{#if isDeleting}
+									Deleting...
+								{/if}
+							</button>
+						{/if}
 					</div>
 				</div>
 
@@ -218,7 +252,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<div class="flex items-center gap-3 text-sm flex-wrap">
 					<!-- Replies Button -->
 					{#if sortedReplies && sortedReplies.length > 0}
-						<button class="btn btn-ghost btn-sm" on:click={() => (showReplies = !showReplies)}>
+						<button class="btn btn-ghost btn-sm" onclick={() => (showReplies = !showReplies)}>
 							{#if showReplies}
 								<span class="icon-[solar--alt-arrow-up-outline]"></span>
 								Hide replies
@@ -234,14 +268,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{#if user}
 						<button
 							class="btn btn-ghost btn-sm"
-							on:click|preventDefault={() => {
+							onclick={(e) => {
+								e.preventDefault();
 								if (showReplyBoxFor != null) {
 									showReplyBoxFor = null;
 								} else {
 									showReplyBoxFor = index;
 									// Scroll to bottom where ReplyBox will appear
 									setTimeout(() => {
-										const replyBoxElement = document.querySelector(`[data-answer-id="${answer.id}"] .reply-box-container`);
+										const replyBoxElement = document.querySelector(
+											`[data-answer-id="${answer.id}"] .reply-box-container`
+										);
 										if (replyBoxElement) {
 											replyBoxElement.scrollIntoView({
 												behavior: 'smooth',
@@ -256,22 +293,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							Reply
 						</button>
 						<div class="divider divider-horizontal mx-0"></div>
-					{/if}
-
-					<!-- Delete Button (Far right for safety) -->
-					{#if answer.can_i_delete}
-						<button
-							class="btn btn-ghost btn-sm text-error hover:btn-error"
-							on:click|preventDefault={() => deleteAnswer(answer.id)}
-							disabled={isDeleting}
-						>
-							<span
-								class="icon-[solar--trash-bin-minimalistic-bold] {isDeleting ? 'opacity-50' : ''}"
-							></span>
-							{#if isDeleting}
-								Deleting...
-							{/if}
-						</button>
 					{/if}
 				</div>
 
@@ -298,20 +319,22 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<!-- Reply Box at the bottom of the replies timeline -->
 				{#if showReplyBoxFor === index}
 					<div class="reply-box-container mt-8 pt-6 w-full">
-						<div class="bg-base-200/50 backdrop-blur-sm rounded-lg p-4 border-l-4 border-primary/30">
+						<div
+							class="bg-base-200/50 backdrop-blur-sm rounded-lg p-4 border-l-4 border-primary/30"
+						>
 							<!-- Contextual Header -->
 							<div class="flex items-center gap-2 mb-3 text-sm text-base-content/70">
 								<span class="icon-[solar--reply-outline] text-primary/70"></span>
-								<span>Replying to <strong class="text-base-content">@{answer.user}</strong></span>
 								<button
 									class="btn btn-ghost btn-xs ml-auto"
-									on:click={() => (showReplyBoxFor = null)}
+									onclick={() => (showReplyBoxFor = null)}
 									title="Cancel reply"
 								>
+									>
 									<span class="icon-[solar--close-circle-outline]"></span>
 								</button>
 							</div>
-							
+
 							<ReplyBox
 								closeCallback={() => {
 									showReplyBoxFor = null;

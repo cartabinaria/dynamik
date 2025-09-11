@@ -5,6 +5,7 @@
 
 	export let pdf: FullPDF;
 	export let box: Box;
+	export let proposal: boolean = false;
 	let canvas: HTMLCanvasElement;
 	let parent: HTMLSpanElement;
 	let visible: boolean = false;

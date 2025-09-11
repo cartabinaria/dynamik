@@ -64,33 +64,24 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								{/if}
 							</div>
 							{#if $auth.user.admin}
-								<div class="badge badge-primary badge-sm">Admin</div>
+								<div class="badge badge-primary badge-sm !font-semibold">Admin</div>
 							{/if}
 						</div>
 
 						<!-- Menu Items -->
 						<div class="menu p-0 mt-2 w-70">
-							<li>
-								<!-- TODO: route page of pdf approve dash -->
-								<a
-									href="#"
-									class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
-								>
-									<!-- <span class="icon-[ic--round-approval] text-lg"></span>
-									<span class="icon-[ic--round-fact-check] text-lg"></span>
-									<span class="icon-[ic--round-assignment-turned-in] text-lg"></span>
-									<span class="icon-[ic--round-rule] text-lg"></span>
-									<span class="icon-[ic--round-verified] text-lg"></span>
-									<span class="icon-[ic--round-rate-review] text-lg"></span>
-									<span class="icon-[ic--round-admin-panel-settings] text-lg"></span>
-									<span class="icon-[ic--round-checklist] text-lg"></span>
-									<span class="icon-[ic--round-pending-actions] text-lg"></span> -->
-									<span class="icon-[ic--round-task-alt] text-lg"></span>
-
-									<span class="flex-1">Q&A approve</span>
-									<span class="badge badge-ghost badge-sm">Soon</span>
-								</a>
-							</li>
+							{#if $auth.user?.admin}
+								<li>
+									<a
+										href="/moderation"
+										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
+									>
+										<span class="icon-[ic--round-task-alt] text-lg"></span>
+										<span class="flex-1">Moderation</span>
+										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
+									</a>
+								</li>
+							{/if}
 							<li>
 								<a
 									href="/settings"

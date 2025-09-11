@@ -19,12 +19,14 @@
 
 		{#if isAdmin}
 			<button class="btn btn-outline btn-primary" on:click|preventDefault={() => setEditMode(true)}>
-				Prepare it
+				Prepare PDF
 			</button>
 		{:else if isAuthenticated}
 			<button class="btn btn-outline btn-primary" on:click|preventDefault={() => setEditMode(true)}>
 				Propose PDF preparation
 			</button>
+		{:else}
+			<p class="mb-4">Please login to propose PDF preparation.</p>
 		{/if}
 		<button class="btn btn-ghost" on:click|preventDefault={() => history.back()}> Go back </button>
 	</div>

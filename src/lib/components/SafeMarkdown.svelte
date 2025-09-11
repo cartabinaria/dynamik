@@ -1,4 +1,3 @@
-<!-- SafeMarkdown.svelte -->
 <script lang="ts">
 	import { Markdown } from 'carta-md';
 	import { carta } from '$lib/carta-config';
