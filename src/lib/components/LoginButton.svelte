@@ -81,6 +81,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
+
+								<li>
+									<a
+										href="/logs"
+										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
+									>
+										<span class="icon-[octicon--log-16] text-lg"></span>
+										Logs
+									</a>
+								</li>
 							{/if}
 							<li>
 								<a

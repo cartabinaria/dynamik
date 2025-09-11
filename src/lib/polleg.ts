@@ -31,3 +31,12 @@ export interface Document {
 	questions: Question[];
 	url: string;
 }
+
+export interface Logs {
+	timestamp: string;
+	action: string;
+	item_type: string;
+	item_id: string;
+	username: string;
+	user_avatar_url: string;
+}

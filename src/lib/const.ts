@@ -45,3 +45,4 @@ export const VOTE_URL = (id: number) => `${POLLEG_BASE_URL}/answer/${id}/vote`;
 export const ANSWERS_REPLIES_URL = (id: number) => `${POLLEG_BASE_URL}/answers/${id}/replies`;
 export const PROPOSAL_URL = `${POLLEG_BASE_URL}/proposals`;
 export const PROPOSALS_URL = (id: number) => `${PROPOSAL_URL}/${id}`;
+export const LOGS_URL = `${POLLEG_BASE_URL}/logs`;
