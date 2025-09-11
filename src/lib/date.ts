@@ -13,9 +13,9 @@ dayjs.locale(localeIt);
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
-export const formatDate = (settings: Settings, date: string) => {
+export const formatDate = (date: string, settings?: Settings) => {
 	const dayjsDate = dayjs(date);
-	if (settings.isoDates) {
+	if (settings?.isoDates) {
 		return dayjsDate.toISOString().substring(0, 19);
 	} else {
 		return dayjsDate.format('LLL');

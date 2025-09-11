@@ -69,6 +69,7 @@
 								<div class="avatar">
 									<div class="mask mask-squircle h-6 w-6">
 										<img src={log.user_avatar_url} alt="Avatar of {log.username}" />
+										<!-- TODO: Add a fallback avatar -->
 									</div>
 								</div>
 								<div>

@@ -114,9 +114,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</span>
 		<span class="hidden md:block">
 			{#if $settings.isoDates}
-				{data.time ? formatDate($settings, data.time) : '-'}
+				{data.time ? formatDate(data.time, $settings) : '-'}
 			{:else if data.time}
-				{@const dateParts = splitDate(formatDate($settings, data.time))}
+				{@const dateParts = splitDate(formatDate(data.time, $settings))}
 				<div class="ml-4 grid grid_date grid-flow-col">
 					<div class="justify-self-end mr-2">{dateParts.day}</div>
 					<div>{dateParts.month}</div>

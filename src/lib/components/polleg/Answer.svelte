@@ -14,6 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { formatRelativeTime } from '$lib/date';
 	import { Markdown, Carta } from 'carta-md';
 	import { getCartaConfig } from '$lib/carta-config';
+	import ReportAnswer from '$lib/components/polleg/ReportAnswer.svelte';
 
 	const carta = new Carta(getCartaConfig());
 
@@ -210,18 +211,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						</div>
 					</div>
 					<div class="flex justify-end items-center gap-2">
-						<!-- TODO: report answer -->
-						<button
-							class="btn btn-ghost btn-square btn-xs text-warning hover:btn-warning opacity-60 hover:opacity-100 hover:text-base-100"
-							onclick={(e) => {
-								e.preventDefault();
-								reportAnswer(answer.id);
-							}}
-							title="Report this reply to admin"
-							aria-label="Report this reply to admin"
-						>
-							<span class="icon-[solar--shield-warning-bold] text-xl"></span>
-						</button>
+						<ReportAnswer id={answer.id} />
 
 						<!-- Delete Button (Far right for safety) -->
 						{#if answer.can_i_delete}

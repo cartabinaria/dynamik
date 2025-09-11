@@ -40,3 +40,13 @@ export interface Logs {
 	username: string;
 	user_avatar_url: string;
 }
+
+export interface Report {
+	id: number;
+	cause: string;
+	created_at: string;
+	username: string;
+	user_avatar_url: string;
+	answer_id: number;
+	answer: Answer;
+}

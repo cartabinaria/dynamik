@@ -8,6 +8,7 @@
 	import { getCartaConfig } from '$lib/carta-config';
 	import { tick, untrack } from 'svelte';
 	import Reply from './Reply.svelte'; // Self-import for recursive rendering
+	import ReportAnswer from './ReportAnswer.svelte';
 
 	const carta = new Carta(getCartaConfig());
 
@@ -205,6 +206,10 @@
 			isDeleting = false;
 		}
 	};
+
+	function reportReply(replyId: number) {
+		alert('Report functionality is not yet implemented.');
+	}
 </script>
 
 <!-- Reply with Timeline Design -->
@@ -245,22 +250,7 @@
 								{formatRelativeTime(reply.created_at)}
 							</span>
 						</div>
-					</div>
-
-					<!-- TODO: report to moderator -->
-					<div class="flex justify-end items-center gap-2">
-						<button
-							class="btn btn-ghost btn-square btn-xs text-warning hover:btn-warning opacity-60 hover:opacity-100 hover:text-base-100"
-							onclick={(e) => {
-								e.preventDefault();
-								reportReply(reply.id);
-							}}
-							title="Report this reply to admin"
-							aria-label="Report this reply to admin"
-						>
-							<span class="icon-[solar--shield-warning-bold] text-xl"></span>
-						</button>
-
+						<ReportAnswer id={reply.id} />
 						<!-- Delete Button (only for reply owner or admin) -->
 						{#if reply.can_i_delete}
 							<button

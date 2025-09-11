@@ -1,6 +1,5 @@
 <!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2025 Eyad Issa <eyadlorenzo@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
@@ -84,10 +83,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 								<li>
 									<a
-										href="/logs"
+										href="/report"
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
-										<span class="icon-[octicon--log-16] text-lg"></span>
+										<span class="icon-[solar--shield-user-bold] text-lg"></span>
+										<span class="flex-1">Report</span>
+										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
+									</a>
+								</li>
+
+								<li>
+									<a
+										href="/logs"
+										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
+										><span class="icon-[material-symbols--list-rounded] text-lg"></span>
 										Logs
 									</a>
 								</li>
