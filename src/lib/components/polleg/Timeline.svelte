@@ -65,6 +65,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/if}
 
 			<!-- Load More Control - positioned lower on the timeline -->
+			<!-- FIXME: when closed is hidden -->
 			{#if hasMore && onLoadMore}
 				<button
 					class="timeline-load-btn absolute left-1/2 bottom-4 transform -translate-x-1/2 w-6 h-6 bg-accent/10 border border-accent/40 rounded-full flex items-center justify-center hover:bg-accent/15 hover:border-accent/60 transition-all duration-200 shadow-sm"

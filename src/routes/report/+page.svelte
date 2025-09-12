@@ -144,7 +144,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<td>
 							<div class="leading-normal mb-4">
 								<!-- <Markdown {carta} value={report.answer.content} /> -->
-								<!-- FIXME fa schifo carta-->
+								<!-- FIXME fa schifo carta, c'è un problema perché PDFViewer già monta nel DOM carta per le Question Component [forse] e quindi ne trova 2-->
 							</div>
 						</td>
 						<td>{formatDate(report.created_at)}</td>
@@ -174,6 +174,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<tbody>
 				{#each banned as ban}
 					<tr>
+						<!-- TODO: additiona th for checkbox for mutiple action like remove -->
 						<td>
 							<div class="flex items-center gap-3">
 								<div class="avatar">
@@ -194,6 +195,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							>
 								<span class="icon-[akar-icons--trash]"></span>
 							</button>
+							<!-- TODO: btn remove report -->
 						</th>
 					</tr>
 				{/each}

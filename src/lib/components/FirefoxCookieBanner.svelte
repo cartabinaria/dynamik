@@ -3,43 +3,95 @@ SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
  -->
-
 <script lang="ts">
 	import { AUTH_BASE_URL, POLLEG_BASE_URL } from '$lib/const';
 	import { onMount } from 'svelte';
 
 	const backends = [POLLEG_BASE_URL, AUTH_BASE_URL];
-	let showBanner = true;
 
-	// mappa stato: dominio → granted?
-	let status: Record<string, boolean> = {};
+	let showBanner = $state(false);
+	let status = $state<Record<string, boolean>>({});
+	let iframes: HTMLIFrameElement[] = $state([]);
+	let isLoading = $state(true);
 
-	let iframes: HTMLIFrameElement[] = [];
+	// Auto-hide banner quando tutti i domini sono abilitati
+	$effect(() => {
+		const allEnabled = backends.every((domain) => status[domain] === true);
+		if (allEnabled && Object.keys(status).length === backends.length) {
+			showBanner = false;
+		}
+	});
 
 	onMount(() => {
-		// ascolta messaggi dagli iframe
-		window.addEventListener('message', (event) => {
-			if (!backends.includes(event.origin)) return;
+		// Controlla se mostrare il banner
+		const hasStorageAccessSupport = 'hasStorageAccess' in document;
+		const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+
+		if (!hasStorageAccessSupport || !isFirefox) {
+			showBanner = false;
+			isLoading = false;
+			return;
+		}
+
+		// Inizializza status
+		backends.forEach((domain) => {
+			status[domain] = false;
+		});
+
+		// Timeout per iframe che non rispondono
+		const timeoutId = setTimeout(() => {
+			backends.forEach((domain) => {
+				if (!(domain in status)) {
+					status[domain] = false;
+				}
+			});
+
+			// Se almeno un dominio non ha accesso, mostra banner
+			const needsAccess = Object.values(status).some((granted) => !granted);
+			showBanner = needsAccess;
+			isLoading = false;
+		}, 3000);
+
+		// Ascolta messaggi dagli iframe
+		const messageHandler = (event: MessageEvent) => {
+			if (!backends.includes(event.origin)) {
+				console.warn(`Messaggio da origine non autorizzata: ${event.origin}`);
+				return;
+			}
 
 			if (event.data?.type === 'storage-access-result') {
 				status[event.origin] = event.data.granted;
-				status = { ...status }; // forza reattività
 				console.log('Risultato da', event.origin, event.data.granted);
+
+				// Se tutti hanno risposto, nascondi loading
+				if (Object.keys(status).length === backends.length) {
+					clearTimeout(timeoutId);
+
+					const needsAccess = Object.values(status).some((granted) => !granted);
+					showBanner = needsAccess;
+					isLoading = false;
+				}
 			}
-		});
+		};
+
+		window.addEventListener('message', messageHandler);
+
+		return () => {
+			window.removeEventListener('message', messageHandler);
+			clearTimeout(timeoutId);
+		};
 	});
 
 	function requestAccess() {
-		// manda messaggio a tutti gli iframe per iniziare la richiesta
 		iframes.forEach((frame) => {
 			frame.contentWindow?.postMessage({ type: 'request-storage-access' }, frame.src);
 		});
 	}
 </script>
 
-{#if showBanner}
+{#if showBanner && !isLoading}
 	<div
-		class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-200 p-4 text-black rounded-lg shadow-lg flex flex-col items-center z-50"
+		class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-200 p-4 text-black rounded-lg shadow-lg flex flex-col z-50"
 	>
 		<div class="flex items-center justify-between border-b border-yellow-400 pb-2 mb-2 w-full">
 			<div>
@@ -47,9 +99,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<p>To make everything work smoothly, add our domain to your cookie exceptions.</p>
 				<p class="font-semibold">Don't worry, it's quick and safe!</p>
 			</div>
-
 			<button
-				on:click={requestAccess}
+				onclick={requestAccess}
 				class="ml-4 btn btn-warning"
 				title="Click here to allow cookies for our service domains"
 			>
@@ -57,27 +108,24 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				Enable cookies
 			</button>
 		</div>
-
 		<ul>
-			<p class="font-semibold">Current status:</p>
-			{#each backends as domain}
-				<li>
-					<b>{domain}:</b>
-					{#if status[domain]}✅ Cookies enabled!{:else}<span
-							class="loading loading-dots loading-xs"
-						></span> Not enabled yet, this website will not work properly without cookies{/if}
+			{#each backends as domain, index}
+				<li class="flex flex-row w-full items-center justify-between">
+					<b class="mr-2">{domain}:</b>
+					{#if status[domain]}
+						✅ Cookies enabled!
+					{:else}
+						<span class="loading loading-dots loading-xs"></span>
+						Not enabled yet, this website will not work properly without cookies
+					{/if}
 				</li>
+				<iframe
+					bind:this={iframes[index]}
+					title="Firefox Cookie Banner Helper"
+					src="{domain}/cookie-button"
+					class="w-full h-10 border-0 {status[domain] ? 'hidden' : ''}"
+				></iframe>
 			{/each}
 		</ul>
 	</div>
 {/if}
-
-<!-- iframes nascosti -->
-{#each backends as domain}
-	<iframe
-		bind:this={iframes[backends.indexOf(domain)]}
-		title="Firefox Cookie Banner Helper"
-		src={domain + '/storage-access'}
-		style="display:none"
-	></iframe>
-{/each}

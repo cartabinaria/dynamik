@@ -75,7 +75,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								<div class="avatar">
 									<div class="mask mask-squircle h-6 w-6">
 										<img src={log.user_avatar_url} alt="Avatar of {log.username}" />
-										<!-- TODO: Add a fallback avatar -->
+										<!-- TODO: Add a fallback avatar for system user -->
 									</div>
 								</div>
 								<div>
