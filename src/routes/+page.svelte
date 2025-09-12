@@ -15,6 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import type { Degree } from '$lib/teachings';
 	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+	import FirefoxCookieBanner from '$lib/components/FirefoxCookieBanner.svelte';
 
 	let { data }: { data: { degrees: Degree[] } } = $props();
 </script>
@@ -56,6 +57,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 	</div>
 {/if}
+
+<FirefoxCookieBanner />
 
 {#snippet line(name: string, href: string, icon: string)}
 	<li>
