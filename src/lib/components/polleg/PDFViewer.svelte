@@ -1,8 +1,10 @@
 <!-- 
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
--->
+ -->
 
 <script lang="ts">
 	import PDFBox from '$lib/components/polleg/PDFBox.svelte';

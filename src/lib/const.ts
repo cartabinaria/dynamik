@@ -1,8 +1,12 @@
-// SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
-// SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
-// SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
-//
-// SPDX-License-Identifier: AGPL-3.0-or-later
+/*
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 - 2025 Samuele Musiani <samu@teapot.ovh>
+SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+*/
 
 const ORG = 'cartabinaria';
 export const RISORSE_BASE_URL =

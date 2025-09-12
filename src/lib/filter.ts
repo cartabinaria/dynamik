@@ -1,6 +1,8 @@
-// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
-//
-// SPDX-License-Identifier: AGPL-3.0-or-later
+/*
+SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+*/
 
 /**
  * Filters an array asynchronously using a predicate function.

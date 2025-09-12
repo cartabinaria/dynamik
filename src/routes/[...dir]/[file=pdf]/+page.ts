@@ -1,7 +1,11 @@
-// SPDX-FileCopyrightText: 2024 Eyad Issa <eyadlorenzo@gmail.com>
-//
-// SPDX-License-Identifier: AGPL-3.0-or-later
+/*
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
 
+SPDX-License-Identifier: AGPL-3.0-or-later
+*/
 import sha256 from 'sha256';
 import { error, redirect } from '@sveltejs/kit';
 

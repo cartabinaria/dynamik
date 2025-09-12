@@ -1,3 +1,9 @@
+<!-- 
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+ -->
+
 <script lang="ts">
 	import { Markdown, Carta } from 'carta-md';
 	import { getCartaConfig } from '$lib/carta-config';

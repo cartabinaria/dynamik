@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { PROPOSALS_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
@@ -48,7 +54,7 @@
 	}
 </script>
 
-{#if p.id}
+│ {#if p.id}
 	<div class="fab fab-flower absolute right-6 bottom-6 z-[99] pointer-events-none mb-2">
 		<div tabindex="0" role="button" class="btn btn-circle btn-primary">
 			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
