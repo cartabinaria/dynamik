@@ -1,6 +1,6 @@
 /*
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2024 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
 

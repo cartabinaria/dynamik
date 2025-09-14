@@ -1,6 +1,6 @@
 <!-- 
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -22,7 +22,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		url,
 		questions,
 		updateProposals
-	}: { proposal?: boolean; data?: any; url?: any; questions: Question[] } = $props();
+	}: {
+		proposal?: boolean;
+		data?: any;
+		url?: any;
+		questions: Question[];
+		updateProposals: () => Promise<void>;
+	} = $props();
 
 	// Function to reload all questions data
 	async function reloadAllQuestions() {
@@ -54,7 +60,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	});
 
 	// Function get total answer count for a question
-	let questionsMap = $state(new Map(questions?.map((q) => [q.id, q]) || []));
+	let questionsMap = $derived(new Map(questions?.map((q) => [q.id, q]) || []));
 
 	const getFullQuestion = (questionId: number) => questionsMap.get(questionId);
 	const getTotalAnswerCount = (questionId: number) =>
@@ -351,11 +357,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</div>
 
 					<!-- Non-split mode: show questions inline (MOBILE) -->
-					<div class="md:hidden">
+					<!-- <div class="md:hidden">
 						{#if box.question}
 							<QuestionComponent question={box.question} onAnswerUpdate={reloadAllQuestions} />
 						{/if}
-					</div>
+					</div> -->
 				{/if}
 			{/each}
 		</main>
@@ -364,11 +370,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{#if splitMode && selectedQuestion && !proposal}
 			<!-- Desktop Horizontal Panel -->
 			<div
-				class="bg-base-100/80 w-full backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
+				class="bg-base-100/80 w-full h-full backdrop-blur-xl border-t border-primary/20 shadow-xl transition-all duration-300 ease-out transform {!isClosing &&
 				splitMode
 					? 'translate-y-0 opacity-100'
 					: 'translate-y-full opacity-0'} hidden md:flex flex-col relative overflow-hidden {isFullscreen
-					? 'fixed inset-0 z-50'
+					? 'fixed inset-0'
 					: ''}"
 				style={isFullscreen ? '' : 'height: 50vh; min-height: 20vh; max-height: 80vh;'}
 			>
@@ -428,7 +434,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
-			<div class="fixed inset-0 z-50 md:hidden">
+			<div class="fixed inset-0 md:hidden">
 				<div class="modal modal-open">
 					<div class="modal-box max-w-full max-h-full h-full w-full rounded-none">
 						<div
