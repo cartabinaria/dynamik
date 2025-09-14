@@ -1,20 +1,23 @@
-// TODO: aggiungere altri temi in base al tema selezionato [quando c'è molto tempo]
+:root {
+	--carta-background-light: var(--color-base-200);
+	--carta-background: var(--color-base-100);
+	--carta-border: var(--color-neutral);
+	--carta-accent: var(--color-accent);
+	--carta-text: var(--color-base-content);
+}
 
-.carta-theme__github {
-	// Core styles
-	$background: #0d1117;
-	$background-light: #161b22;
-	$border: #2b3138;
-	$accent: #1f6feb;
-
+.carta-theme,
+.carta-theme__github,
+.carta-theme__light {
+	/* EDITOR wrapper variante (usa insieme alla classe .carta-editor) */
 	&.carta-editor {
-		background-color: $background;
-		border: 1px solid $border;
+		background-color: var(--carta-background);
+		border: 1px solid var(--carta-border);
 		border-radius: 0.5rem;
 		flex: 1;
 
 		&:focus-within {
-			outline: 2px solid $accent;
+			outline: 2px solid var(--carta-accent);
 		}
 
 		.carta-wrapper {
@@ -30,102 +33,135 @@
 
 		.carta-font-code {
 			font-family: 'Fira Code', monospace;
-			caret-color: white;
-			color: white;
+			caret-color: var(--carta-text);
+			color: var(--carta-text);
 		}
 
 		.carta-toolbar {
 			height: 2.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 
-			background-color: $background-light;
-			border-bottom: 1px solid $border;
-
+			background-color: var(--carta-background-light);
+			border-bottom: 1px solid var(--carta-border);
 			padding-right: 12px;
 			border-top-left-radius: 0.5rem;
 			border-top-right-radius: 0.5rem;
 
+			.carta-toolbar-left,
+			.carta-toolbar-right {
+				display: flex;
+				align-items: center;
+				height: 100%;
+			}
+
+			.carta-toolbar-left {
+				& > *:first-child {
+					border-top-left-radius: 0.5rem;
+				}
+
+				& > * {
+					padding-left: 1rem;
+					padding-right: 1rem;
+					font-size: 0.95rem;
+					color: var(--carta-text);
+				}
+
+				.carta-active {
+					height: 100%;
+					background-color: var(--carta-background);
+					transform: translateY(1px);
+					color: var(--carta-accent);
+
+					border-right: 1px solid var(--carta-border);
+					border-bottom: 1px solid var(--carta-background);
+
+					&:not(:first-child) {
+						border-left: 1px solid var(--carta-border);
+					}
+				}
+			}
+
+			.carta-toolbar-right {
+				& > * {
+					padding-left: 0.5rem;
+					padding-right: 0.5rem;
+				}
+			}
+
 			.carta-icon {
 				width: 2rem;
 				height: 2rem;
+				color: var(--carta-text);
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 0.25rem;
 
 				&:hover {
-					color: white;
-					background-color: $border;
+					color: var(--carta-accent);
+					background-color: var(--carta-border);
 				}
 			}
 		}
 
-		.carta-toolbar-left {
-			& > *:first-child {
-				border-top-left-radius: 0.5rem;
-			}
-
-			& > * {
-				padding-left: 1rem;
-				padding-right: 1rem;
-				font-size: 0.95rem;
-			}
-
-			.carta-active {
-				height: 100%;
-				background-color: $background;
-				transform: translateY(1px);
-				color: white;
-
-				border-right: 1px solid $border;
-				border-bottom: 1px solid $background;
-
-				&:not(:first-child) {
-					border-left: 1px solid $border;
-				}
-			}
-		}
-
+		/* Syntax highlighting container fallback */
 		[class*='shj-lang-'] {
 			background: transparent;
 		}
 	}
 
-	// Plugin emoji
+	/* -------------------------
+     Plugin: emoji
+     Se l'elemento ha anche .carta-emoji (es. <div class="carta-theme__github carta-emoji">)
+     ------------------------- */
 	&.carta-emoji {
 		width: 18rem;
 		max-height: 14rem;
-		overflow-y: scroll;
+		overflow-y: auto;
 		border-radius: 4px;
 		font-family: inherit;
-		background-color: $background;
+		background-color: var(--carta-background);
 		padding: 6px;
 		scroll-padding: 6px;
 		gap: 6px;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	&.carta-emoji button {
-		background: $background-light;
-
+		background: var(--carta-background-light);
 		aspect-ratio: 1;
 		border-radius: 4px;
 		border: 0;
 		padding: 0;
-
 		cursor: pointer;
-
 		font-size: 1.2rem;
 		line-height: 100%;
+		color: var(--carta-text);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
 	}
 
 	&.carta-emoji button:hover,
 	&.carta-emoji button.carta-active {
-		background: $border;
+		background: var(--carta-border);
 	}
 
-	// Plugin slash
+	/* -------------------------
+     Plugin: slash (command palette)
+     ------------------------- */
 	&.carta-slash {
 		width: 18rem;
 		max-height: 14rem;
-		overflow-y: scroll;
+		overflow-y: auto;
 		border-radius: 4px;
 		font-family: inherit;
-		background-color: $background;
+		background-color: var(--carta-background);
 		padding: 6px;
 		scroll-padding: 6px;
 	}
@@ -140,27 +176,34 @@
 		padding: 10px;
 		border: 0;
 		border-radius: 4px;
+		color: var(--carta-text);
+		text-align: left;
+		display: block;
 	}
 
 	&.carta-slash .carta-slash-group {
-		padding: 0 4px 0 4px;
+		padding: 0 4px;
 		margin-bottom: 4px;
 		font-size: 0.8rem;
+		color: var(--carta-accent);
 	}
 
 	&.carta-slash button.carta-active,
 	&.carta-slash button:hover {
-		background: $background-light;
+		background: var(--carta-background-light);
 		cursor: pointer;
 	}
 
 	&.carta-slash .carta-snippet-title {
 		font-size: 0.85rem;
 		font-weight: 600;
+		color: var(--carta-text);
 	}
 
 	&.carta-slash .carta-snippet-description {
 		font-size: 0.8rem;
 		text-overflow: ellipsis;
+		/* fallback: usa color-mix dove supportato */
+		color: color-mix(in srgb, var(--carta-text) 70%, #000 30%);
 	}
 }
