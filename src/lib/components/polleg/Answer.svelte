@@ -1,5 +1,5 @@
 <!-- 
-SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 
@@ -12,11 +12,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { formatRelativeTime } from '$lib/date';
-	import { Markdown, Carta } from 'carta-md';
-	import { getCartaConfig } from '$lib/carta-config';
+	import { Markdown } from 'carta-md';
+	import { carta } from '$lib/carta-config';
 	import ReportAnswer from '$lib/components/polleg/ReportAnswer.svelte';
-
-	const carta = new Carta(getCartaConfig());
 
 	export let answer;
 	export let index;
@@ -25,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
 	export let onAnswerUpdate: (() => Promise<void>) | undefined = undefined;
 
-	let showReplyBoxFor = null;
+	let showReplyBoxFor: any = null;
 	let unfinishedReplies: string[] = [];
 	let isDeleting = false;
 	let showReplies = false;

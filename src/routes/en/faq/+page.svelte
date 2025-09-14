@@ -5,14 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
  -->
 
 <script lang="ts">
-	import { Markdown, Carta } from 'carta-md';
-	import { getCartaConfig } from '$lib/carta-config';
+	import { Markdown } from 'carta-md';
+	import { carta } from '$lib/carta-config';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	const carta = new Carta(getCartaConfig());
 
 	// Search state
 	let searchTerm = '';

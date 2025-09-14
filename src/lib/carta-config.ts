@@ -13,6 +13,7 @@ import { attachment } from '@cartamd/plugin-attachment';
 import settings from '$lib/settings';
 import { get } from 'svelte/store';
 import { IMAGES_URL, POLLEG_BASE_URL } from './const';
+import { Carta } from 'carta-md';
 
 function getTheme() {
 	const theme = get(settings).theme;
@@ -20,9 +21,9 @@ function getTheme() {
 	else if (theme == 'light' || theme == 'autumn') return 'github-light';
 	return theme;
 }
-
+export const carta = new Carta(getCartaConfig());
 // Shared Carta configuration for markdown rendering
-export function getCartaConfig() {
+function getCartaConfig() {
 	return {
 		extensions: [
 			emoji(),

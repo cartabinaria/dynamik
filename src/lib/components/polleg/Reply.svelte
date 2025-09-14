@@ -12,15 +12,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { ANSWER_URL, ANSWERS_REPLIES_URL } from '$lib/const';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import Timeline from '$lib/components/polleg/Timeline.svelte';
-	import { Markdown, Carta } from 'carta-md';
-	import { getCartaConfig } from '$lib/carta-config';
+	import { Markdown } from 'carta-md';
+	import { carta } from '$lib/carta-config';
 	import { tick, untrack } from 'svelte';
 	import Reply from './Reply.svelte'; // Self-import for recursive rendering
 	import ReportAnswer from './ReportAnswer.svelte';
 
-	const carta = new Carta(getCartaConfig());
-
-	// Props using Svelte 5 $props()
 	let {
 		answer,
 		reply,
@@ -43,7 +40,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		parentForceUpdate?: number;
 	} = $props();
 
-	// Svelte 5 state management
 	let isDeleting = $state(false);
 	let showReplyBox = $state(false);
 	let showNestedReplies = $state(false);

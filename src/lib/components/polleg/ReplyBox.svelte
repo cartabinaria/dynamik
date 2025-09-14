@@ -1,6 +1,6 @@
 <!-- 
 SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
-SPDX-FileCopyrightText: 2024 Luca <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 
@@ -8,13 +8,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
  -->
 
 <script lang="ts">
-	import { MarkdownEditor, Carta } from 'carta-md';
+	import { MarkdownEditor } from 'carta-md';
 	import { onDestroy } from 'svelte';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { ANSWERS_URL } from '$lib/const';
-	import { getCartaConfig } from '$lib/carta-config';
-
-	const carta = new Carta(getCartaConfig());
+	import { carta } from '$lib/carta-config';
+	import settings from '$lib/settings';
 
 	let body: string = '';
 	let disabled: boolean = false;
