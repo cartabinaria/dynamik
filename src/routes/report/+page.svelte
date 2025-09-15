@@ -128,12 +128,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <div class="overflow-x-auto overflow-y-auto">
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
 		<div class="card bg-base-100 shadow-xl col-span-2">
-			<div class="card-body py-0 pr-0">
+			<div class="card-body py-0 md:pr-0">
 				<h2 class="card-title">Reports</h2>
 				{#each reports as report}
 					<div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
 						<input type="checkbox" />
-						<div class="collapse-title text-md font-medium flex items-center gap-2">
+						<div
+							class="collapse-title text-md font-medium flex flex-col md:flex-row md:items-center gap-2"
+						>
 							<div class="flex flex-col">
 								<div class="flex items-center gap-3 min-w-max">
 									<div class="avatar">
@@ -149,9 +151,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{formatDate(report.created_at)}
 								</span>
 							</div>
-							Reported:<b>{report.answer?.user}</b>'s answer #{report.answer_id}
+							<p>Reported: <b>{report.answer?.user}</b>'s answer #{report.answer_id}</p>
 						</div>
-						<div class="collapse-content flex justify-around gap-1">
+						<div class="collapse-content flex flex-col md:flex-row justify-around gap-1">
 							<div class="flex items-start w-max">
 								<div class="flex flex-col gap-2 w-max">
 									Report reason:

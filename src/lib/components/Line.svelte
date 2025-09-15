@@ -1,7 +1,6 @@
 <!--
-SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
-SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
@@ -45,7 +44,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="contents">
 	<div class="contents">
-		<span class="flex items-center flex-[1_0_auto] w-max">
+		<span class="flex items-center flex-[1_0_auto] min-w-0 md:w-max">
 			{#if external}
 				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
 				<a
@@ -72,7 +71,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					></span>
 				</button>
 				<a
-					class="flex link link-hover sm:flex-wrap text-primary"
+					class="flex link link-hover break-anywhere text-primary min-w-0"
 					class:line-through={$isDone}
 					href="{base}/{data.name}?{$page.url.searchParams}"
 					target={$settings.newTab ? '_blank' : null}
@@ -131,5 +130,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <style>
 	.grid_date {
 		grid-template-columns: 5% 45% auto auto;
+	}
+
+	.break-anywhere {
+		word-break: break-word;
+		overflow-wrap: anywhere;
+		word-wrap: break-word;
+		min-width: 0;
 	}
 </style>

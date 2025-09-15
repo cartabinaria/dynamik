@@ -27,7 +27,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data?: any;
 		url?: any;
 		questions: Question[];
-		updateProposals: () => Promise<void>;
+		updateProposals: (id: any) => Promise<void>;
 	} = $props();
 
 	// Function to reload all questions data
@@ -423,7 +423,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</div>
 
 				<!-- Content area -->
-				<div class="flex-1 overflow-y-auto h-full w-full p-4">
+				<div class="flex-1 overflow-y-auto h-full w-full py-4">
 					<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>
 
@@ -434,11 +434,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
-			<div class="fixed inset-0 md:hidden">
+			<div class="fixed inset-x-0 bottom-0 md:hidden">
 				<div class="modal modal-open">
 					<div class="modal-box max-w-full max-h-full h-full w-full rounded-none">
 						<div
-							class="sticky top-0 bg-base-100 border-b border-base-300 p-4 flex justify-between items-center"
+							class="sticky top-8 bg-base-100 border-b border-base-300 p-4 flex justify-between items-center"
 						>
 							<h3 class="text-lg font-semibold">Solutions</h3>
 							<button
@@ -449,7 +449,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								<span class="icon-[solar--close-circle-bold] text-xl"></span>
 							</button>
 						</div>
-						<div class="p-4 overflow-auto">
+						<div class="py-7 overflow-y-auto h-full">
 							<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 						</div>
 					</div>

@@ -55,10 +55,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					title={expanded ? 'Collapse replies' : 'Show replies'}
 				>
 					{#if expanded}
-						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-[10px]"
-						></span>
+						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-sm"></span>
 					{:else}
-						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-[10px]"
+						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-sm"
 						></span>
 					{/if}
 				</button>

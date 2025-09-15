@@ -35,8 +35,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					/>
 				</div>
 			</div>
-			<div class="dropdown-content z-[1] mt-3">
-				<div class="card bg-base-100 shadow-xl border border-base-300 w-80">
+			<div class="dropdown-content mt-3">
+				<div class="card bg-base-100 shadow-xl border border-base-300 2-56 md:w-80 z-80">
 					<div class="card-body p-4">
 						<!-- User Info Header -->
 						<div class="flex items-center gap-3 pb-3 border-b border-base-200">
@@ -62,21 +62,21 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									</p>
 								{/if}
 							</div>
-							{#if $auth.user.admin}
+							{#if $auth.user.role === 'admin'}
 								<div class="badge badge-primary badge-sm !font-semibold">Admin</div>
 							{/if}
 						</div>
 
 						<!-- Menu Items -->
-						<div class="menu p-0 mt-2 w-70">
-							{#if $auth.user?.admin}
+						<div class="menu p-0 mt-2 w-56 md:w-70">
+							{#if $auth.user?.role === 'admin'}
 								<li>
 									<a
-										href="/moderation"
+										href="/proposals"
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
 										<span class="icon-[ic--round-task-alt] text-lg"></span>
-										<span class="flex-1">Moderation</span>
+										<span class="flex-1">PDF Proposal Approve</span>
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
 										<span class="icon-[solar--shield-user-bold] text-lg"></span>
-										<span class="flex-1">Report</span>
+										<span class="flex-1">Moderation Panel</span>
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>

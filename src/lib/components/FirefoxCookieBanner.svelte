@@ -81,12 +81,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			clearTimeout(timeoutId);
 		};
 	});
-
-	function requestAccess() {
-		iframes.forEach((frame) => {
-			frame.contentWindow?.postMessage({ type: 'request-storage-access' }, frame.src);
-		});
-	}
 </script>
 
 {#if showBanner && !isLoading}
@@ -99,18 +93,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<p>To make everything work smoothly, add our domain to your cookie exceptions.</p>
 				<p class="font-semibold">Don't worry, it's quick and safe!</p>
 			</div>
-			<button
-				onclick={requestAccess}
-				class="ml-4 btn btn-warning"
-				title="Click here to allow cookies for our service domains"
-			>
-				<span class="icon-[mdi--firefox] text-lg"></span>
-				Enable cookies
-			</button>
 		</div>
 		<ul>
 			{#each backends as domain, index}
-				<li class="flex flex-row w-full items-center justify-between">
+				<li class="flex flex-row w-full items-center justify-start">
 					<b class="mr-2">{domain}:</b>
 					{#if status[domain]}
 						✅ Cookies enabled!

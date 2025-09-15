@@ -9,9 +9,10 @@
 .carta-theme,
 .carta-theme__github,
 .carta-theme__light {
-	/* EDITOR wrapper variante (usa insieme alla classe .carta-editor) */
 	&.carta-editor {
-		background-color: var(--carta-background);
+		z-index: 1 !important;
+		position: unset !important;
+		background-color: var(--ata-background);
 		border: 1px solid var(--carta-border);
 		border-radius: 0.5rem;
 		flex: 1;
@@ -69,6 +70,7 @@
 				}
 
 				.carta-active {
+					z-index: 0 !important;
 					height: 100%;
 					background-color: var(--carta-background);
 					transform: translateY(1px);
@@ -104,6 +106,21 @@
 					background-color: var(--carta-border);
 				}
 			}
+		}
+
+		.carta-icons-menu {
+			padding: 8px;
+			border: 1px solid var(--carta-border);
+			border-radius: 6px;
+			min-width: 180px;
+			background: var(--carta-background);
+			position: absolute;
+			top: 100%;
+			right: 0;
+			display: flex;
+			flex-direction: column;
+			margin-right: 0.5rem;
+			z-index: 1;
 		}
 
 		/* Syntax highlighting container fallback */

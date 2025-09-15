@@ -34,12 +34,14 @@ interface Error {
 	error: string;
 }
 
+type Role = 'admin' | 'member' | 'user';
+
 interface Whoami {
 	username: string;
 	avatarUrl: string;
 	name: string;
 	email: string;
-	admin: boolean;
+	role: Role;
 }
 
 const store = writable<AuthState>(defaultState);

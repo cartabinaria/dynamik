@@ -157,24 +157,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <!-- Answer Card with Glass Effect -->
 <div
 	data-answer-id={answer.id}
-	class="m-4 w-full card bg-base-200/30 backdrop-blur-md border border-base-300/30 shadow-lg rounded-xl transition-all duration-300"
+	class="w-full card bg-base-200/30 backdrop-blur-md shadow-lg rounded-xl transition-all duration-300 z-1"
 >
-	<div class="card-body p-4 w-full">
+	<div class="card-body p-0 md:p-4 w-full">
 		<!-- Answer Layout: Left voting, Right content -->
-		<div class="flex gap-8 w-full">
+		<div class="flex gap-1 md:gap-6 w-full">
 			<!-- Left Voting Column -->
-			<div class="flex flex-col items-center gap-3 min-w-[4rem] pt-2">
+			<div class="flex flex-col items-center md:gap-3 md:min-w-[4rem] pt-2">
 				<!-- Upvote Button -->
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
 						(answer?.i_voted == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
 					onclick={() => vote(index, answer.id, 1)}
+					title="Upvote this answer"
+					aria-label="Upvote this answer"
 				>
 					<span class="icon-[material-symbols--arrow-upward] text-xl"></span>
 				</button>
 
 				<!-- Vote Count -->
-				<span class="text-xl font-bold py-1 min-w-[2rem] text-center"
+				<span class="text-lg font-bold py-1 min-w-[2rem] text-center"
 					>{answer.upvotes - answer.downvotes}</span
 				>
 
@@ -183,6 +185,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					class={'btn btn-circle btn-sm transition-colors ' +
 						(answer?.i_voted == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
 					onclick={() => vote(index, answer.id, -1)}
+					title="Downvote this answer"
+					aria-label="Downvote this answer"
 				>
 					<span class="icon-[material-symbols--arrow-downward] text-xl"></span>
 				</button>
@@ -191,24 +195,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<!-- Right Content Column -->
 			<div class="flex-1 min-w-0">
 				<!-- Header with user info and timestamp -->
-				<div class="flex items-center justify-between mb-4">
-					<div class="flex items-center gap-4">
-						<img
-							class="w-10 h-10 rounded-full ring-2 ring-base-300/50"
-							src={answer.user_avatar_url}
-							alt={answer.user + ' profile picture'}
-							loading="lazy"
-							referrerpolicy="no-referrer"
-						/>
-						<div class="flex items-center gap-3 text-base">
+				<div class="flex items-center justify-between mb-4 flex-wrap">
+					<div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2 mt-4">
+						<div class="flex items-center gap-2 text-base">
+							<img
+								class="w-6 h-6 md:w-10 md:h-10 rounded-full ring-2 ring-base-300/50"
+								src={answer.user_avatar_url}
+								alt={answer.user + ' profile picture'}
+								loading="lazy"
+								referrerpolicy="no-referrer"
+							/>
 							{answer.user}
-							<span class="text-base-content/60">•</span>
-							<span class="text-base-content/70">
+						</div>
+						<div>
+							<span class="text-base-content/70 text-sm sm:text-base">
+								<span class="text-base-content/60">•</span>
 								{formatRelativeTime(answer.created_at)}
 							</span>
 						</div>
 					</div>
-					<div class="flex justify-end items-center gap-2">
+					<div class="flex flex-end justify-end items-center gap-2">
 						<ReportAnswer id={answer.id} />
 
 						<!-- Delete Button (Far right for safety) -->
@@ -306,41 +312,23 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 				<!-- Reply Box at the bottom of the replies timeline -->
 				{#if showReplyBoxFor === index}
-					<div class="reply-box-container mt-8 pt-6 w-full">
-						<div
-							class="bg-base-200/50 backdrop-blur-sm rounded-lg p-4 border-l-4 border-primary/30"
-						>
-							<!-- Contextual Header -->
-							<div class="flex items-center gap-2 mb-3 text-sm text-base-content/70">
-								<span class="icon-[solar--reply-outline] text-primary/70"></span>
-								<button
-									class="btn btn-ghost btn-xs ml-auto"
-									onclick={() => (showReplyBoxFor = null)}
-									title="Cancel reply"
-								>
-									>
-									<span class="icon-[solar--close-circle-outline]"></span>
-								</button>
-							</div>
-
-							<ReplyBox
-								closeCallback={() => {
-									showReplyBoxFor = null;
-								}}
-								bind:unfinishedReply={unfinishedReplies[index]}
-								questionId={question}
-								sendAnswerCallback={async () => {
-									showReplyBoxFor = null;
-									// Call external callback to update parent component
-									if (onAnswerUpdate) {
-										await onAnswerUpdate();
-									}
-								}}
-								parentAnswerId={answer.id}
-								{reloadAnswers}
-								onSubmitSuccess={handleNewReply}
-							/>
-						</div>
+					<div class="reply-box-container mt-4 w-full">
+						<ReplyBox
+							closeCallback={() => {
+								showReplyBoxFor = null;
+							}}
+							questionId={question}
+							sendAnswerCallback={async () => {
+								showReplyBoxFor = null;
+								// Call external callback to update parent component
+								if (onAnswerUpdate) {
+									await onAnswerUpdate();
+								}
+							}}
+							parentAnswerId={answer.id}
+							{reloadAnswers}
+							onSubmitSuccess={handleNewReply}
+						/>
 					</div>
 				{/if}
 			</div>

@@ -23,7 +23,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	onMount(async () => {
 		await checkAuth();
-		if (!('user' in $auth && $auth.user?.admin)) {
+		if (!('user' in $auth && $auth.user?.role === 'admin')) {
 			message = { type: 'error', text: 'Access denied: admin only' };
 			return;
 		}
@@ -64,8 +64,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				Go back
 			</button>
 		</div>
-		<div class="navbar-cener">
-			<h1 class="text-xl font-semibold text-base-content">Moderation</h1>
+		<div class="navbar-center">
+			<h1 class="text-xl font-semibold text-base-content">PDF Proposal Approve</h1>
 		</div>
 
 		<div class="navbar-end">

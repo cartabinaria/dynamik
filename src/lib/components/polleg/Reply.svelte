@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Timeline from '$lib/components/polleg/Timeline.svelte';
 	import { Markdown } from 'carta-md';
 	import { carta } from '$lib/carta-config';
-	import { tick, untrack } from 'svelte';
+	import { untrack } from 'svelte';
 	import Reply from './Reply.svelte'; // Self-import for recursive rendering
 	import ReportAnswer from './ReportAnswer.svelte';
 
@@ -210,15 +210,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			isDeleting = false;
 		}
 	};
-
-	function reportReply(replyId: number) {
-		alert('Report functionality is not yet implemented.');
-	}
 </script>
 
 <!-- Reply with Timeline Design -->
 {#key reply.id}
-	<div class="flex gap-4 w-full group" data-reply-id={reply.id} bind:this={replyContainer}>
+	<div class="flex gap-1 md:gap-4 w-full group" data-reply-id={reply.id} bind:this={replyContainer}>
 		<!-- Timeline Component -->
 		<Timeline
 			{index}
@@ -238,40 +234,44 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				class="bg-base-200 backdrop-blur-sm rounded-lg p-4 mb-4 transition-all duration-200 border border-transparent"
 			>
 				<!-- Reply Header -->
-				<div class="flex items-center justify-between mb-4">
-					<div class="flex items-center gap-3">
-						<img
-							class="w-8 h-8 rounded-full ring-1 ring-base-300/50 transition-all"
-							src={reply.user_avatar_url}
-							alt={reply.user + ' profile picture'}
-							loading="lazy"
-							referrerpolicy="no-referrer"
-						/>
-						<div class="flex items-center gap-2 text-sm">
-							<span class="font-medium transition-colors">{reply.user}</span>
-							<span class="text-base-content/60">•</span>
-							<span class="text-base-content/70">
+				<!-- Header with user info and timestamp -->
+				<div class="flex items-center justify-between mb-4 flex-wrap">
+					<div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-2 mt-4">
+						<div class="flex items-center gap-2 text-base">
+							<img
+								class="w-6 h-6 md:w-10 md:h-10 rounded-full ring-2 ring-base-300/50"
+								src={reply.user_avatar_url}
+								alt={reply.user + ' profile picture'}
+								loading="lazy"
+								referrerpolicy="no-referrer"
+							/>
+							{reply.user}
+						</div>
+						<div>
+							<span class="text-base-content/70 text-sm sm:text-base">
+								<span class="text-base-content/60">•</span>
 								{formatRelativeTime(reply.created_at)}
 							</span>
 						</div>
+					</div>
+					<div class="flex flex-end justify-end items-center gap-2">
 						<ReportAnswer id={reply.id} />
-						<!-- Delete Button (only for reply owner or admin) -->
+
+						<!-- Delete Button (Far right for safety) -->
 						{#if reply.can_i_delete}
 							<button
-								class="btn btn-ghost btn-square btn-xs text-error hover:btn-error opacity-60 hover:opacity-100"
-								onclick={(e) => {
-									e.preventDefault();
-									deleteReply(reply.id);
-								}}
+								class="btn btn-ghost btn-square btn-sm text-error hover:btn-error"
+								onclick={() => deleteReply(reply.id)}
 								disabled={isDeleting}
-								title="Delete reply"
-								aria-label="Delete reply"
 							>
 								<span
 									class="icon-[solar--trash-bin-minimalistic-bold] text-xl {isDeleting
 										? 'opacity-50'
 										: ''}"
 								></span>
+								{#if isDeleting}
+									Deleting...
+								{/if}
 							</button>
 						{/if}
 					</div>
@@ -318,7 +318,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			<!-- Nested Replies Section - simplified recursive rendering -->
 			{#if showNestedReplies && sortedNestedReplies && sortedNestedReplies.length > 0}
-				<div class="ml-8 animate-in slide-in-from-left-4 duration-300">
+				<div class="md:ml-8 animate-in slide-in-from-left-4 duration-300">
 					{#each sortedNestedReplies as nestedReply, nestedIndex (nestedReply.id)}
 						<div
 							class="animate-in fade-in slide-in-from-top-2 duration-300"
@@ -342,23 +342,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			<!-- Reply Box at the bottom of this reply's timeline -->
 			{#if showReplyBox}
-				<div class="reply-box-container ml-8">
-					<div
-						class="bg-base-200/40 backdrop-blur-sm rounded-lg p-4 border border-primary/20 shadow-lg animate-in slide-in-from-top-2 duration-300"
-					>
-						<ReplyBox
-							closeCallback={() => {
-								showReplyBox = false;
-							}}
-							questionId={question}
-							sendAnswerCallback={() => {
-								showReplyBox = false;
-							}}
-							parentAnswerId={reply.id}
-							{reloadAnswers}
-							onSubmitSuccess={handleNewNestedReply}
-						/>
-					</div>
+				<div class="reply-box-container md:ml-8">
+					<ReplyBox
+						closeCallback={() => {
+							showReplyBox = false;
+						}}
+						questionId={question}
+						sendAnswerCallback={() => {
+							showReplyBox = false;
+						}}
+						parentAnswerId={reply.id}
+						{reloadAnswers}
+						onSubmitSuccess={handleNewNestedReply}
+					/>
 				</div>
 			{/if}
 		</div>

@@ -34,10 +34,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			}
 		};
 
-		checkScreenSize();
-		window.addEventListener('resize', checkScreenSize);
+		// checkScreenSize();
+		// window.addEventListener('resize', checkScreenSize);
 
-		return () => window.removeEventListener('resize', checkScreenSize);
+		// return () => window.removeEventListener('resize', checkScreenSize);
 	});
 
 	const sortCriteria = (a: Answer, b: Answer) => {
@@ -59,8 +59,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 
 	const load = async () => {
-		if (!expanded) return;
-
 		const res = await fetch(QUESTION_URL(question.id), {
 			credentials: 'include'
 		});
@@ -122,39 +120,39 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		return success;
 	};
 
-	const deleteAnswer = async (id: number) => {
-		// This function will be handled by the Answer component itself
-		// We just need to provide it for the interface
-	};
-
 	$: (expanded, load());
 </script>
 
-<div class="flex items-center flex-col pb-8">
-	{#if expanded}
-		{#if loading}
-			<span bind:this={spinner} class="loading loading-spinner loading-md my-4"></span>
-		{:else}
-			<div bind:this={answerContainer} class="w-full" data-answers>
-				{#if question.answers.length === 0}
-					<p class="text-base-content/70 italic mb-4">No answers yet. Be the first to answer!</p>
-				{/if}
-				{#each question.answers as answer, index}
-					<AnswerComponent
-						{answer}
-						{index}
-						{question}
-						removeAnswer={deleteAnswer}
-						data={{ answers: question.answers }}
-						reloadAnswers={load}
-						{onAnswerUpdate}
-					/>
-				{/each}
-			</div>
-		{/if}
-		<ReplyBox submit={addAnswer} />
+<div class="flex items-center flex-col pb-8 w-full">
+	<!-- {#if expanded} -->
+	{#if loading}
+		<span bind:this={spinner} class="loading loading-spinner loading-md my-4"></span>
+	{:else}
+		<div
+			bind:this={answerContainer}
+			class="w-full flex flex-col gap-2 md:gap-4 md:px-4"
+			data-answers
+		>
+			{#if question.answers.length === 0}
+				<p class="text-base-content/70 italic mb-4">No answers yet. Be the first to answer!</p>
+			{/if}
+			{#each question.answers as answer, index}
+				<AnswerComponent
+					{answer}
+					{index}
+					{question}
+					data={{ answers: question.answers }}
+					reloadAnswers={load}
+					{onAnswerUpdate}
+				/>
+			{/each}
+		</div>
 	{/if}
-	<button
+	<div class="w-full py-2 md:p-4">
+		<ReplyBox submit={addAnswer} />
+	</div>
+	<!-- {/if} -->
+	<!-- <button
 		class="btn btn-primary md:hidden"
 		on:click|preventDefault={() => {
 			expanded = !expanded;
@@ -162,5 +160,5 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		}}
 	>
 		{!expanded ? 'Show answers' : 'Hide answers'}
-	</button>
+	</button> -->
 </div>

@@ -29,7 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	// Reactive variables for auth
 	$: user = isAuthenticated($auth) ? $auth.user : null;
-	$: isAdmin = user?.admin || false;
+	$: isAdmin = user?.role === 'admin';
 	$: userIsAuthenticated = isAuthenticated($auth);
 
 	async function removePdfCutter(dataRet: PageData) {
