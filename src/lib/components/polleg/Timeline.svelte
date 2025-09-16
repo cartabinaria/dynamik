@@ -42,40 +42,35 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		></div>
 	</div>
 
-	<!-- Timeline connector to below - with controls -->
-	{#if !isLast || (expanded && hasNestedReplies) || hasMore}
+	{#if !isLast || hasNestedReplies || hasMore}
 		<div
-			class="relative w-0.5 flex-1 bg-primary/30 group-hover:bg-primary/40 transition-colors min-h-[2rem]"
+			class="relative w-0.5 flex-1 bg-primary/30 group-hover:bg-primary/40 transition-colors min-h-1/2"
 		>
-			<!-- Expand/Collapse Control for nested replies -->
-			{#if hasNestedReplies && onToggleExpanded}
+			{#if (hasNestedReplies || hasMore) && (onToggleExpanded || onLoadMore)}
 				<button
-					class="timeline-expand-btn absolute left-1/2 top-4 transform -translate-x-1/2 w-4 h-4 bg-base-100 border border-primary/40 rounded-full flex items-center justify-center hover:bg-primary/10 hover:border-primary/60 transition-all duration-200 shadow-sm"
-					onclick={onToggleExpanded}
-					title={expanded ? 'Collapse replies' : 'Show replies'}
-				>
-					{#if expanded}
-						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-sm"></span>
-					{:else}
-						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-sm"
-						></span>
-					{/if}
-				</button>
-			{/if}
-
-			<!-- Load More Control - positioned lower on the timeline -->
-			<!-- FIXME: when closed is hidden -->
-			{#if hasMore && onLoadMore}
-				<button
-					class="timeline-load-btn absolute left-1/2 bottom-4 transform -translate-x-1/2 w-6 h-6 bg-accent/10 border border-accent/40 rounded-full flex items-center justify-center hover:bg-accent/15 hover:border-accent/60 transition-all duration-200 shadow-sm"
-					onclick={onLoadMore}
+					class="timeline-action-btn absolute left-1/2 bottom-6 transform -translate-x-1/2 w-6 h-6 bg-base-100 border rounded-full flex items-center justify-center hover:bg-primary/10 transition-all duration-200 shadow-sm
+				       {hasMore
+						? 'border-accent/40 hover:border-accent/60'
+						: 'border-primary/40 hover:border-primary/60'}"
+					onclick={() => {
+						if (hasMore && onLoadMore) {
+							onLoadMore();
+						} else if (onToggleExpanded) {
+							onToggleExpanded();
+						}
+					}}
 					disabled={isLoadingMore}
-					title="Load deeper conversation levels"
+					title={hasMore ? 'Load more replies' : expanded ? 'Collapse replies' : 'Expand replies'}
 				>
 					{#if isLoadingMore}
-						<span class="icon-[solar--refresh-bold] text-accent/70 text-xs animate-spin"></span>
+						<span class="loading loading-spinner text-accent/70 text-lg animate-spin"></span>
+					{:else if hasMore}
+						<span class="icon-[solar--double-alt-arrow-down-outline] text-accent/70 text-lg"></span>
+					{:else if expanded}
+						<span class="icon-[solar--double-alt-arrow-up-outline] text-primary/70 text-lg"></span>
 					{:else}
-						<span class="icon-[solar--double-alt-arrow-down-outline] text-accent/70 text-xs"></span>
+						<span class="icon-[solar--double-alt-arrow-down-outline] text-primary/70 text-lg"
+						></span>
 					{/if}
 				</button>
 			{/if}

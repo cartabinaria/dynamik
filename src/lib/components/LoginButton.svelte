@@ -90,7 +90,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
 										<span class="icon-[solar--shield-user-bold] text-lg"></span>
-										<span class="flex-1">Moderation Panel</span>
+										<span class="flex-1">Answers Moderation</span>
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>

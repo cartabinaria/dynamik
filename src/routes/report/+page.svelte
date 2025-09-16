@@ -8,6 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 	import { carta } from '$lib/carta-config';
 	import LoginButton from '$lib/components/LoginButton.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
 	import { ANSWERS_REPLIES_URL, BAN_URL, REPORTS_URL } from '$lib/const';
 	import { formatDate } from '$lib/date';
 	import type { Report } from '$lib/polleg';
@@ -100,30 +101,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </script>
 
 <div class="max-w-5xl p-4 mx-auto">
-	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
-		<div class="navbar-start flex items-center">
-			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
-				<span class="icon-[ic--round-home]"></span>
-				Home
-			</a>
-			<button
-				class="btn btn-ghost btn-primary rounded-lg"
-				title="Indietro"
-				aria-label="Indietro"
-				onclick={() => history.back()}
-			>
-				<span class="icon-[akar-icons--arrow-back-thick-fill]"></span>
-				Go back
-			</button>
-		</div>
-		<div class="navbar-center">
-			<h1 class="text-xl font-semibold text-base-content">Moderation Panel</h1>
-		</div>
-
-		<div class="navbar-end">
-			<LoginButton url={$page.url} />
-		</div>
-	</nav>
+	<Navbar title="Answers Moderation"></Navbar>
 </div>
 
 <div class="overflow-x-auto overflow-y-auto">

@@ -26,7 +26,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}>();
 
 	let showReplyBoxFor: any = $state(null);
-	let unfinishedReplies: string[] = [];
 	let isDeleting = $state(false);
 	let showReplies = $state(false);
 	let repliesContainer: HTMLElement | null = $state(null);
@@ -35,7 +34,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let user = $state(isAuthenticated($auth) ? $auth.user : null);
 
 	// Sort replies by creation time (oldest first - chronological order)
-	const sortedReplies = $derived(() =>
+	let sortedReplies = $derived(() =>
 		answer.replies
 			? [...answer.replies].sort((a, b) => {
 					// Primary sort: by created_at if available
@@ -242,20 +241,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 				<!-- Answer Content -->
 				<div class="leading-normal mb-4">
-					<Markdown {carta} value={answer.content} />
+					<Markdown {carta} value={answer.content ?? ''} />
 				</div>
 
 				<!-- Bottom Actions Bar -->
 				<div class="flex items-center gap-3 text-sm flex-wrap">
 					<!-- Replies Button -->
-					{#if sortedReplies && sortedReplies.length > 0}
+					{#if sortedReplies().length > 0}
 						<button class="btn btn-ghost btn-sm" onclick={() => (showReplies = !showReplies)}>
 							{#if showReplies}
 								<span class="icon-[solar--alt-arrow-up-outline]"></span>
 								Hide replies
 							{:else}
 								<span class="icon-[solar--alt-arrow-down-outline]"></span>
-								{sortedReplies.length} Replies
+								{sortedReplies().length} Replies
 							{/if}
 						</button>
 						<div class="divider divider-horizontal mx-0"></div>
@@ -294,15 +293,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</div>
 
 				<!-- Replies Section with Timeline -->
-				{#if showReplies && sortedReplies && sortedReplies.length > 0}
+				{#if showReplies && sortedReplies().length > 0}
 					<div class="mt-8 pt-6 w-full">
 						<div class="flex flex-col" bind:this={repliesContainer}>
-							{#each sortedReplies as reply, replyIndex (reply.id)}
+							{#each sortedReplies() as reply, replyIndex (reply.id)}
 								<Reply
 									{answer}
 									{reply}
 									index={replyIndex}
-									isLast={replyIndex === sortedReplies.length - 1}
+									isLast={replyIndex === sortedReplies().length - 1}
 									{reloadAnswers}
 									{question}
 									{onAnswerUpdate}
