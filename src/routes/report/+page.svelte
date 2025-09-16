@@ -12,6 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { formatDate } from '$lib/date';
 	import type { Report } from '$lib/polleg';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { toast } from '$lib/toast';
 	import { Markdown } from 'carta-md';
 	import { onMount } from 'svelte';
 
@@ -38,8 +39,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				} else {
 					console.error('Failed to fetch banned users:', resban.statusText);
 				}
-				console.log('Fetched reports:', reports);
-				console.log('Fetched banned users:', banned);
 			} catch (error) {
 				console.error('Error fetching reports:', error);
 			}
@@ -71,6 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				const resban = await fetch(BAN_URL, { credentials: 'include' });
 				if (resban.ok) {
 					banned = await resban.json();
+					toast.success(`${username} has been banned.`);
 				} else {
 					console.error('Failed to fetch banned users:', resban.statusText);
 				}
@@ -89,6 +89,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			});
 			if (res.ok) {
 				reports = reports.filter((report) => report.id !== id);
+				toast.success('Report removed.');
 			} else {
 				console.error('Failed to remove report:', res.statusText);
 			}

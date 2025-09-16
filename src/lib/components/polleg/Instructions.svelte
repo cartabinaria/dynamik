@@ -6,9 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
  -->
 
 <script lang="ts">
-	export let setEditMode: (flag: boolean) => void;
-	export let isAdmin: boolean;
-	export let isAuthenticated: boolean = false;
+	let { setEditMode, isAdmin, isAuthenticated } = $props<{
+		setEditMode: (flag: boolean) => void;
+		isAdmin: boolean;
+		isAuthenticated?: boolean;
+	}>();
 </script>
 
 <div class="flex justify-center mb-2">
@@ -25,16 +27,36 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</p>
 
 		{#if isAdmin}
-			<button class="btn btn-outline btn-primary" on:click|preventDefault={() => setEditMode(true)}>
+			<button
+				class="btn btn-outline btn-primary"
+				onclick={(e) => {
+					e.preventDefault();
+					setEditMode(true);
+				}}
+			>
 				Prepare PDF
 			</button>
 		{:else if isAuthenticated}
-			<button class="btn btn-outline btn-primary" on:click|preventDefault={() => setEditMode(true)}>
+			<button
+				class="btn btn-outline btn-primary"
+				onclick={(e) => {
+					e.preventDefault();
+					setEditMode(true);
+				}}
+			>
 				Propose PDF preparation
 			</button>
 		{:else}
 			<p class="mb-4">Please login to propose PDF preparation.</p>
 		{/if}
-		<button class="btn btn-ghost" on:click|preventDefault={() => history.back()}> Go back </button>
+		<button
+			class="btn btn-ghost"
+			onclick={(e) => {
+				e.preventDefault();
+				history.back();
+			}}
+		>
+			Go back
+		</button>
 	</div>
 </div>

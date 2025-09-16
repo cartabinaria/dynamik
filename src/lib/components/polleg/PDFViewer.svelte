@@ -298,7 +298,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				: ''}"
 			style={splitMode && !isFullscreen ? 'max-height: 50vh;' : ''}
 		>
-			{#each boxes as box (box.question?.id)}
+			{#each boxes as box (box.question?.id ?? box.y)}
 				<!-- In split mode, show only the first box (selected question's box) -->
 				{#if !splitMode || (splitMode && selectedQuestion && box.question?.id === selectedQuestion.id)}
 					<div
@@ -427,7 +427,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 				<!-- Content area -->
 				<div class="flex-1 overflow-y-auto h-full w-full py-4">
-					<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
+					<QuestionComponent bind:question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>
 
 				<!-- Simple border -->
@@ -437,34 +437,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
-			<!-- <button class="btn" onclick={() => (showSheet = true)}>Apri Bottom Sheet</button> -->
-
 			<BottomSheet bind:open={showSheet} on:close={() => { showSheet = false; closeSplitMode(); }}>
 				<div class="py-7 overflow-y-auto h-full">
-					<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
+					<QuestionComponent bind:question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>
 			</BottomSheet>
-			<!-- <div class="fixed inset-x-0 bottom-0 md:hidden">
-				<div class="modal modal-open">
-					<div class="modal-box max-w-full max-h-full h-full w-full rounded-none">
-						<div
-							class="sticky top-8 bg-base-100 border-b border-base-300 p-4 flex justify-between items-center"
-						>
-							<h3 class="text-lg font-semibold">Solutions</h3>
-							<button
-								class="btn btn-ghost btn-sm"
-								onclick={closeSplitMode}
-								aria-label="Close solutions panel"
-							>
-								<span class="icon-[solar--close-circle-bold] text-xl"></span>
-							</button>
-						</div>
-						<div class="py-7 overflow-y-auto h-full">
-							<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
-						</div>
-					</div>
-				</div>
-			</div> -->
 		{/if}
 	</div>
 {/if}

@@ -74,8 +74,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="flex items-center gap-3">
 								<div class="avatar">
 									<div class="mask mask-squircle h-6 w-6">
-										<img src={log.user_avatar_url} alt="Avatar of {log.username}" />
-										<!-- TODO: Add a fallback avatar for system user -->
+										{#if log.username === 'system'}
+											<span class="icon-[mdi--robot] text-2xl text-accent"></span>
+										{:else}
+											<img src={log.user_avatar_url} alt="Avatar of {log.username}" />
+										{/if}
 									</div>
 								</div>
 								<div>

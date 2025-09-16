@@ -8,19 +8,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { Markdown } from 'carta-md';
 	import { carta } from '$lib/carta-config';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	export let data: PageData;
+	let {data}: PageProps = $props();
 
 	// State per la ricerca
-	let searchTerm = '';
-	let expandedIndex: string | null = null;
+	let searchTerm = $state('');
+	let expandedIndex: string | null = $state(null);
 
 	// Cache del termine di ricerca normalizzato per evitare toLowerCase() ripetuti
-	$: normalizedSearchTerm = searchTerm.toLowerCase();
+	let normalizedSearchTerm = $derived(searchTerm.toLowerCase());
 
-	// Filtra le categorie e FAQ in base alla ricerca
-	$: filteredCategories =
+	// Filter categories and FAQs based on search
+	let filteredCategories =
 		data.categories
 			?.map((category) => ({
 				...category,
@@ -36,11 +36,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			}))
 			.filter((category) => category.faqs.length > 0) || [];
 
-	// Conta il totale delle FAQ filtrate
-	$: totalFilteredFaqs = filteredCategories.reduce(
+	// Count total filtered FAQs
+	let totalFilteredFaqs = $derived(() => filteredCategories.reduce(
 		(total, category) => total + category.faqs.length,
 		0
-	);
+	));
 
 	// Funzione per togglere l'accordion
 	const toggleAccordion = (id: string) => {

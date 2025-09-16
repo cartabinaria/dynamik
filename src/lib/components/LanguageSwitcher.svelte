@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 
-	export let currentLang: 'it' | 'en';
+	let currentLang = $props<{ currentLang: 'it' | 'en' }>();
 
 	const switchLanguage = (lang: 'it' | 'en') => {
 		if (browser) {

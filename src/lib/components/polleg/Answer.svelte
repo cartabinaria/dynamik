@@ -16,35 +16,39 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { carta } from '$lib/carta-config';
 	import ReportAnswer from '$lib/components/polleg/ReportAnswer.svelte';
 
-	export let answer;
-	export let index;
-	export let question;
-	export let data; // Add data prop for question data
-	export let reloadAnswers: (() => Promise<void>) | undefined = undefined;
-	export let onAnswerUpdate: (() => Promise<void>) | undefined = undefined;
+	let { answer, index, question, data, reloadAnswers, onAnswerUpdate } = $props<{
+		answer: any;
+		index: number;
+		question: any;
+		data: any;
+		reloadAnswers?: () => Promise<void>;
+		onAnswerUpdate?: () => Promise<void>;
+	}>();
 
-	let showReplyBoxFor: any = null;
+	let showReplyBoxFor: any = $state(null);
 	let unfinishedReplies: string[] = [];
-	let isDeleting = false;
-	let showReplies = false;
-	let repliesContainer: HTMLElement;
+	let isDeleting = $state(false);
+	let showReplies = $state(false);
+	let repliesContainer: HTMLElement | null = $state(null);
 
 	// Reactive variables for auth
-	$: user = isAuthenticated($auth) ? $auth.user : null;
+	let user = $state(isAuthenticated($auth) ? $auth.user : null);
 
 	// Sort replies by creation time (oldest first - chronological order)
-	$: sortedReplies = answer.replies
-		? [...answer.replies].sort((a, b) => {
-				// Primary sort: by created_at if available
-				if (a.created_at && b.created_at) {
-					const dateA = new Date(a.created_at);
-					const dateB = new Date(b.created_at);
-					return dateA.getTime() - dateB.getTime(); // Chronological: oldest first
-				}
-				// Fallback: sort by ID (assuming sequential IDs) - oldest first
-				return a.id - b.id; // Lower ID first
-			})
-		: [];
+	const sortedReplies = $derived(() =>
+		answer.replies
+			? [...answer.replies].sort((a, b) => {
+					// Primary sort: by created_at if available
+					if (a.created_at && b.created_at) {
+						const dateA = new Date(a.created_at);
+						const dateB = new Date(b.created_at);
+						return dateA.getTime() - dateB.getTime(); // Chronological: oldest first
+					}
+					// Fallback: sort by ID (assuming sequential IDs) - oldest first
+					return a.id - b.id; // Lower ID first
+				})
+			: []
+	);
 
 	const deleteAnswer = async (id: number) => {
 		if (isDeleting) return; // Prevent double clicks
@@ -154,7 +158,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 </script>
 
-<!-- Answer Card with Glass Effect -->
 <div
 	data-answer-id={answer.id}
 	class="w-full card bg-base-200/30 shadow-lg rounded-xl transition-all duration-300"

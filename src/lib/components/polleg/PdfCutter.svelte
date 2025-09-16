@@ -14,14 +14,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 
 	const ENDPOINT = POLLEG_BASE_URL + '/documents';
-	export let url: string;
-	export let id: string;
-	export let setEditMode: (flag: boolean) => void;
-	export let show: (arg0: any) => void;
-	export let isAdmin: boolean = true;
+
+	let { url, id, setEditMode, show, isAdmin } = $props<{
+		url: string;
+		id: string;
+		setEditMode: (flag: boolean) => void;
+		show: (arg0: any) => void;
+		isAdmin?: boolean;
+	}>();
 
 	// State for instructions visibility
-	let showInstructions = true;
+	let showInstructions = $state(true);
 
 	let editCanvas: HTMLCanvasElement, editContext: any;
 	let opacityCanvas: HTMLCanvasElement, opacityContext: any;
@@ -267,8 +270,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
 		// Use different endpoint based on user type
-		// TODO: edited for testing proposal
-		const endpoint = !isAdmin ? ENDPOINT : PROPOSAL_URL;
+		const endpoint = isAdmin ? ENDPOINT : PROPOSAL_URL;
 
 		data.document_path = $page.url.pathname;
 
@@ -306,10 +308,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 {#if showInstructions}
 	<div
 		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-md bg-info rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-info/90 transition-colors"
-		on:click={() => (showInstructions = false)}
+		onclick={() => (showInstructions = false)}
 		role="button"
 		tabindex="0"
-		on:keydown={(e) => e.key === 'Enter' && (showInstructions = false)}
+		onkeydown={(e) => e.key === 'Enter' && (showInstructions = false)}
 	>
 		<h3 class="font-semibold mb-2 text-info-content">How to prepare a PDF:</h3>
 		<ul class="list-disc list-inside space-y-1 text-info-content">
@@ -337,16 +339,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	></canvas>
 	<canvas
 		bind:this={opacityCanvas}
-		on:mousedown={ev_mousedown}
+		onmousedown={ev_mousedown}
 		class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"
 	></canvas>
 </div>
 <!-- <canvas bind:this={canvasMerged} id="canvasMerged"></canvas> -->
 
 <div class="fixed top-[90%] left-0 right-0 text-center z-[1001]">
-	<button on:click={show} type="button" class="btn btn-neutral rounded-lg border-0">CANCEL</button>
+	<button onclick={show} type="button" class="btn btn-neutral rounded-lg border-0">CANCEL</button>
 	<button
-		on:click={exportData}
+		onclick={exportData}
 		type="button"
 		id="exportBtn"
 		class="btn btn-primary hover:glass hover:bg-primary rounded-lg border-0"

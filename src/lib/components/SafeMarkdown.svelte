@@ -9,26 +9,30 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { carta } from '$lib/carta-config';
 	import { onMount, tick } from 'svelte';
 
-	export let value: string;
+	const { value } = $props<{
+		value: string;
+	}>();
 
-	let mounted = false;
-	let container: HTMLDivElement;
+	let mounted = $state(false);
+	let container: HTMLDivElement | undefined = $state();
 	let lastRenderedValue = '';
 
 	onMount(() => {
 		mounted = true;
 	});
 
-	// Solo re-renderizza se il valore è effettivamente cambiato
-	$: if (mounted && value && value !== lastRenderedValue) {
-		lastRenderedValue = value;
-		tick().then(() => {
-			// Forza un re-render pulito
-			if (container) {
-				container.innerHTML = '';
-			}
-		});
-	}
+	// re-render only when value changes
+	$effect(() => {
+		if (mounted && value && value !== lastRenderedValue) {
+			lastRenderedValue = value;
+			tick().then(() => {
+				// Force a clean re-render
+				if (container) {
+					container.innerHTML = '';
+				}
+			});
+		}
+	});
 </script>
 
 {#if mounted && value}

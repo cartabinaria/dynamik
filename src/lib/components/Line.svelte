@@ -17,7 +17,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
 	let { data }: { data: File | Directory } = $props();
-	// export let customUrl: string | undefined = undefined;
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'

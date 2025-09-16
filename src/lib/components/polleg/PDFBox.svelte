@@ -10,12 +10,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import { renderBox } from '$lib/pdfcanvas';
 
-	export let pdf: FullPDF;
-	export let box: Box;
-	export let proposal: boolean = false;
-	let canvas: HTMLCanvasElement;
-	let parent: HTMLSpanElement;
-	let visible: boolean = false;
+	let { pdf, box, proposal } = $props<{ pdf: FullPDF; box: Box; proposal: boolean }>();
+
+	let canvas: HTMLCanvasElement | undefined = $state();
+	let parent: HTMLSpanElement | undefined = $state();
+	let visible: boolean = $state(false);
 
 	const render = () => {
 		if (!visible) return;
@@ -23,7 +22,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		renderBox(pdf, canvas, box);
 	};
 
-	$: (visible, render());
+	$effect(() => {
+		render();
+	});
 </script>
 
 <IntersectionObserver once element={parent} bind:intersecting={visible}>
