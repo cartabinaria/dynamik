@@ -10,6 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import PDFBox from '$lib/components/polleg/PDFBox.svelte';
 	import QuestionComponent from '$lib/components/polleg/Question.svelte';
 	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
+	import BottomSheet from '$lib/components/BottomSheet.svelte';
 	import type { Question } from '$lib/polleg';
 	import { type FullPDF, type Box, extractFullPDF, SCALE } from '$lib/pdfcanvas';
 	import type { OnProgressParameters } from 'pdfjs-dist';
@@ -27,7 +28,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data?: any;
 		url?: any;
 		questions: Question[];
-		updateProposals: (id: any) => Promise<void>;
+		updateProposals?: (id: any) => Promise<void>;
 	} = $props();
 
 	// Function to reload all questions data
@@ -73,6 +74,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let isFullscreen = $state(false); // To handle fullscreen mode for Solutions panel
 	let mainContainer: HTMLElement | undefined = $state();
 	let bookmarkAnimating = $state(false); // For bookmark animation
+	let showSheet = $state(false); // For mobile bottom sheet
 
 	let pdf: FullPDF | null = $state(null);
 	let boxes: Box[] = $state([]);
@@ -344,6 +346,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								onclick={(event) => {
 									event.stopPropagation();
 									openSplitMode(box.question);
+									showSheet = true;
 								}}
 							>
 								{#if getTotalAnswerCount(box.question.id) > 0}
@@ -434,7 +437,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
-			<div class="fixed inset-x-0 bottom-0 md:hidden">
+			<!-- <button class="btn" onclick={() => (showSheet = true)}>Apri Bottom Sheet</button> -->
+
+			<BottomSheet bind:open={showSheet} on:close={() => { showSheet = false; closeSplitMode(); }}>
+				<div class="py-7 overflow-y-auto h-full">
+					<QuestionComponent question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
+				</div>
+			</BottomSheet>
+			<!-- <div class="fixed inset-x-0 bottom-0 md:hidden">
 				<div class="modal modal-open">
 					<div class="modal-box max-w-full max-h-full h-full w-full rounded-none">
 						<div
@@ -454,7 +464,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		{/if}
 	</div>
 {/if}

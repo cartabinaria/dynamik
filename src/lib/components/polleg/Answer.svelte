@@ -157,7 +157,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <!-- Answer Card with Glass Effect -->
 <div
 	data-answer-id={answer.id}
-	class="w-full card bg-base-200/30 backdrop-blur-md shadow-lg rounded-xl transition-all duration-300 z-1"
+	class="w-full card bg-base-200/30 shadow-lg rounded-xl transition-all duration-300"
 >
 	<div class="card-body p-0 md:p-4 w-full">
 		<!-- Answer Layout: Left voting, Right content -->

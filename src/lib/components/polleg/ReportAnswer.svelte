@@ -8,22 +8,18 @@
 	let selectedReason: string = $state('');
 	let reported: boolean = $state(false);
 
-	onMount(){
-		// Check if the answer is already reported
-		fetch(REPORT_URL(id), {
-			method: 'GET',
-			credentials: 'include'
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.reported) {
-					reported = true;
-				}
-			})
-			.catch((error) => {
-				console.error('Error checking report status:', error);
-			});
-	}
+	onMount(async () => {
+		// try {
+		// 	// Check if the answer is already reported
+		// 	const res = await fetch(REPORT_URL(id), { credentials: 'include' });
+		// 	const data = await res.json();
+		// 	if (data.reported) {
+		// 		reported = true;
+		// 	}
+		// } catch (error) {
+		// 	console.error('Error checking report status:', error);
+		// }
+	});
 
 	const reportOptions = [
 		'I don’t like it',
@@ -73,11 +69,11 @@
 		</p>
 		{#each reportOptions as option}
 			<li>
-				<label class="flex items-center gap-2">
+				<label class="flex items-center gap-2 text-sm">
 					<input
 						type="radio"
 						name="report-reason"
-						class="radio"
+						class="radio radio-sm"
 						value={option}
 						bind:group={selectedReason}
 					/>
@@ -93,7 +89,7 @@
 				title="Report this answer"
 				aria-label="Report this answer"
 			>
-				Report Message
+				Report
 			</button>
 		</li>
 	</ul>

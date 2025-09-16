@@ -64,12 +64,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</div>
 							{#if $auth.user.role === 'admin'}
 								<div class="badge badge-primary badge-sm !font-semibold">Admin</div>
+							{:else if $auth.user.role === 'member'}
+								<div class="badge badge-ghost badge-sm !font-semibold">Member</div>
 							{/if}
 						</div>
 
 						<!-- Menu Items -->
 						<div class="menu p-0 mt-2 w-56 md:w-70">
-							{#if $auth.user?.role === 'admin'}
+							{#if ['admin', 'member'].includes($auth.user?.role)}
 								<li>
 									<a
 										href="/proposals"
@@ -80,7 +82,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
-
+							{/if}
+							{#if $auth.user.role === 'admin'}
 								<li>
 									<a
 										href="/report"
@@ -91,7 +94,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
-
 								<li>
 									<a
 										href="/logs"

@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import { onMount } from 'svelte';
-	import type { PageData } from './$types';
+	import type { PageData, PageProps } from './$types';
 	import '$lib/styles/github.scss';
 	import PdfCutter from '$lib/components/polleg/PdfCutter.svelte';
 	import Instructions from '$lib/components/polleg/Instructions.svelte';
@@ -19,18 +19,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { auth, isAuthenticated, checkAuth } from '$lib/stores/auth';
 	import { page } from '$app/stores';
 
-	export let data: PageData;
+	let { data }: PageProps = $props();
 
-	let editMode: boolean = false;
+	let editMode: boolean = $state(false);
 
 	onMount(async () => {
 		await checkAuth();
 	});
 
 	// Reactive variables for auth
-	$: user = isAuthenticated($auth) ? $auth.user : null;
-	$: isAdmin = user?.role === 'admin';
-	$: userIsAuthenticated = isAuthenticated($auth);
+	let user = $state(isAuthenticated($auth) ? $auth.user : null);
+	let isAdmin = $state(['admin', 'member'].includes(user?.role ?? ''));
+	let userIsAuthenticated = $state(isAuthenticated($auth));
 
 	async function removePdfCutter(dataRet: PageData) {
 		editMode = false;
@@ -49,7 +49,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		return part[part.length - 1].split('?')[0];
 	}
 
-	$: title = genTitle(data.url);
+	let title = $state(genTitle(data.url));
 </script>
 
 <svelte:head>

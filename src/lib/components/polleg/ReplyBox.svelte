@@ -110,7 +110,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later -->
 					></span>
 					{isReply() ? 'Replying to this answer' : 'Share your answer'}
 				</div>
-				<label class="label cursor-pointer gap-2 -z-1">
+				<label class="label cursor-pointer gap-2">
 					<input
 						type="checkbox"
 						bind:checked={isAnonymous}
