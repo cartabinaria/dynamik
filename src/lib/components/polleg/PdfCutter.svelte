@@ -15,13 +15,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	const ENDPOINT = POLLEG_BASE_URL + '/documents';
 
-	let { url, id, setEditMode, show, isAdmin } = $props<{
+	type Props = {
 		url: string;
 		id: string;
 		setEditMode: (flag: boolean) => void;
 		show: (arg0: any) => void;
 		isAdmin?: boolean;
-	}>();
+	};
+
+	let { url, id, setEditMode, show, isAdmin }: Props = $props();
 
 	// State for instructions visibility
 	let showInstructions = $state(true);
@@ -343,7 +345,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		class="absolute flex-shrink-0 w-full top-20 left-0 right-0 mx-auto"
 	></canvas>
 </div>
-<!-- <canvas bind:this={canvasMerged} id="canvasMerged"></canvas> -->
 
 <div class="fixed top-[90%] left-0 right-0 text-center z-[1001]">
 	<button onclick={show} type="button" class="btn btn-neutral rounded-lg border-0">CANCEL</button>

@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	let { setEditMode, isAdmin, isAuthenticated } = $props<{
+	let { setEditMode, isAdmin, isAuthenticated }: {
 		setEditMode: (flag: boolean) => void;
 		isAdmin: boolean;
 		isAuthenticated?: boolean;
-	}>();
+	} = $props();
 </script>
 
 <div class="flex justify-center mb-2">

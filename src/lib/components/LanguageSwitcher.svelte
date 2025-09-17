@@ -8,10 +8,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	
+	type AllowedLanguages = 'it' | 'en';
+	let { currentLang }: { currentLang: AllowedLanguages } = $props();
 
-	let currentLang = $props<{ currentLang: 'it' | 'en' }>();
-
-	const switchLanguage = (lang: 'it' | 'en') => {
+	const switchLanguage = (lang: AllowedLanguages) => {
 		if (browser) {
 			localStorage.setItem('dynamik-language-preference', lang);
 		}

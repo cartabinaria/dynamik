@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import LoginButton from './LoginButton.svelte';
 
-	let { goback = true, title } = $props<{ goback?: boolean, title: string }>();
+	let { goback = true, title }: { goback?: boolean; title: string } = $props();
 </script>
 
 <nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">

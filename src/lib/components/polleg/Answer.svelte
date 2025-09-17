@@ -16,14 +16,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { carta } from '$lib/carta-config';
 	import ReportAnswer from '$lib/components/polleg/ReportAnswer.svelte';
 
-	let { answer, index, question, data, reloadAnswers, onAnswerUpdate } = $props<{
+	type Props = {
 		answer: any;
 		index: number;
-		question: any;
+		question: number;
 		data: any;
 		reloadAnswers?: () => Promise<void>;
 		onAnswerUpdate?: () => Promise<void>;
-	}>();
+	};
+
+	let { answer, index, question, data, reloadAnswers, onAnswerUpdate }: Props = $props();
 
 	let showReplyBoxFor: any = $state(null);
 	let isDeleting = $state(false);

@@ -358,13 +358,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</button>
 						{/if}
 					</div>
-
-					<!-- Non-split mode: show questions inline (MOBILE) -->
-					<!-- <div class="md:hidden">
-						{#if box.question}
-							<QuestionComponent question={box.question} onAnswerUpdate={reloadAllQuestions} />
-						{/if}
-					</div> -->
 				{/if}
 			{/each}
 		</main>

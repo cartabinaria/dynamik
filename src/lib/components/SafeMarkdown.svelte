@@ -9,9 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { carta } from '$lib/carta-config';
 	import { onMount, tick } from 'svelte';
 
-	const { value } = $props<{
-		value: string;
-	}>();
+	const { value }: { value: string } = $props();
 
 	let mounted = $state(false);
 	let container: HTMLDivElement | undefined = $state();

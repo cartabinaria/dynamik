@@ -93,9 +93,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							/>
 							<div class="collapse-title font-semibold">
 								<p class="font-semibold">{`Proposal ${p.document_path}`}</p>
-								<!-- <p class="text-sm text-base-content/70 truncate">
-									{p.summary ?? p.description ?? ''}
-								</p> -->
 								<div class="text-xs text-base-content/50 mt-2 flex items-center gap-2">
 									<img
 										class="w-6 h-6 rounded-full ring-1 ring-base-300/50 transition-all"

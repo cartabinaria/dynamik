@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let loadingMap = $state(new Map<any, boolean>());
 
 	// Espone una funzione reattiva per notificare il genitore
-	let { p, update } = $props<(detail: { id: number; action: 'approve' | 'reject' }) => void>();
+	let { p, update }: { p: any; update: { id: number; action: 'approve' | 'reject' } } = $props();
 
 	async function approve(id: number) {
 		setLoading(id, true);

@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { onMount } from 'svelte';
 
-	let { question = $bindable(), onAnswerUpdate } = $props<{ question: Question; onAnswerUpdate?: () => Promise<void> | undefined }>();
+	let { question = $bindable(), onAnswerUpdate }: { question: Question; onAnswerUpdate?: () => Promise<void> | undefined } = $props();
 
 	let expanded = false;
 	let answerContainer: HTMLElement | undefined = $state();

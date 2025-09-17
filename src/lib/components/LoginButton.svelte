@@ -7,9 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { LOGIN_URL, LOGOUT_URL } from '$lib/const';
 	import { auth, isAuthenticated } from '$lib/stores/auth';
-	import { fly } from 'svelte/transition';
 
-	interface Props {
+	type Props = {
 		class?: string;
 		url: URL;
 	}
@@ -79,7 +78,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									>
 										<span class="icon-[ic--round-task-alt] text-lg"></span>
 										<span class="flex-1">PDF Proposal Approve</span>
-										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
 							{/if}
@@ -91,7 +89,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									>
 										<span class="icon-[solar--shield-user-bold] text-lg"></span>
 										<span class="flex-1">Answers Moderation</span>
-										<!-- <span class="badge badge-primary badge-sm">Moderate</span> -->
 									</a>
 								</li>
 								<li>
