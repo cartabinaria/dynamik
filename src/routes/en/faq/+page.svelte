@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { Markdown } from 'carta-md';
+	import { resolve } from '$app/paths';
+
 	import { carta } from '$lib/carta-config';
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
-	import type { PageProps } from './$types';
 
-	let {data}: PageProps = $props();
+	import type { PageProps } from './$types';
+	let { data }: PageProps = $props();
 
 	// Search state
 	let searchTerm = $state('');
@@ -37,10 +39,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			.filter((category) => category.faqs.length > 0) || [];
 
 	// Count total filtered FAQs
-	let totalFilteredFaqs = $derived(() => filteredCategories.reduce(
-		(total, category) => total + category.faqs.length,
-		0
-	));
+	let totalFilteredFaqs = $derived(
+		filteredCategories.reduce((total, category) => total + category.faqs.length, 0)
+	);
 
 	// Function to toggle accordion
 	const toggleAccordion = (id: string) => {
@@ -56,7 +57,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <div class="container mx-auto px-4 py-8 max-w-4xl">
 	<nav class="navbar">
 		<div class="navbar-start flex items-center">
-			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+			<a
+				href={resolve('/')}
+				class="btn btn-ghost btn-primary rounded-lg"
+				title="Home"
+				aria-label="Home"
+			>
 				<span class="icon-[ic--round-home]"></span>
 				Home
 			</a>
@@ -101,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<!-- FAQ Categories -->
 	{#if filteredCategories.length > 0}
 		<div class="space-y-6">
-			{#each filteredCategories as category, categoryIndex}
+			{#each filteredCategories as category, categoryIndex (category.name)}
 				<div class="join join-vertical bg-base-100">
 					<!-- Category Header -->
 					<div class="bg-base-200 p-4 rounded-t-lg border border-base-300">
@@ -112,14 +118,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</div>
 
 					<!-- Category FAQs -->
-					{#each category.faqs as faq, faqIndex}
+					{#each category.faqs as faq, faqIndex (faq.question)}
 						{@const accordionId = `${categoryIndex}-${faqIndex}`}
 						<div class="collapse collapse-arrow join-item border-base-300 border">
 							<input
 								type="radio"
 								name="faq-accordion-{categoryIndex}"
 								checked={expandedIndex === accordionId}
-								on:change={() => toggleAccordion(accordionId)}
+								onchange={() => toggleAccordion(accordionId)}
 							/>
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
 								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"
@@ -145,9 +151,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<h3 class="text-xl font-semibold text-base-content/70 mb-2">No results found</h3>
 			<p class="text-base-content/60">
 				Try modifying your search terms or
-				<button class="link link-primary" onclick={() => (searchTerm = '')}>
-					view all FAQs
-				</button>
+				<button class="link link-primary" onclick={() => (searchTerm = '')}> view all FAQs </button>
 			</p>
 		</div>
 	{/if}

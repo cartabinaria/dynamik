@@ -19,7 +19,8 @@ export const load: PageLoad = async () => {
 	let currentQuestion = '';
 	let currentAnswer = '';
 	let inAnswer = false;
-	let metadata = {
+
+	const metadata = {
 		title: 'FAQ - Frequently Asked Questions',
 		description: 'Answers to the most common questions about Dynamik'
 	};
