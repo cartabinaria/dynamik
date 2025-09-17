@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2024 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
- -->
+-->
 
 <script lang="ts">
 	import { base } from '$app/paths';
