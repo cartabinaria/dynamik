@@ -28,7 +28,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				class="btn btn-ghost btn-primary rounded-lg"
 				title="Indietro"
 				aria-label="Indietro"
-				on:click={() => history.back()}
+				onclick={() => history.back()}
 			>
 				<span class="icon-[akar-icons--arrow-back-thick-fill]"></span>
 				Go back

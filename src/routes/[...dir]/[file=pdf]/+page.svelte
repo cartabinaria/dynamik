@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let { data }: PageProps = $props();
 
-	let editMode: boolean = $state(false);
+	let editMode = $state(false);
 
 	onMount(async () => {
 		await checkAuth();

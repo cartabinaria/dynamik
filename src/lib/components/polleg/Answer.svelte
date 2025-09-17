@@ -303,7 +303,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{answer}
 									{reply}
 									index={replyIndex}
-									isLast={replyIndex === sortedReplies().length - 1}
+									last={replyIndex === sortedReplies().length - 1}
 									{reloadAnswers}
 									{question}
 									{onAnswerUpdate}

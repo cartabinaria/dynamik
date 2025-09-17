@@ -32,7 +32,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later -->
 		onSubmitSuccess?: (newAnswerId: number) => Promise<void>;
 	} = $props();
 
-	// state
 	let body = $state(unfinishedReply ?? '');
 	let disabled = $state(false);
 	let isAnonymous = $state(false);

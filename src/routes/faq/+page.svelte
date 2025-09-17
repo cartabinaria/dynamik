@@ -148,7 +148,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<h3 class="text-xl font-semibold text-base-content/70 mb-2">Nessun risultato trovato</h3>
 			<p class="text-base-content/60">
 				Prova a modificare i termini di ricerca o
-				<button class="link link-primary" on:click={() => (searchTerm = '')}>
+				<button class="link link-primary" onclick={() => (searchTerm = '')}>
 					visualizza tutte le FAQ
 				</button>
 			</p>

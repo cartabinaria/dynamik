@@ -33,7 +33,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	</div>
 	<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
 		<li class:disabled={currentLang === 'it'}>
-			<button on:click={() => switchLanguage('it')} class="flex items-center gap-2">
+			<button onclick={() => switchLanguage('it')} class="flex items-center gap-2">
 				🇮🇹 Italiano
 				{#if currentLang === 'it'}
 					<span class="badge badge-primary badge-xs">current</span>
@@ -41,7 +41,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</button>
 		</li>
 		<li class:disabled={currentLang === 'en'}>
-			<button on:click={() => switchLanguage('en')} class="flex items-center gap-2">
+			<button onclick={() => switchLanguage('en')} class="flex items-center gap-2">
 				🇬🇧 English
 				{#if currentLang === 'en'}
 					<span class="badge badge-primary badge-xs">current</span>

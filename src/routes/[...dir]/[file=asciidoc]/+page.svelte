@@ -44,12 +44,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <main class="container m-auto grid gap-4 grid-cols-[4fr_1fr]">
 	<section class="prose m-auto" id="markdown" role="document" bind:this={docContainer}>
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		<!-- eslint-disable-next-li
+		ne svelte/no-at-html-tags -->
 		{@html html}
 	</section>
 	<section class="prose" id="toc" role="contentinfo"></section>
 </main>
 
 <style>
-	/* KaTeX CSS is now imported globally in +layout.svelte */
 </style>

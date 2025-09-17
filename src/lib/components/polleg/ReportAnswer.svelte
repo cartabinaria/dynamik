@@ -5,8 +5,8 @@
 	import { onMount } from 'svelte';
 
 	let { id }: { id: number } = $props();
-	let selectedReason: string = $state('');
-	let reported: boolean = $state(false);
+	let selectedReason = $state('');
+	let reported = $state(false);
 
 	onMount(async () => {
 		// try {
@@ -21,7 +21,7 @@
 		// }
 	});
 
-	const reportOptions = [
+	const REPORT_OPTION = [
 		'I don’t like it',
 		'Bullying or unwanted contact',
 		'Spam or advertising',
@@ -67,7 +67,7 @@
 		<p class="mb-2 text-sm">
 			The moderators can take action on this report and will review it as soon as possible.
 		</p>
-		{#each reportOptions as option}
+		{#each REPORT_OPTION as option}
 			<li>
 				<label class="flex items-center gap-2 text-sm">
 					<input

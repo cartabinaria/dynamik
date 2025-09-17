@@ -28,10 +28,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// State for instructions visibility
 	let showInstructions = $state(true);
 
-	let editCanvas: HTMLCanvasElement, editContext: any;
-	let opacityCanvas: HTMLCanvasElement, opacityContext: any;
-	let fullCanvas: HTMLCanvasElement, fullContext: any;
-	let pageCanvas: HTMLCanvasElement, pageContext: any;
+	let editCanvas: HTMLCanvasElement;
+	let editContext: any;
+
+	let opacityCanvas: HTMLCanvasElement;
+	let opacityContext: any;
+
+	let fullCanvas: HTMLCanvasElement;
+	let fullContext: any;
+
+	let pageCanvas: HTMLCanvasElement;
+	let pageContext: any;
+
 	let pages: PDFPageProxy[] = [];
 	let lines: number[][] = [];
 	lines[0] = [];
@@ -295,15 +303,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		} else {
 			toast.error('Error: ' + objRet.error);
 			setEditMode(false);
-			// location.reload();
 		}
 	}
 </script>
 
 <svelte:window
-	on:scroll={fireLastMouseEvent}
-	on:mousemove={ev_mousemove}
-	on:contextmenu|preventDefault={() => {}}
+	onscroll={fireLastMouseEvent}
+	onmousemove={ev_mousemove}
+	oncontextmenu={(e) => e.preventDefault()}
 />
 
 <!-- Instructions for PDF preparation - positioned at top -->

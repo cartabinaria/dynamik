@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		answer,
 		reply,
 		index,
-		isLast = false,
+		last = false,
 		reloadAnswers = undefined,
 		question, // Add question prop for nested replies
 		onAnswerUpdate = undefined,
@@ -32,7 +32,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		answer: any;
 		reply: any;
 		index: number;
-		isLast?: boolean;
+		last?: boolean;
 		reloadAnswers?: (() => Promise<void>) | undefined;
 		question?: any;
 		onAnswerUpdate?: (() => Promise<void>) | undefined;
@@ -218,7 +218,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<!-- Timeline Component -->
 		<Timeline
 			{index}
-			{isLast}
+			{last}
 			{hasNestedReplies}
 			expanded={showNestedReplies}
 			hasMore={hasMoreToLoad}
@@ -328,7 +328,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								{answer}
 								reply={nestedReply}
 								index={nestedIndex}
-								isLast={nestedIndex === sortedNestedReplies.length - 1}
+								last={nestedIndex === sortedNestedReplies.length - 1}
 								{reloadAnswers}
 								{question}
 								{onAnswerUpdate}

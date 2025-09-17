@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	let {
 		index,
-		isLast = false,
+		last = false,
 		hasNestedReplies = false,
 		expanded = false,
 		hasMore = false,
@@ -16,7 +16,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		onLoadMore = undefined
 	}: {
 		index: number;
-		isLast?: boolean;
+		last?: boolean;
 		hasNestedReplies?: boolean;
 		expanded?: boolean;
 		hasMore?: boolean;
@@ -42,7 +42,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		></div>
 	</div>
 
-	{#if !isLast || hasNestedReplies || hasMore}
+	{#if !last || hasNestedReplies || hasMore}
 		<div
 			class="relative w-0.5 flex-1 bg-primary/30 group-hover:bg-primary/40 transition-colors min-h-1/2"
 		>
