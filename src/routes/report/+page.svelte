@@ -1,14 +1,10 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { carta } from '$lib/carta-config';
-	import LoginButton from '$lib/components/LoginButton.svelte';
-	import Navbar from '$lib/components/Navbar.svelte';
 	import { ANSWERS_REPLIES_URL, BAN_URL, REPORTS_URL } from '$lib/const';
 	import { formatDate } from '$lib/date';
 	import type { Report } from '$lib/polleg';
@@ -16,6 +12,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { toast } from '$lib/toast';
 	import { Markdown } from 'carta-md';
 	import { onMount } from 'svelte';
+
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let reports: Report[] = $state([]);
 	let banned = $state<{ username: string; user_avatar_url: string; banned_at: string }[]>([]);
@@ -109,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div class="card bg-base-100 shadow-xl col-span-2">
 			<div class="card-body py-0 md:pr-0">
 				<h2 class="card-title">Reports</h2>
-				{#each reports as report}
+				{#each reports as report (report.id)}
 					<div class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
 						<input type="checkbox" />
 						<div
@@ -178,7 +176,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{/if}
 				<table class="table">
 					<tbody>
-						{#each banned as ban}
+						{#each banned as ban (ban.username)}
 							<tr>
 								<!-- TODO: additiona th for checkbox for mutiple action like remove -->
 								<td>
@@ -198,6 +196,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									<button
 										class="btn btn-ghost btn-xs btn-error"
 										onclick={() => banUser(ban.username, false)}
+										aria-label="Delete user ban"
 									>
 										<span class="icon-[akar-icons--trash]"></span>
 									</button>
