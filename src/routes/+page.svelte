@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
 SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
@@ -44,25 +44,30 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 {#if $shouldShowBanner && browser}
 	<div class="bg-info bg-opacity-50 text-content p-4">
-		<div class="flex items-center justify-between">
-			<div><!-- justifier --></div>
-			<p class="font-semibold">
-				<i><b>🔥Nuova feature: ToDo List🔥</b></i>
-				All'interno di tutte le pagine con file cliccando sopra l'icona
-				<span class="inline-flex items-baseline icon-[solar--file-bold-duotone]"></span>
-				potrai segnarlo e salvarlo come "fatto"
-				<span class="inline-flex items-baseline text-success icon-[solar--file-check-bold-duotone]"
-				></span>, cancella i tuoi "ToDo" nella pagina corrente con
-				<span class="inline-flex items-baseline text-warning icon-[solar--broom-bold-duotone]"
-				></span>
-			</p>
-			<button
-				class="text-content hover:text-error focus:outline-hidden"
-				onclick={() => setBannerClosed()}
-				aria-label="Chiudi banner"
-			>
-				<span class="text-xl icon-[akar-icons--x-small]"></span>
-			</button>
+		<!-- FEATURE BANNER -->
+		<div class="fixed z-1 bg-info bg-opacity-30 text-content p-4 rounded-xl m-4">
+			<div class="flex items-center justify-between">
+				<div><!-- justifier --></div>
+				<p class="font-semibold">
+					<i><b>🔥Nuova feature: ToDo List🔥</b></i>
+					All'interno di tutte le pagine con file cliccando sopra l'icona
+					<span class="inline-flex items-baseline icon-[solar--file-bold-duotone]"></span>
+					potrai segnarlo e salvarlo come "fatto"
+					<span
+						class="inline-flex items-baseline text-success icon-[solar--file-check-bold-duotone]"
+					></span>, cancella i tuoi "ToDo" nella pagina corrente con
+					<span class="inline-flex items-baseline text-warning icon-[solar--broom-bold-duotone]"
+					></span>
+				</p>
+				<button
+					class="btn btn-ghost btn-circle btn-error focus:outline-hidden"
+					onclick={() => setBannerClosed()}
+					aria-label="I've read this, close it!"
+					title="I've read this, close it!"
+				>
+					<span class="text-xl icon-[akar-icons--x-small]"></span>
+				</button>
+			</div>
 		</div>
 	</div>
 {/if}
