@@ -5,45 +5,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import LoginButton from '$lib/components/LoginButton.svelte';
-	import type { PageProps } from './$types';
-	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import { LOGS_URL } from '$lib/const';
+	import type { Logs } from '$lib/polleg';
+	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { onMount } from 'svelte';
 
 	let { data }: PageProps = $props();
 	let { logs } = $derived(data);
 </script>
 
 <div class="max-w-5xl p-4 mx-auto">
-	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
-		<div class="navbar-start flex items-center">
-			<a
-				href={resolve('/')}
-				class="btn btn-ghost btn-primary rounded-lg"
-				title="Home"
-				aria-label="Home"
-			>
-				<span class="icon-[ic--round-home]"></span>
-				Home
-			</a>
-			<button
-				class="btn btn-ghost btn-primary rounded-lg"
-				title="Indietro"
-				aria-label="Indietro"
-				onclick={() => history.back()}
-			>
-				<span class="icon-[akar-icons--arrow-back-thick-fill]"></span>
-				Go back
-			</button>
-		</div>
-		<div class="navbar-cener">
-			<h1 class="text-xl font-semibold text-base-content">Logs</h1>
-		</div>
+	<Navbar title="Logs"></Navbar>
 
-		<div class="navbar-end">
-			<LoginButton url={page.url} />
-		</div>
-	</nav>
 	<div class="overflow-x-auto overflow-y-auto">
 		<table class="table">
 			<!-- head -->

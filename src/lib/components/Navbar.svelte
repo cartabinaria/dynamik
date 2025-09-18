@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { resolve } from '$app/paths';
+import { page } from '$app/stores';
 	import LoginButton from './LoginButton.svelte';
 
 	let { goback = true, title }: { goback?: boolean; title: string } = $props();
@@ -7,24 +8,24 @@
 
 <nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
 	<div class="navbar-start flex items-center">
-		<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
-			<span class="icon-[ic--round-home]"></span>
+		<a href="{resolve('/')}" class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md" title="Home" aria-label="Home">
+			<span class="icon-[ic--round-home] text-lg"></span>
 			<p class="hidden md:block">Home</p>
 		</a>
 		{#if goback}
 			<button
-				class="btn btn-ghost btn-primary rounded-lg"
+				class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
 				title="Indietro"
 				aria-label="Indietro"
 				onclick={() => history.back()}
 			>
-				<span class="icon-[akar-icons--arrow-back-thick-fill]"></span>
+				<span class="icon-[akar-icons--arrow-back-thick-fill] text-lg"></span>
 				<p class="hidden md:block">Go back</p>
 			</button>
 		{/if}
 	</div>
 	<div class="navbar-center">
-		<h1 class="text-xl font-semibold text-base-content">{title}</h1>
+		<h1 class="text-md md:text-xl font-semibold text-base-content">{title}</h1>
 	</div>
 
 	<div class="navbar-end">

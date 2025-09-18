@@ -11,14 +11,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
 	import ListTeaching from './ListTeaching.svelte';
-	import LoginButton from '$lib/components/LoginButton.svelte';
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
 	import { checkAuth } from '$lib/stores/auth';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -62,23 +61,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </svelte:head>
 
 <div class="max-w-5xl p-4 mx-auto">
-	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
-		<div class="navbar-start flex items-center">
-			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
-				<span class="icon-[ic--round-home]"></span>
-				Home
-			</a>
-		</div>
-		<div class="navbar min-h-0 p-0 justify-center items-center">
-			<h1 class="flex flex-wrap text-xl text-center font-semibold text-base-content">
-				{data.degree.name}
-			</h1>
-		</div>
+	<Navbar title={data.degree?.name} goback={false}></Navbar>
 
-		<div class="navbar-end">
-			<LoginButton url={page.url} />
-		</div>
-	</nav>
 	<ListTeaching
 		years={reorganizedTeachings.mandatory}
 		activeYears={namesToTeachings(activeYears)}

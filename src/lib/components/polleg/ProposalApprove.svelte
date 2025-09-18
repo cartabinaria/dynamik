@@ -13,9 +13,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	type Props = {
 		p: K;
+		document?: boolean;
 		onupdate: ({ id, action }: { id: number; action: 'approve' | 'reject' }) => void;
 	};
-	let { p, onupdate }: Props = $props();
+	let { p, document, onupdate }: Props = $props();
 
 	async function approve(id: number) {
 		setLoading(id, true);
@@ -58,8 +59,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 </script>
 
-│ {#if p.id}
-	<div class="fab fab-flower absolute right-6 bottom-6 z-[99] pointer-events-none mb-2">
+{#if p.id}
+	<div class="{!document? 'fab fab-flower absolute right-6 bottom-6 z-[99]' :'flex'} pointer-events-none mb-2">
+		{#if !document}
 		<div tabindex="0" role="button" class="btn btn-circle btn-primary">
 			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
 		</div>
@@ -67,9 +69,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<button class="fab-main-action btn btn-circle btn-base-100" aria-label="Menu">
 			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
 		</button>
+		{/if}
 
 		<button
-			class="btn btn-sm btn-circle btn-success z-50 absolute"
+			class="btn btn-sm btn-circle btn-success {!document?'z-50 absolute':''}"
 			onclick={() => approve(p.id)}
 			disabled={loadingMap.get(p.id)}
 		>
@@ -77,7 +80,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<span class="icon-[ic--round-task-alt] text-lg"></span>{/if}
 		</button>
 		<button
-			class="btn btn-sm btn-circle btn-error z-50 absolute"
+			class="btn btn-sm btn-circle btn-error {!document?'z-50 absolute':''}"
 			onclick={() => rejectProposal(p.id)}
 			disabled={loadingMap.get(p.id)}
 		>
