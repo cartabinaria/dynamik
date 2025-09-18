@@ -9,10 +9,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { derived } from 'svelte/store';
-	import { page } from '$app/stores';
 	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
 	import LoginButton from '$lib/components/LoginButton.svelte';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 
 	let themes = derived(settings, ({ theme }) => allThemes.filter((t) => t != theme));
 </script>
@@ -20,7 +21,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <main class="md:container md:m-auto p-4">
 	<nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
 		<div class="navbar-start flex items-center">
-			<a href="/" class="btn btn-ghost btn-primary rounded-lg" title="Home" aria-label="Home">
+			<a
+				href={resolve('/')}
+				class="btn btn-ghost btn-primary rounded-lg"
+				title="Home"
+				aria-label="Home"
+			>
 				<span class="icon-[ic--round-home]"></span>
 				Home
 			</a>
@@ -39,7 +45,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 
 		<div class="navbar-end">
-			<LoginButton url={$page.url} />
+			<LoginButton url={page.url} />
 		</div>
 	</nav>
 
