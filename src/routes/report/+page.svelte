@@ -5,55 +5,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script lang="ts">
 	import { carta } from '$lib/carta-config';
-	import { ANSWERS_REPLIES_URL, BAN_URL, REPORTS_URL } from '$lib/const';
+	import { BAN_URL, REPORTS_URL } from '$lib/const';
 	import { formatDate } from '$lib/date';
-	import type { Report } from '$lib/polleg';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
 	import { toast } from '$lib/toast';
 	import { Markdown } from 'carta-md';
 	import { onMount } from 'svelte';
 
 	import Navbar from '$lib/components/Navbar.svelte';
+	import type { PageProps } from './$types';
 
-	let reports: Report[] = $state([]);
-	let banned = $state<{ username: string; user_avatar_url: string; banned_at: string }[]>([]);
+	let { data }: PageProps = $props();
+	let { banned, reports } = $derived(data);
 
-	onMount(async () => {
-		if (isAuthenticated($auth)) {
-			try {
-				const res = await fetch(REPORTS_URL, { credentials: 'include' });
-				if (res.ok) {
-					reports = await res.json();
-				} else {
-					console.error('Failed to fetch reports:', res.statusText);
-				}
-				// Fetch reply contents for each report
-				for (const report of reports) {
-					report.answer = await getAnswerContent(report.answer_id);
-				}
-				reports = [...reports];
-				const resban = await fetch(BAN_URL, { credentials: 'include' });
-				if (resban.ok) {
-					banned = await resban.json();
-				} else {
-					console.error('Failed to fetch banned users:', resban.statusText);
-				}
-			} catch (error) {
-				console.error('Error fetching reports:', error);
-			}
-		}
-	});
-
-	async function getAnswerContent(answerId: number) {
-		const res = await fetch(ANSWERS_REPLIES_URL(answerId), { credentials: 'include' });
-		if (res.ok) {
-			const answer = await res.json();
-			return answer;
-		} else {
-			console.error('Failed to fetch answers:', res.statusText);
-			return 'Error fetching answer';
-		}
-	}
+	onMount(async () => {});
 
 	async function banUser(username: string, banmode: boolean) {
 		const res = await fetch(BAN_URL, {
