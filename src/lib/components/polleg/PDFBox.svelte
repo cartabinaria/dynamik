@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
@@ -16,14 +16,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let parent: HTMLSpanElement | undefined = $state();
 	let visible: boolean = $state(false);
 
-	const render = () => {
-		if (!visible) return;
+	$effect(() => {
+		if (!visible || !canvas) return;
 
 		renderBox(pdf, canvas, box);
-	};
-
-	$effect(() => {
-		render();
 	});
 </script>
 
