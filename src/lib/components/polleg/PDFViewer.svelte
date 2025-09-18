@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
@@ -6,7 +6,7 @@ SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script lang="ts">
+<script lang="ts" generics="D extends {url: string}, U">
 	import PDFBox from '$lib/components/polleg/PDFBox.svelte';
 	import QuestionComponent from '$lib/components/polleg/Question.svelte';
 	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
@@ -25,10 +25,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		updateProposals
 	}: {
 		proposal?: boolean;
-		data?: any;
-		url?: any;
+		data: D;
+		url?: U;
 		questions: Question[];
-		updateProposals?: (id: any) => Promise<void>;
+		updateProposals?: (id: number) => Promise<void>;
 	} = $props();
 
 	// Function to reload all questions data
@@ -306,14 +306,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						onclick={splitMode ? closeSplitMode : undefined}
 						role={splitMode ? 'button' : undefined}
 					>
-						<PDFBox {pdf} {box} {proposal} />
+						<PDFBox {pdf} {box} proposal={proposal ?? false} />
 						{#if proposal}
 							<ProposalApprove
 								p={box.question}
-								update={({ id }: { id: number }) => {
+								onupdate={({ id }) => {
 									questions = questions.filter((q) => q.id !== id);
 									boxes = boxes.filter((b) => b.question.id !== id);
-									updateProposals(id);
+									updateProposals?.(id);
 								}}
 							></ProposalApprove>
 						{/if}
@@ -430,7 +430,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
-			<BottomSheet bind:open={showSheet} on:close={() => { showSheet = false; closeSplitMode(); }}>
+			<BottomSheet
+				bind:open={showSheet}
+				onclose={() => {
+					showSheet = false;
+					closeSplitMode();
+				}}
+			>
 				<div class="py-7 overflow-y-auto h-full">
 					<QuestionComponent bind:question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>

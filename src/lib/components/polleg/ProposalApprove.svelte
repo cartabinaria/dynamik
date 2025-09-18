@@ -4,14 +4,18 @@ SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script lang="ts">
+<script lang="ts" generics="K extends { id: number }">
 	import { PROPOSALS_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
+	import { SvelteMap } from 'svelte/reactivity';
 
-	let loadingMap = $state(new Map<any, boolean>());
+	let loadingMap = $state(new Map<number, boolean>());
 
-	// Espone una funzione reattiva per notificare il genitore
-	let { p, update }: { p: any; update: { id: number; action: 'approve' | 'reject' } } = $props();
+	type Props = {
+		p: K;
+		onupdate: ({ id, action }: { id: number; action: 'approve' | 'reject' }) => void;
+	};
+	let { p, onupdate }: Props = $props();
 
 	async function approve(id: number) {
 		setLoading(id, true);
@@ -24,7 +28,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			toast.success(`Approved proposal ${id}`);
 
 			// Notifica il genitore che la question è stata approvata
-			update({ id, action: 'approve' });
+			onupdate({ id, action: 'approve' });
 		} catch (e) {
 			toast.error(`${(e as Error).message}`);
 		} finally {
@@ -40,7 +44,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			toast.success(`Rejected proposal ${id}`);
 
 			// Notifica il genitore che la question è stata rifiutata
-			update({ id, action: 'reject' });
+			onupdate({ id, action: 'reject' });
 		} catch (e) {
 			toast.error(`${(e as Error).message}`);
 		} finally {
@@ -50,7 +54,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	function setLoading(id: number, v: boolean) {
 		loadingMap.set(id, v);
-		loadingMap = new Map(loadingMap); // Force tick
+		loadingMap = new SvelteMap(loadingMap); // Force tick
 	}
 </script>
 
@@ -59,7 +63,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div tabindex="0" role="button" class="btn btn-circle btn-primary">
 			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
 		</div>
-		<button class="fab-main-action btn btn-circle btn-base-100">
+
+		<button class="fab-main-action btn btn-circle btn-base-100" aria-label="Menu">
 			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
 		</button>
 
