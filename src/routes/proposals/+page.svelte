@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let openedProposalId = $state(null);
 
 	onMount(async () => {
-		await checkAuth();
+		await checkAuth(fetch);
 		if (!('user' in $auth && $auth.user?.role === 'admin')) {
 			message = { type: 'error', text: 'Access denied: admin only' };
 			return;
