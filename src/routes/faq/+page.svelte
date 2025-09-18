@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 	import type { PageProps } from './$types';
 
-	let {data}: PageProps = $props();
+	let { data }: PageProps = $props();
 
 	// State per la ricerca
 	let searchTerm = $state('');
@@ -37,10 +37,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			.filter((category) => category.faqs.length > 0) || [];
 
 	// Count total filtered FAQs
-	let totalFilteredFaqs = $derived(() => filteredCategories.reduce(
-		(total, category) => total + category.faqs.length,
-		0
-	));
+	let totalFilteredFaqs = $derived(() =>
+		filteredCategories.reduce((total, category) => total + category.faqs.length, 0)
+	);
 
 	// Funzione per togglere l'accordion
 	const toggleAccordion = (id: string) => {
@@ -104,7 +103,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<!-- FAQ Categories -->
 	{#if filteredCategories.length > 0}
 		<div class="space-y-6">
-			{#each filteredCategories as category, categoryIndex}
+			{#each filteredCategories as category, categoryIndex (category.name + categoryIndex)}
 				<div class="join join-vertical bg-base-100">
 					<!-- Category Header -->
 					<div class="bg-base-200 p-4 rounded-t-lg border border-base-300">
@@ -115,14 +114,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</div>
 
 					<!-- Category FAQs -->
-					{#each category.faqs as faq, faqIndex}
+					{#each category.faqs as faq, faqIndex (faq.question + faqIndex)}
 						{@const accordionId = `${categoryIndex}-${faqIndex}`}
 						<div class="collapse collapse-arrow join-item border-base-300 border">
 							<input
 								type="radio"
 								name="faq-accordion-{categoryIndex}"
 								checked={expandedIndex === accordionId}
-								on:change={() => toggleAccordion(accordionId)}
+								onchange={() => toggleAccordion(accordionId)}
 							/>
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
 								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"
