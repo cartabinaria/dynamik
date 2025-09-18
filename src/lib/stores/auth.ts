@@ -46,7 +46,7 @@ interface Whoami {
 
 const store = writable<AuthState>(defaultState);
 
-export const checkAuth = async () => {
+export async function checkAuth(fetch: typeof window.fetch) {
 	const req = await fetch(WHOAMI_URL, { credentials: 'include' });
 	const res: Whoami | Error = await req.json();
 	if (!('error' in res)) {
@@ -56,6 +56,6 @@ export const checkAuth = async () => {
 		};
 		store.set(state);
 	}
-};
+}
 
 export const auth = store;
