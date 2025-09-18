@@ -29,7 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let { manifest } = $derived(data);
 
 	onMount(async () => {
-		await checkAuth();
+		await checkAuth(fetch);
 	});
 
 	function kebabToTitle(str: string) {
