@@ -16,7 +16,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
 	let { data }: { data: File | Directory } = $props();
-	// export let customUrl: string | undefined = undefined;
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
@@ -137,7 +136,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="justify-self-end mr-2">{dateParts.day}</div>
 					<div>{dateParts.month}</div>
 					<div>{dateParts.year}</div>
-					<div class="ml-1">{dateParts.time}</div>
+					<!-- <div class="ml-1">{dateParts.time}</div> -->
 				</div>
 			{/if}
 		</span>
@@ -146,6 +145,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <style>
 	.grid_date {
-		grid-template-columns: 5% 45% auto auto;
+		grid-template-columns: 5% 60% auto auto;
 	}
 </style>
