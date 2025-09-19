@@ -372,9 +372,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</div>
 		{/if}
 
-		<div class="text-xs text-info-content/70 text-center">
-			Click to hide these instructions
-		</div>
+		<div class="text-xs text-info-content/70 text-center">Click to hide these instructions</div>
 	</div>
 {/if}
 

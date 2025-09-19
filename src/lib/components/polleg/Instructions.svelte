@@ -6,7 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	let { setEditMode,  isAdminAndMember, isAuthenticated }: {
+	let {
+		setEditMode,
+		isAdminAndMember,
+		isAuthenticated
+	}: {
 		setEditMode: (flag: boolean) => void;
 		isAdminAndMember: boolean;
 		isAuthenticated?: boolean;

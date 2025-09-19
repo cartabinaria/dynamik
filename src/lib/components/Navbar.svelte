@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-import { page } from '$app/stores';
+	import { page } from '$app/stores';
 	import LoginButton from './LoginButton.svelte';
 
 	let { goback = true, title }: { goback?: boolean; title: string } = $props();
@@ -8,7 +8,12 @@ import { page } from '$app/stores';
 
 <nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
 	<div class="navbar-start flex items-center">
-		<a href="{resolve('/')}" class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md" title="Home" aria-label="Home">
+		<a
+			href={resolve('/')}
+			class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
+			title="Home"
+			aria-label="Home"
+		>
 			<span class="icon-[ic--round-home] text-lg"></span>
 			<p class="hidden md:block">Home</p>
 		</a>

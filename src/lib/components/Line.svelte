@@ -18,7 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import sha256 from 'sha256';
 
 	let { data, isPolleg }: { data: File | Directory; isPolleg?: boolean } = $props();
-	
+
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
 	 *

@@ -50,7 +50,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 
 	let title = $state(genTitle(data.url));
-	let pollegPreference = $state($settings.pollegPreference)
+	let pollegPreference = $state($settings.pollegPreference);
 </script>
 
 <svelte:head>

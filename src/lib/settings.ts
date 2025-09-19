@@ -18,7 +18,7 @@ export interface Settings {
 	newTab: boolean;
 	isoDates: boolean;
 	defaultCourse: string;
-	pollegPreference: boolean; 		// true: polleg enable 
+	pollegPreference: boolean; // true: polleg enable
 }
 
 const settings = persisted<Settings>('settings', {

@@ -14,7 +14,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { onMount } from 'svelte';
 
-	let { question = $bindable(), onAnswerUpdate }: { question: Question; onAnswerUpdate?: () => Promise<void> | undefined } = $props();
+	let {
+		question = $bindable(),
+		onAnswerUpdate
+	}: { question: Question; onAnswerUpdate?: () => Promise<void> | undefined } = $props();
 
 	let expanded = false;
 	let answerContainer: HTMLElement | undefined = $state();
@@ -98,7 +101,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{#if loading}
 		<span bind:this={spinner} class="loading loading-spinner loading-md my-4"></span>
 	{:else}
-		<div bind:this={answerContainer} class="w-full flex flex-col gap-2 md:gap-4 md:px-4" data-answers>
+		<div
+			bind:this={answerContainer}
+			class="w-full flex flex-col gap-2 md:gap-4 md:px-4"
+			data-answers
+		>
 			{#if question.answers.length === 0}
 				<p class="text-base-content/70 italic mb-4">No answers yet. Be the first to answer!</p>
 			{/if}

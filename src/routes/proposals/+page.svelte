@@ -60,7 +60,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<div class="collapse collapse-arrow bg-base-100 border border-base-300">
 							<input type="checkbox" />
 							<div class="collapse-title font-semibold">
-								<div class='flex justify-between'>
+								<div class="flex justify-between">
 									<p class="font-semibold">{`${p.document_path}`}</p>
 									<ProposalApprove
 										{p}

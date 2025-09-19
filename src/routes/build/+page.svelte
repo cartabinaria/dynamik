@@ -24,7 +24,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <main class="md:container md:m-auto p-4">
 	<Navbar title="Stato delle raccolte" goback={false}></Navbar>
-	
+
 	<div class="m-8">
 		{#each data.degrees as degree, degreeIndex (degree.id)}
 			{#if degree.teachings != null}
