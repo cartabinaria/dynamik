@@ -81,15 +81,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				onclick={mobileBreadcrumb}
 				aria-label="Open breadcrumb menu"
 			>
-				<span class="text-2xl text-accent icon-[solar--folder-path-connect-bold-duotone]"></span>
-				<p class="text-accent">{title}</p>
+				<span class="text-lg text-accent icon-[solar--folder-path-connect-bold-duotone]"></span>
+				<p class="text-accent text-xs wrap-anywhere">{title}</p>
 			</button>
 
 			{#if !breadcrumbMobile}
 				<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-56 z-50">
 					<li>
-						<a href="/" class="flex items-center">
-							<span class="text-xl icon-[akar-icons--home-alt1]"></span>
+						<a href="/" class="flex items-center"
+							><span class="icon-[ic--round-home]"></span>
 							Home
 						</a>
 					</li>
@@ -112,12 +112,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<!-- DESKTOP  -->
 	<div class="navbar min-h-0 p-0 justify-start items-center gap-2">
 		<div
-			class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm sm:flex-wrap font-semibold"
+			class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm font-semibold"
 		>
-			<ul>
+			<ul class="flex flex-wrap">
 				<li>
 					<a class="ml-1 flex items-center" href="/" aria-label="Home">
-						<span class="text-xl icon-[akar-icons--home-alt1]"></span>
+						<span class="icon-[ic--round-home] text-lg"></span>
 					</a>
 				</li>
 				{#if degree != null}

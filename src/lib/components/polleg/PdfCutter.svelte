@@ -280,8 +280,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
 		// Use different endpoint based on user type
-		// TODO: edited for testing member proposals
-		const endpoint = !isAdminAndMember ? ENDPOINT : PROPOSAL_URL;
+		const endpoint = isAdminAndMember ? ENDPOINT : PROPOSAL_URL;
 
 		data.document_path = $page.url.pathname;
 

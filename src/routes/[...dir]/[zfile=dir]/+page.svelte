@@ -173,7 +173,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{/if}
 		{#if files != null}
 			{#each files as file (file.url)}
-				<Line data={file} />
+				<Line data={file} isPolleg={data.isPolleg.includes(file.name)} />
 			{/each}
 		{/if}
 	</div>

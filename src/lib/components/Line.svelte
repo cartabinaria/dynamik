@@ -14,10 +14,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { File, Directory } from '$lib/api';
 	import { formatDate } from '$lib/date';
 	import { getDoneStatus } from '$lib/todo-file';
-	import { GH_PAGES_BASE_URL } from '$lib/const';
+	import { APPROVE_DOCUMENTS_URL, DOCUMENT_URL, GH_PAGES_BASE_URL } from '$lib/const';
+	import sha256 from 'sha256';
 
-	let { data }: { data: File | Directory } = $props();
-
+	let { data, isPolleg }: { data: File | Directory; isPolleg?: boolean } = $props();
+	
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
 	 *
@@ -77,6 +78,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				>
 					{data.name}
 				</a>
+				{#if isPolleg}
+					<span class="ml-2 icon-[solar--chat-round-dots-bold] text-primary text-lg"></span>
+				{/if}
 			{:else}
 				<span class="flex icon-[solar--folder-bold] text-xl mr-2" style="color: #FDE74C"></span>
 				<a
@@ -119,7 +123,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="justify-self-end mr-2">{dateParts.day}</div>
 					<div>{dateParts.month}</div>
 					<div>{dateParts.year}</div>
-					<div class="ml-1">{dateParts.time}</div>
+					<!-- <div class="ml-1">{dateParts.time}</div> -->
 				</div>
 			{/if}
 		</span>
@@ -128,7 +132,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <style>
 	.grid_date {
-		grid-template-columns: 5% 45% auto auto;
+		grid-template-columns: 5% 60% auto auto;
 	}
 
 	.break-anywhere {
