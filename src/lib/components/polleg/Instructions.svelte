@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	let { setEditMode, isAdmin, isAuthenticated }: {
+	let { setEditMode,  isAdminAndMember, isAuthenticated }: {
 		setEditMode: (flag: boolean) => void;
-		isAdmin: boolean;
+		isAdminAndMember: boolean;
 		isAuthenticated?: boolean;
 	} = $props();
 </script>
@@ -17,7 +17,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="text-center">
 		<span class="text-5xl icon-[solar--sad-circle-broken]"></span>
 		<p class="text-xl mb-8">
-			{#if isAdmin}
+			{#if isAdminAndMember}
 				This document isn't ready for interactive Q&A yet. <b>You can prepare it now!</b>
 			{:else if isAuthenticated}
 				This document isn't ready for interactive Q&A yet. <b>Help us by preparing it!</b>
@@ -26,7 +26,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/if}
 		</p>
 
-		{#if isAdmin}
+		{#if isAdminAndMember}
 			<button
 				class="btn btn-outline btn-primary"
 				onclick={(e) => {

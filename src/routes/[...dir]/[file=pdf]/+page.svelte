@@ -29,7 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	// Reactive variables for auth
 	let user = $state(isAuthenticated($auth) ? $auth.user : null);
-	let isAdmin = $state(['admin', 'member'].includes(user?.role ?? ''));
+	let isAdminAndMember = $state(['admin', 'member'].includes(user?.role ?? ''));
 	let userIsAuthenticated = $state(isAuthenticated($auth));
 
 	async function removePdfCutter(dataRet: PageData) {
@@ -72,11 +72,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<PDFViewer {data} questions={data.questions} />
 				{:else}
 					<!-- If the questions aren't present show instructions and pdf -->
-					<Instructions {isAdmin} isAuthenticated={userIsAuthenticated} {setEditMode} />
+					<Instructions {isAdminAndMember} isAuthenticated={userIsAuthenticated} {setEditMode} />
 					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"
 					></iframe>
 					{#if editMode}
-						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} {isAdmin} />
+						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} {isAdminAndMember} />
 					{/if}
 				{/if}
 			{:else}

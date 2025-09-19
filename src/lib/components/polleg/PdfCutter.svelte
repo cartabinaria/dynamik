@@ -20,10 +20,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		id: string;
 		setEditMode: (flag: boolean) => void;
 		show: (arg0: any) => void;
-		isAdmin?: boolean;
+		isAdminAndMember?: boolean;
 	};
 
-	let { url, id, setEditMode, show, isAdmin }: Props = $props();
+	let { url, id, setEditMode, show, isAdminAndMember: isAdminAndMember }: Props = $props();
 
 	// State for instructions visibility
 	let showInstructions = $state(true);
@@ -280,7 +280,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
 		// Use different endpoint based on user type
-		const endpoint = isAdmin ? ENDPOINT : PROPOSAL_URL;
+		const endpoint = isAdminAndMember ? ENDPOINT : PROPOSAL_URL;
 
 		data.document_path = $page.url.pathname;
 
@@ -294,7 +294,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		});
 		let objRet = await res.json();
 		if (res.status == 200) {
-			const successMessage = isAdmin
+			const successMessage = isAdminAndMember
 				? 'PDF successfully prepared! Students can now answer questions.'
 				: 'Proposal submitted successfully! Admins will review it soon.';
 
@@ -316,25 +316,63 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <!-- Instructions for PDF preparation - positioned at top -->
 {#if showInstructions}
 	<div
-		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-[90%] max-w-md bg-info rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-info/90 transition-colors"
+		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-max max-h- 1/2 bg-linear-to-t to-blue-300 from-blue-300/70 rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-blue-300/90 transition-colors *:font-semibold"
 		onclick={() => (showInstructions = false)}
 		role="button"
 		tabindex="0"
 		onkeydown={(e) => e.key === 'Enter' && (showInstructions = false)}
 	>
-		<h3 class="font-semibold mb-2 text-info-content">How to prepare a PDF:</h3>
-		<ul class="list-disc list-inside space-y-1 text-info-content">
-			<li>Use <u>left click</u> to start selecting questions</li>
-			<li>Use <u>right click</u> to delete a selection</li>
-			<li>Select each question from start to end</li>
-			<li>Click {isAdmin ? 'EXPORT' : 'PROPOSE'} when done</li>
+		<h3 class="text-info-content text-lg font-bold">How to prepare a PDF</h3>
+
+		<ul class="steps steps-vertical text-info-content">
+			<li class="step !min-h-auto">
+				<p>
+					Select each <b>exercise or question</b> as a <u>separate block</u>.
+				</p>
+			</li>
+
+			<li class="step !min-h-auto">
+				<p>
+					Include <u>instructions, notes, or titles</u> inside the block of the
+					<b>closest question</b>.
+				</p>
+			</li>
+
+			<li class="step !min-h-auto">
+				<span class="flex flex-col gap-1">
+					<span class="flex items-center gap-2">
+						<span class="icon-[mdi--mouse-left-click] text-lg"></span>
+						Left click → mark start & end
+					</span>
+					<span class="flex items-center gap-2">
+						<span class="icon-[mdi--mouse-right-click] text-lg"></span>
+						Right click → delete selection
+					</span>
+				</span>
+			</li>
+
+			<li class="step !min-h-auto">
+				<p>
+					Continue until you have blocks like:
+					<i>[Title + Instructions + Q1] → [Q2] → … → [Qn + extra notes]</i>.
+				</p>
+			</li>
+
+			<li class="step !min-h-auto">
+				<p>
+					When finished, click
+					<b>{isAdminAndMember ? 'EXPORT (save as final version)' : 'PROPOSE'}</b>.
+				</p>
+			</li>
 		</ul>
-		{#if !isAdmin}
-			<div class="mt-3 p-2 bg-warning rounded text-warning-content">
+
+		{#if !isAdminAndMember}
+			<div class="p-2 bg-warning rounded text-warning-content">
 				<strong>Note:</strong> Your preparation will be sent as a proposal for admin approval.
 			</div>
 		{/if}
-		<div class="mt-2 text-xs text-info-content/70 text-center">
+
+		<div class="text-xs text-info-content/70 text-center">
 			Click to hide these instructions
 		</div>
 	</div>
@@ -360,6 +398,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		type="button"
 		id="exportBtn"
 		class="btn btn-primary hover:glass hover:bg-primary rounded-lg border-0"
-		>{isAdmin ? 'EXPORT' : 'PROPOSE'}<span class="icon-[ic--round-send]"></span></button
+		>{isAdminAndMember ? 'EXPORT' : 'PROPOSE'}<span class="icon-[ic--round-send]"></span></button
 	>
 </div>
