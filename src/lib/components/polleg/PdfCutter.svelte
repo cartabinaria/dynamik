@@ -280,7 +280,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		data.coords.sort((a: number[], b: number[]) => a[0] - b[0]);
 
 		// Use different endpoint based on user type
-		const endpoint = isAdminAndMember ? ENDPOINT : PROPOSAL_URL;
+		// TODO: edited for testing member proposals
+		const endpoint = !isAdminAndMember ? ENDPOINT : PROPOSAL_URL;
 
 		data.document_path = $page.url.pathname;
 
@@ -295,7 +296,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		let objRet = await res.json();
 		if (res.status == 200) {
 			const successMessage = isAdminAndMember
-				? 'PDF successfully prepared! Students can now answer questions.'
+				? 'PDF successfully saved! Students can now answer questions.'
 				: 'Proposal submitted successfully! Admins will review it soon.';
 
 			toast.success(successMessage);

@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import { renderBox } from '$lib/pdfcanvas';
 
-	let { pdf, box, proposal }: { pdf: FullPDF; box: Box; proposal: boolean } = $props();
+	let { pdf, box }: { pdf: FullPDF; box: Box } = $props();
 
 	let canvas: HTMLCanvasElement | undefined = $state();
 	let parent: HTMLSpanElement | undefined = $state();

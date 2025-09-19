@@ -49,6 +49,7 @@ export const VOTE_URL = (id: number) => `${POLLEG_BASE_URL}/answer/${id}/vote`;
 export const ANSWERS_REPLIES_URL = (id: number) => `${POLLEG_BASE_URL}/answers/${id}/replies`;
 export const PROPOSAL_URL = `${POLLEG_BASE_URL}/proposals`;
 export const PROPOSALS_URL = (id: number) => `${PROPOSAL_URL}/${id}`;
+export const APPROVE_DOCUMENTS_URL = (id: number) => `${PROPOSAL_URL}/document/${id}/approve`;
 export const LOGS_URL = `${POLLEG_BASE_URL}/logs`;
 export const REPORT_URL = (id: number) => `${POLLEG_BASE_URL}/moderation/report/${id}`;
 export const REPORTS_URL = `${POLLEG_BASE_URL}/moderation/reports`;

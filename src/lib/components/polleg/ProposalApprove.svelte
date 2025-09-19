@@ -5,14 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts" generics="K extends { id: number }">
-	import { PROPOSALS_URL } from '$lib/const';
+	import { APPROVE_DOCUMENTS_URL, PROPOSALS_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
+	import type { Proposal } from '$lib/polleg';
 	import { SvelteMap } from 'svelte/reactivity';
 
 	let loadingMap = $state(new Map<number, boolean>());
 
 	type Props = {
-		p: K;
+		p: Proposal;
 		document?: boolean;
 		onupdate: ({ id, action }: { id: number; action: 'approve' | 'reject' }) => void;
 	};
@@ -21,14 +22,22 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	async function approve(id: number) {
 		setLoading(id, true);
 		try {
-			const res = await fetch(`${PROPOSALS_URL(id)}/approve`, {
-				method: 'POST',
-				credentials: 'include'
-			});
+			let res;
+			if (document) {
+				res = await fetch(`${APPROVE_DOCUMENTS_URL(id)}`, {
+					method: 'POST',
+					credentials: 'include'
+				});
+			} else {
+				res = await fetch(`${PROPOSALS_URL(id)}/approve`, {
+					method: 'POST',
+					credentials: 'include'
+				});
+			}
 			if (!res.ok) throw new Error('Failed to approve');
 			toast.success(`Approved proposal ${id}`);
 
-			// Notifica il genitore che la question è stata approvata
+			// update parent
 			onupdate({ id, action: 'approve' });
 		} catch (e) {
 			toast.error(`${(e as Error).message}`);
@@ -44,7 +53,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			if (!res.ok) throw new Error('Failed to reject');
 			toast.success(`Rejected proposal ${id}`);
 
-			// Notifica il genitore che la question è stata rifiutata
+			// update parent
 			onupdate({ id, action: 'reject' });
 		} catch (e) {
 			toast.error(`${(e as Error).message}`);
@@ -59,35 +68,43 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 </script>
 
-{#if p.id}
-	<div class="{!document? 'fab fab-flower absolute right-6 bottom-6 z-[99]' :'flex'} pointer-events-none mb-2">
+{#if p && p.id}
+	<div
+		class={`pointer-events-none mb-auto ${
+			!document ? 'fab fab-flower absolute right-6 bottom-6 z-[99]' : 'flex gap-2'
+		}`}
+	>
 		{#if !document}
-		<div tabindex="0" role="button" class="btn btn-circle btn-primary">
-			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
-		</div>
+			<div tabindex="0" role="button" class="btn btn-circle btn-primary">
+				<span class="icon-[solar--menu-dots-bold] text-lg"></span>
+			</div>
 
-		<button class="fab-main-action btn btn-circle btn-base-100" aria-label="Menu">
-			<span class="icon-[solar--menu-dots-bold] text-lg"></span>
-		</button>
+			<button class="fab-main-action btn btn-circle btn-base-100" aria-label="Menu">
+				<span class="icon-[solar--menu-dots-bold] text-lg"></span>
+			</button>
 		{/if}
 
-		<button
-			class="btn btn-sm btn-circle btn-success {!document?'z-50 absolute':''}"
-			onclick={() => approve(p.id)}
-			disabled={loadingMap.get(p.id)}
-		>
-			{#if loadingMap.get(p.id)}<span class="loading loading-spinner text-primary"></span>{:else}
-				<span class="icon-[ic--round-task-alt] text-lg"></span>{/if}
-		</button>
-		<button
-			class="btn btn-sm btn-circle btn-error {!document?'z-50 absolute':''}"
-			onclick={() => rejectProposal(p.id)}
-			disabled={loadingMap.get(p.id)}
-		>
-			{#if loadingMap.get(p.id)}<span class="loading loading-spinner text-error"></span>{:else}<span
-					class="icon-[solar--trash-bin-trash-bold] text-lg"
-				></span>{/if}
-		</button>
+		{#each [{ type: 'success', icon: 'ic--round-task-alt', text: 'Approve all', action: approve }, { type: 'error', icon: 'solar--trash-bin-trash-bold', text: 'Reject all', action: rejectProposal }] as btn}
+			<button
+				class={`btn btn-sm z-50 btn-${btn.type} pointer-events-auto ${
+					document ? 'rounded-lg btn-outline' : 'btn-circle absolute'
+				}`}
+				onclick={(e) => {
+					e.stopPropagation();
+					btn.action(p.id);
+				}}
+				disabled={loadingMap.get(p.id)}
+			>
+				{#if loadingMap.get(p.id)}
+					<span class="loading loading-spinner text-${btn.type === 'success' ? 'primary' : 'error'}"
+					></span>
+				{:else}
+					<span class={`icon-[${btn.icon}] text-lg`}></span>
+				{/if}
+
+				{#if document}{btn.text}{/if}
+			</button>
+		{/each}
 	</div>
 {:else}
 	<p class="font-semibold bg-error rounded-lg absolute right-6 bottom-6 z-[99] p-2 mb-2">

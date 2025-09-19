@@ -7,19 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { checkAuth, auth } from '$lib/stores/auth';
-	import type { Question } from '$lib/polleg';
+	import type { Proposal } from '$lib/polleg';
 	import { ASSET_URL, PROPOSAL_URL } from '$lib/const';
 	import PDFViewer from '$lib/components/polleg/PDFViewer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
 
-	let proposals = $state([]) as Array<{
-		id: any;
-		questions: Question[];
-		document_path: string;
-	}>;
+	let proposals: Proposal[] = $state([]);
 	let message = $state<{ type: 'error' | 'success'; text: string } | null>(null);
-	let openedProposalId = $state(null);
 
 	onMount(async () => {
 		await checkAuth(fetch);
@@ -63,15 +58,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<div class="relative">
 					<div class="card bg-base-200 shadow-sm border border-base-300 p-4">
 						<div class="collapse collapse-arrow bg-base-100 border border-base-300">
-							<input
-								type="radio"
-								name="my-accordion-3"
-								bind:group={openedProposalId}
-								value={p.id}
-							/>
+							<input type="checkbox" />
 							<div class="collapse-title font-semibold">
-								<p class="font-semibold">{`Proposal ${p.document_path}`}</p>
+								<div class='flex justify-between'>
+									<p class="font-semibold">{`${p.document_path}`}</p>
+									<ProposalApprove
+										{p}
+										onupdate={({ id }) => {
+											updateProposals?.(id);
+										}}
+										document={true}
+									></ProposalApprove>
+								</div>
 								<div class="text-xs text-base-content/50 mt-2 flex items-center gap-2">
+									<p>Proposed by</p>
 									<img
 										class="w-6 h-6 rounded-full ring-1 ring-base-300/50 transition-all"
 										src={p.questions[0].user_avatar_url}
@@ -81,26 +81,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									/>
 									<p>{p.questions[0].username}</p>
 								</div>
-								<div class="flex m-2">
-									Approve or reject this document proposal:
-									<ProposalApprove
-										{p}
-										onupdate={({ id }) => {
-											updateProposals?.(id);
-										}}
-										document={true}
-									></ProposalApprove>
-								</div>
 							</div>
 							<div class="collapse-content text-sm">
-								{#if openedProposalId === p.id}
-									<PDFViewer
-										url={ASSET_URL(p.document_path)}
-										questions={p.questions}
-										proposal={true}
-										{updateProposals}
-									/>
-								{/if}
+								<PDFViewer
+									url={ASSET_URL(p.document_path)}
+									questions={p.questions}
+									proposal={true}
+									{updateProposals}
+								/>
 							</div>
 						</div>
 					</div>

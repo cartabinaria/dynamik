@@ -254,7 +254,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				boxes = [...boxes.slice(0, boxI), ...newBoxes, ...boxes.slice(boxI + 1)];
 			}
 		}
-		boxes.splice(boxes.length - 1, 1);
+		boxes.splice(boxes.length, 1);
 		return boxes;
 	};
 
@@ -298,7 +298,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				: ''}"
 			style={splitMode && !isFullscreen ? 'max-height: 50vh;' : ''}
 		>
-			{#each boxes as box (box.question?.id ?? box.y)}
+			{#each boxes as box}
 				<!-- In split mode, show only the first box (selected question's box) -->
 				{#if !splitMode || (splitMode && selectedQuestion && box.question?.id === selectedQuestion.id)}
 					<div
@@ -306,7 +306,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						onclick={splitMode ? closeSplitMode : undefined}
 						role={splitMode ? 'button' : undefined}
 					>
-						<PDFBox {pdf} {box} proposal={proposal ?? false} />
+						<PDFBox {pdf} {box} />
 						{#if proposal}
 							<ProposalApprove
 								p={box.question}

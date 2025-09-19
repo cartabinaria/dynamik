@@ -40,6 +40,12 @@ export interface Document {
 	url: string;
 }
 
+export interface Proposal {
+	id: any;
+	questions: Question[];
+	document_path: string;
+}
+
 export interface Logs {
 	timestamp: string;
 	action: string;
