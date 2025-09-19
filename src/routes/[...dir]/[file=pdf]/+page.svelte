@@ -8,7 +8,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { onDestroy } from 'svelte';
 	import { onMount } from 'svelte';
 	import type { PageData, PageProps } from './$types';
 	import '$lib/styles/github.scss';
@@ -18,6 +17,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 	import { auth, isAuthenticated, checkAuth } from '$lib/stores/auth';
 	import { page } from '$app/stores';
+	import settings from '$lib/settings';
 
 	let { data }: PageProps = $props();
 
@@ -50,6 +50,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 
 	let title = $state(genTitle(data.url));
+	let pollegPreference = $state($settings.pollegPreference)
 </script>
 
 <svelte:head>
@@ -66,17 +67,43 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<!-- Scrollable content area -->
 	<div class="flex-1 overflow-y-auto overflow-x-hidden">
 		<main class="max-w-6xl min-w-fit p-4 mx-auto h-full">
-			{#if data.questions !== undefined}
+			<!-- Polleg Preference -->
+
+			<div class="tabs tabs-box w-max my-4">
+				<input
+					type="radio"
+					name="pdf"
+					class="tab"
+					aria-label="PDF"
+					bind:group={pollegPreference}
+					value={false}
+				/>
+				<input
+					type="radio"
+					name="polleg"
+					class="tab"
+					aria-label="Q&A"
+					bind:group={pollegPreference}
+					value={true}
+				/>
+			</div>
+			{#if data.questions !== undefined && pollegPreference}
 				<!-- Polleg functionality for exam PDFs -->
 				{#if data.questions?.length > 0}
 					<PDFViewer {data} questions={data.questions} />
-				{:else}
+				{:else if data.questions?.length == 0}
 					<!-- If the questions aren't present show instructions and pdf -->
 					<Instructions {isAdminAndMember} isAuthenticated={userIsAuthenticated} {setEditMode} />
 					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"
 					></iframe>
 					{#if editMode}
-						<PdfCutter id={data.id} url={data.url} show={removePdfCutter} {setEditMode} {isAdminAndMember} />
+						<PdfCutter
+							id={data.id}
+							url={data.url}
+							show={removePdfCutter}
+							{setEditMode}
+							{isAdminAndMember}
+						/>
 					{/if}
 				{/if}
 			{:else}

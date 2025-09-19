@@ -73,6 +73,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<option value={course.id}>{course.name}</option>
 				{/each}
 			</select>
+
+			<!-- Polleg Preference -->
+			<label for="polleg-toggle" class="label-text font-medium flex items-center gap-2">
+				Always show Q&A on exams
+			</label>
+			<input
+				id="polleg-toggle"
+				type="checkbox"
+				class="toggle toggle-primary"
+				bind:checked={$settings.pollegPreference}
+			/>
 		</div>
 	</div>
 </main>

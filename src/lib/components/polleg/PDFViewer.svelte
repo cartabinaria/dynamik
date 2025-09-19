@@ -322,7 +322,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						{#if box.question && !splitMode && !proposal}
 							<!-- Desktop Bookmark Bubble -->
 							<button
-								class="absolute bottom-4 right-4 w-14 h-14 bg-primary text-primary-content hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center rounded-full shadow-xl hover:shadow-2xl hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
+								class="absolute bottom-4 right-4 btn btn-circle btn-primary hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center rounded-full shadow-xl hover:shadow-2xl hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
 									? 'animate-pulse scale-125'
 									: ''}"
 								onclick={(event) => {

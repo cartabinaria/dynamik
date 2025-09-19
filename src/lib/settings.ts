@@ -18,13 +18,15 @@ export interface Settings {
 	newTab: boolean;
 	isoDates: boolean;
 	defaultCourse: string;
+	pollegPreference: boolean; 		// true: polleg enable 
 }
 
 const settings = persisted<Settings>('settings', {
 	theme: 'dark',
 	newTab: false,
 	defaultCourse: DEFAULT_COURSE_KEY,
-	isoDates: false
+	isoDates: false,
+	pollegPreference: true
 });
 
 export default settings;
