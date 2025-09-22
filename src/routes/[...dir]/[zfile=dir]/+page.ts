@@ -5,9 +5,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { getFuzzy, getManifest } from '$lib/api';
-import { APPROVE_DOCUMENTS_URL, DOCUMENTS_URL } from '$lib/const';
+import { DOCUMENTS_URL } from '$lib/const';
 import { DEGREES, TEACHINGS } from '$lib/teachings';
-import sha256 from 'sha256';
 import type { PageLoad } from './$types';
 
 async function isPollegDocument(filePath: string) {

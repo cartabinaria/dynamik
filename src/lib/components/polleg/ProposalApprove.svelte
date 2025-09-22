@@ -84,7 +84,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</button>
 		{/if}
 
-		{#each [{ type: 'success', icon: 'ic--round-task-alt', text: 'Approve all', action: approve }, { type: 'error', icon: 'solar--trash-bin-trash-bold', text: 'Reject all', action: rejectProposal }] as btn}
+		{#each [{ type: 'success', icon: 'ic--round-task-alt', text: 'Approve all', action: approve }, { type: 'error', icon: 'solar--trash-bin-minimalistic-bold', text: 'Reject all', action: rejectProposal }] as btn}
 			<button
 				class={`btn btn-sm z-50 btn-${btn.type} pointer-events-auto ${
 					document ? 'rounded-lg btn-outline' : 'btn-circle absolute'

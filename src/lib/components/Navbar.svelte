@@ -10,22 +10,22 @@
 	<div class="navbar-start flex items-center">
 		<a
 			href={resolve('/')}
-			class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
+			class="btn btn-ghost btn-primary btn-square rounded-lg btn-sm md:btn-md"
 			title="Home"
 			aria-label="Home"
 		>
 			<span class="icon-[ic--round-home] text-lg"></span>
-			<p class="hidden md:block">Home</p>
+			<!-- <p class="hidden md:block">Home</p> -->
 		</a>
 		{#if goback}
 			<button
-				class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
+				class="btn btn-ghost btn-primary btn-square rounded-lg btn-sm md:btn-md"
 				title="Indietro"
 				aria-label="Indietro"
 				onclick={() => history.back()}
 			>
-				<span class="icon-[akar-icons--arrow-back-thick-fill] text-lg"></span>
-				<p class="hidden md:block">Go back</p>
+				<span class="icon-[akar-icons--arrow-left] text-xl"></span>
+				<!-- <p class="hidden md:block">Go back</p> -->
 			</button>
 		{/if}
 	</div>

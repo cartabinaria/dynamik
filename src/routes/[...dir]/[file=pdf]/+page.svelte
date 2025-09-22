@@ -68,25 +68,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="flex-1 overflow-y-auto overflow-x-hidden">
 		<main class="max-w-6xl min-w-fit p-4 mx-auto h-full">
 			<!-- Polleg Preference -->
-
-			<div class="tabs tabs-box w-max my-4">
-				<input
-					type="radio"
-					name="pdf"
-					class="tab"
-					aria-label="PDF"
-					bind:group={pollegPreference}
-					value={false}
-				/>
-				<input
-					type="radio"
-					name="polleg"
-					class="tab"
-					aria-label="Q&A"
-					bind:group={pollegPreference}
-					value={true}
-				/>
-			</div>
+			{#if data.questions !== undefined}
+				<div class="tabs tabs-box w-max my-4">
+					<input
+						type="radio"
+						name="pdf"
+						class="tab"
+						aria-label="PDF"
+						bind:group={pollegPreference}
+						value={false}
+					/>
+					<input
+						type="radio"
+						name="polleg"
+						class="tab"
+						aria-label="Q&A"
+						bind:group={pollegPreference}
+						value={true}
+					/>
+				</div>
+			{/if}
 			{#if data.questions !== undefined && pollegPreference}
 				<!-- Polleg functionality for exam PDFs -->
 				{#if data.questions?.length > 0}

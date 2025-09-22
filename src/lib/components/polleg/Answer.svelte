@@ -65,13 +65,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			if (res.ok || res.status === 204) {
 				// Reload answers from server to ensure UI is in sync
 				if (reloadAnswers) {
+					console.log('before', answer.content);
 					await reloadAnswers();
+					console.log('after', answer.content);
 				} else {
 					// Fallback: update local data if reload function not available
 					const newAns = data?.answers?.filter(function (item: any) {
 						return item.id != id;
 					});
 					data.answers = newAns;
+					answer.content = newAns;
 				}
 			} else {
 				// Error - try to parse response for error details
@@ -163,7 +166,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	data-answer-id={answer.id}
 	class="w-full card bg-base-200/30 shadow-lg rounded-xl transition-all duration-300"
 >
-	<div class="card-body p-0 md:p-4 w-full">
+	<div class="flex p-0 md:p-4 w-full">
 		<!-- Answer Layout: Left voting, Right content -->
 		<div class="flex gap-1 md:gap-6 w-full">
 			<!-- Left Voting Column -->
@@ -243,7 +246,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 				<!-- Answer Content -->
 				<div class="leading-normal mb-4">
-					<Markdown {carta} value={answer.content ?? ''} />
+					{#key answer.content}
+						<Markdown {carta} value={answer.content} />
+					{/key}
 				</div>
 
 				<!-- Bottom Actions Bar -->

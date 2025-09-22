@@ -19,7 +19,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="flex justify-center mb-2">
 	<div class="text-center">
-		<span class="text-5xl icon-[solar--sad-circle-broken]"></span>
 		<p class="text-xl mb-8">
 			{#if isAdminAndMember}
 				This document isn't ready for interactive Q&A yet. <b>You can prepare it now!</b>

@@ -18,6 +18,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Reply from './Reply.svelte'; // Self-import for recursive rendering
 	import ReportAnswer from './ReportAnswer.svelte';
 
+	type Props = {
+		answer: any;
+		reply: any;
+		index: number;
+		last?: boolean;
+		reloadAnswers?: (() => Promise<void>) | undefined;
+		question?: any;
+		onAnswerUpdate?: (() => Promise<void>) | undefined;
+		depth?: number;
+		parentForceUpdate?: number;
+	};
 	let {
 		answer,
 		reply,
@@ -28,17 +39,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		onAnswerUpdate = undefined,
 		depth = 0, // Track nesting depth
 		parentForceUpdate = 0 // Force update from parent component
-	}: {
-		answer: any;
-		reply: any;
-		index: number;
-		last?: boolean;
-		reloadAnswers?: (() => Promise<void>) | undefined;
-		question?: any;
-		onAnswerUpdate?: (() => Promise<void>) | undefined;
-		depth?: number;
-		parentForceUpdate?: number;
-	} = $props();
+	}: Props = $props();
 
 	let isDeleting = $state(false);
 	let showReplyBox = $state(false);
@@ -231,7 +232,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div class="flex-1 min-w-0 mr-4">
 			<!-- Main Reply Content -->
 			<div
-				class="bg-base-200 backdrop-blur-sm rounded-lg p-4 mb-4 transition-all duration-200 border border-transparent"
+				class="bg-base-200 rounded-lg p-4 mb-4 transition-all duration-200 border border-transparent"
 			>
 				<!-- Reply Header -->
 				<!-- Header with user info and timestamp -->
@@ -279,7 +280,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 				<!-- Reply Content -->
 				<div class="leading-normal mb-4">
-					<Markdown {carta} value={reply.content} />
+					{#key reply.content}
+						<Markdown {carta} value={reply.content} />
+					{/key}
 				</div>
 
 				<!-- Bottom Actions Bar (similar to Answer component) -->

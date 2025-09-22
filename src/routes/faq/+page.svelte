@@ -48,7 +48,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </script>
 
 <svelte:head>
-	<title>{data.metadata?.title || 'FAQ'} - Dynamik</title>
+	<title>{data.metadata?.title || 'FAQ'} - Risorse</title>
 	<meta name="description" content={data.metadata?.description || 'Domande frequenti'} />
 </svelte:head>
 
@@ -117,12 +117,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{#each category.faqs as faq, faqIndex (faq.question + faqIndex)}
 						{@const accordionId = `${categoryIndex}-${faqIndex}`}
 						<div class="collapse collapse-arrow join-item border-base-300 border">
-							<input
-								type="radio"
-								name="faq-accordion-{categoryIndex}"
-								checked={expandedIndex === accordionId}
-								onchange={() => toggleAccordion(accordionId)}
-							/>
+							<input type="checkbox" />
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
 								<span class="icon-[solar--question-circle-bold] text-primary text-xl flex-shrink-0"
 								></span>

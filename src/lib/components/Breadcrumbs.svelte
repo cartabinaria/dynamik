@@ -71,19 +71,28 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 </script>
 
-<div class="navbar flex bg-base-200 shadow-xs px-0 sm:px-5 {borderRadius}">
+<div class="navbar flex bg-base-200 shadow-xs sm:px-5 {borderRadius}">
 	<!-- MOBILE -->
 	<div class="sm:hidden flex justify-start items-center">
 		<div class="dropdown w-max">
-			<button
-				type="button"
-				class="btn btn-ghost flex gap-2 w-max"
-				onclick={mobileBreadcrumb}
-				aria-label="Open breadcrumb menu"
-			>
-				<span class="text-lg text-accent icon-[solar--folder-path-connect-bold-duotone]"></span>
-				<p class="text-accent text-xs wrap-anywhere">{title}</p>
-			</button>
+			<div class="flex items-center">
+				<button
+					type="button"
+					class="btn btn-ghost flex gap-2 w-max px-1"
+					onclick={mobileBreadcrumb}
+					aria-label="Open breadcrumb menu"
+				>
+					<span class="icon-[solar--hamburger-menu-linear] text-xl"></span>
+				</button>
+				<button
+					class="btn btn-ghost"
+					title="Indietro"
+					aria-label="Indietro"
+					onclick={() => history.back()}
+				>
+					<p class="text-sm wrap-anywhere">{title}</p>
+				</button>
+			</div>
 
 			{#if !breadcrumbMobile}
 				<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-56 z-50">

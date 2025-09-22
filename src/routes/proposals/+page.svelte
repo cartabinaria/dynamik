@@ -18,7 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	onMount(async () => {
 		await checkAuth(fetch);
-		if (!('user' in $auth && $auth.user?.role === 'admin')) {
+		if (!('user' in $auth && ['admin', 'member'].includes($auth.user?.role))) {
 			message = { type: 'error', text: 'Access denied: admin only' };
 			return;
 		}

@@ -316,15 +316,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <!-- Instructions for PDF preparation - positioned at top -->
 {#if showInstructions}
 	<div
-		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000] w-max max-h- 1/2 bg-linear-to-t to-blue-300 from-blue-300/70 rounded-lg p-4 mb-4 text-sm text-left cursor-pointer hover:bg-blue-300/90 transition-colors *:font-semibold"
+		class="fixed top-2 left-1/2 transform -translate-x-1/2 z-[1000]
+         w-[90%] max-w-md max-h-[80vh] md:w-max md:max-h-max
+         bg-linear-to-t to-blue-300 from-blue-300/70 rounded-lg p-4 overflow-y-auto
+         text-sm text-left cursor-pointer hover:bg-blue-300/90 transition-colors *:font-semibold"
 		onclick={() => (showInstructions = false)}
 		role="button"
 		tabindex="0"
 		onkeydown={(e) => e.key === 'Enter' && (showInstructions = false)}
 	>
-		<h3 class="text-info-content text-lg font-bold">How to prepare a PDF</h3>
+		<h3 class="text-lg md:text-lg sm:text-xl text-info-content font-bold">How to prepare a PDF</h3>
 
-		<ul class="steps steps-vertical text-info-content">
+		<ul class="steps steps-vertical text-info-content text-xs sm:text-sm md:text-sm">
 			<li class="step !min-h-auto">
 				<p>
 					Select each <b>exercise or question</b> as a <u>separate block</u>.
@@ -341,11 +344,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<li class="step !min-h-auto">
 				<span class="flex flex-col gap-1">
 					<span class="flex items-center gap-2">
-						<span class="icon-[mdi--mouse-left-click] text-lg"></span>
+						<span class="icon-[mdi--mouse-left-click] text-base sm:text-lg"></span>
 						Left click → mark start & end
 					</span>
 					<span class="flex items-center gap-2">
-						<span class="icon-[mdi--mouse-right-click] text-lg"></span>
+						<span class="icon-[mdi--mouse-right-click] text-base sm:text-lg"></span>
 						Right click → delete selection
 					</span>
 				</span>
@@ -367,12 +370,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</ul>
 
 		{#if !isAdminAndMember}
-			<div class="p-2 bg-warning rounded text-warning-content">
+			<div class="p-2 bg-warning rounded text-warning-content text-xs sm:text-sm mt-2">
 				<strong>Note:</strong> Your preparation will be sent as a proposal for admin approval.
 			</div>
 		{/if}
 
-		<div class="text-xs text-info-content/70 text-center">Click to hide these instructions</div>
+		<div class="text-xs sm:text-sm text-info-content/70 text-center mt-2">
+			Click to hide these instructions
+		</div>
 	</div>
 {/if}
 

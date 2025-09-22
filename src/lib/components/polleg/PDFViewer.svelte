@@ -322,7 +322,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						{#if box.question && !splitMode && !proposal}
 							<!-- Desktop Bookmark Bubble -->
 							<button
-								class="absolute bottom-4 right-4 btn btn-circle btn-primary hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center rounded-full shadow-xl hover:shadow-2xl hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
+								class="absolute bottom-4 right-4 btn btn-circle btn-primary hover:bg-accent transition-all duration-300 ease-out flex items-center justify-center hidden md:flex transform hover:scale-110 z-10 {bookmarkAnimating
 									? 'animate-pulse scale-125'
 									: ''}"
 								onclick={(event) => {
@@ -342,7 +342,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 							<!-- Mobile Bookmark -->
 							<button
-								class="btn btn-primary btn-circle md:hidden shadow-lg absolute top-4 right-4"
+								class="btn btn-primary btn-circle md:hidden shadow-lg absolute bottom-4 right-4 flex transform"
 								onclick={(event) => {
 									event.stopPropagation();
 									openSplitMode(box.question);

@@ -15,13 +15,6 @@ import { get } from 'svelte/store';
 import { IMAGES_URL, POLLEG_BASE_URL } from './const';
 import { Carta } from 'carta-md';
 
-function getTheme() {
-	const theme = get(settings).theme;
-	if (theme == 'dark') return 'github-dark';
-	else if (theme == 'light' || theme == 'autumn') return 'github-light';
-	return theme;
-}
-
 async function pollegUpload(file: File) {
 	const formData = new FormData();
 
@@ -63,7 +56,7 @@ function getCartaConfig() {
 		extensions: [
 			emoji(),
 			code({
-				theme: getTheme()
+				theme: 'github'
 			}),
 			math(),
 			attachment({
