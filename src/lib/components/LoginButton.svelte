@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { LOGOUT_URL } from '$lib/const';
-	import { auth, fetchWhoAmI, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/stores/auth';
 
 	type Props = {
 		class?: string;
