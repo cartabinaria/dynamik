@@ -3,6 +3,12 @@ title: 'FAQ - Frequently Asked Questions'
 description: 'Answers to the most common questions about Resources'
 ---
 
+<!--
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # GitHub Access
 
 ## How do I create an account?
@@ -13,14 +19,14 @@ You don't need to create a separate account for Resources: login happens directl
 
 ## I forgot my password, what should I do?
 
-No problem! Use GitHub's password recovery options that you can find [here](https://github.com/password_reset).
+No problem! Use GitHub's password recovery options that you can find on the [GitHub password reset page](https://github.com/password_reset).
 
 <!-- ## How do I upload a document?
 Go to the appropriate section of the site and use the upload function. Make sure the file is in a supported format (PDF, Markdown, etc.) and doesn't exceed the maximum allowed size. -->
 
 ## I logged in but it doesn't show! What do I do?
 
-Some browsers (Firefox, Brave) block third-party cookies, which are needed for GitHub login.  
+Some browsers (Firefox, Brave) block third-party cookies, which are needed for GitHub login.
 Easy solutions:
 
 - Enable third-party cookies in your browser settings

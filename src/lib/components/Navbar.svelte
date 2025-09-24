@@ -1,3 +1,11 @@
+<!--
+SPDX-FileCopyrightText: 2024 Gabriele Genovese <gabriele.genovese2@studio.unibo.it>
+SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';

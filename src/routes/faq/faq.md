@@ -3,6 +3,12 @@ title: 'FAQ - Domande Frequenti'
 description: 'Risposte alle domande più comuni su Risorse'
 ---
 
+<!--
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Accesso con GitHub
 
 ## Come creo un account?
@@ -20,7 +26,7 @@ Vai nella sezione appropriata del sito e utilizza la funzione di upload. Assicur
 
 ## Mi sono loggato ma non risulta! Cosa faccio?
 
-Alcuni browser (Firefox, Brave) bloccano i cookie di terze parti, che servono per l’accesso tramite GitHub.  
+Alcuni browser (Firefox, Brave) bloccano i cookie di terze parti, che servono per l’accesso tramite GitHub.
 Soluzioni facili:
 
 - Abilita i cookie di terze parti nelle impostazioni del browser

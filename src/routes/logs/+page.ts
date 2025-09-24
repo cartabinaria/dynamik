@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
+// SPDX-FileCopyrightText: 2025 Eyad Issa <eyadlorenzo@gmail.com>
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import { auth, checkAuth, isAuthenticated } from '$lib/stores/auth';
 import { get } from 'svelte/store';
 import type { PageLoad } from './$types';
