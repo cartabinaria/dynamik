@@ -1,8 +1,9 @@
 <!-- SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com> SPDX-License-Identifier: AGPL-3.0-or-later -->
 <script lang="ts">
-	import { REPORT_URL } from '$lib/const';
+	import { REPORT_URL, REPORTS_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
 	import { onMount } from 'svelte';
+	import Answer from './Answer.svelte';
 
 	let { id }: { id: number } = $props();
 	let selectedReason = $state('');
@@ -32,10 +33,10 @@
 	];
 	async function reportAnswer(cause: string) {
 		try {
-			const res = await fetch(REPORT_URL(id), {
+			const res = await fetch(REPORTS_URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ cause: cause }),
+				body: JSON.stringify({ cause: cause, answer: id }),
 				credentials: 'include'
 			});
 			if (res.status === 200) {

@@ -46,6 +46,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="contents">
 		<span class="flex items-center flex-[1_0_auto] min-w-0 md:w-max">
 			{#if external}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm mr-2"
+					id="my-checkbox"
+					disabled
+				/>
 				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
 				<a
 					class="flex link link-hover text-primary sm:flex-wrap"
@@ -56,6 +62,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{data.name}
 				</a>
 			{:else if isFile}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm mr-2"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 				<button
 					class="flex text-xl mr-2 align-center"
 					onclick={() => isDone.toggle()}
@@ -82,6 +94,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<span class="ml-2 icon-[solar--chat-round-dots-bold] text-primary text-lg"></span>
 				{/if}
 			{:else}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm mr-2"
+					id="my-checkbox"
+					disabled
+				/>
 				<span class="flex icon-[solar--folder-bold] text-xl mr-2" style="color: #FDE74C"></span>
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
@@ -91,6 +109,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				>
 					{data.name}
 				</a>
+				{#if isPolleg}
+					<span class="ml-2 icon-[solar--chat-round-dots-bold] text-primary text-lg"></span>
+				{/if}
 			{/if}
 		</span>
 		<div class="flex flex-0"></div>

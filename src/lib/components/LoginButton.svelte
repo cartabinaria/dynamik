@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 	{:else}
 		<a
-			class="btn btn-ghost hover:bg-primary rounded-lg hover:text-primary-content transition-all duration-200 hover:shadow-md"
+			class="btn btn-outline btn-primary hover:bg-primary rounded-lg hover:text-primary-content transition-all duration-200 hover:shadow-md"
 			href={resolve('/login') + `?return_to=${encodeURIComponent(url.pathname + url.search)}`}
 			title="Login with GitHub"
 		>

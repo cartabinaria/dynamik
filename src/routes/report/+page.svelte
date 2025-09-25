@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script lang="ts">
 	import { carta } from '$lib/carta-config';
-	import { BAN_URL, REPORTS_URL } from '$lib/const';
+	import { BAN_URL, REPORT_URL, REPORTS_URL } from '$lib/const';
 	import { formatDate } from '$lib/date';
 	import { toast } from '$lib/toast';
 	import { Markdown } from 'carta-md';
@@ -45,10 +45,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	async function removeReport(id: number) {
 		try {
-			const res = await fetch(REPORTS_URL, {
+			const res = await fetch(REPORT_URL(id), {
 				method: 'DELETE',
-				credentials: 'include',
-				body: JSON.stringify({ id })
+				credentials: 'include'
 			});
 			if (res.ok) {
 				reports = reports.filter((report) => report.id !== id);
