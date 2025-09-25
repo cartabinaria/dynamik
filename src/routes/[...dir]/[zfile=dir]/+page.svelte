@@ -65,7 +65,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 
 	// --- Sorting ---
-	let reverseMode = $state(true); // partiamo in ordine A-Z
+	let reverseMode = $state(false); // starting from Z-A
 
 	/**
 	 * Inverte l'ordine di visualizzazione delle risorse
@@ -115,6 +115,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			});
 			return old;
 		});
+		return true;
 	}
 
 	const prepareForDisplay = (statikEntries: StatikEntry[]) => {
@@ -141,12 +142,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
-				class="lg:ml-2 p-1 flex mr-2 items-center"
+				class="lg:ml-2 p-1 flex ml-3 items-center"
 				onclick={cleanDone}
 				title="Clean all done files in this page"
 				aria-label="Clean all done files in this page"
 			>
-				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
+				<input type="checkbox" class="checkbox checkbox-sm" id="my-checkbox" bind:checked={$isDone}/>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
