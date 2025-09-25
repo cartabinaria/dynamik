@@ -11,7 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import QuestionComponent from '$lib/components/polleg/Question.svelte';
 	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
 	import BottomSheet from '$lib/components/BottomSheet.svelte';
-	import type { Question } from '$lib/polleg';
+	import type { Question } from '$lib/polleg.svelte';
 	import { type FullPDF, type Box, extractFullPDF, SCALE } from '$lib/pdfcanvas';
 	import type { OnProgressParameters } from 'pdfjs-dist';
 	import { onMount, onDestroy } from 'svelte';
@@ -298,7 +298,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				: ''}"
 			style={splitMode && !isFullscreen ? 'max-height: 50vh;' : ''}
 		>
-			{#each boxes as box}
+			<!-- FIXME: this key could be not unique enough -->
+			{#each boxes as box (box.x + '-' + box.y + '-' + box.width + '-' + box.height)}
 				<!-- In split mode, show only the first box (selected question's box) -->
 				{#if !splitMode || (splitMode && selectedQuestion && box.question?.id === selectedQuestion.id)}
 					<div

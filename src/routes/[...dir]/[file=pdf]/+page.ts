@@ -11,7 +11,7 @@ import { error, redirect } from '@sveltejs/kit';
 
 import type { PageLoad } from './$types';
 import { ASSET_URL, DOCUMENT_URL, GH_PAGES_BASE_URL } from '$lib/const';
-import type { Document, Question } from '$lib/polleg';
+import type { Document, Question } from '$lib/polleg.svelte';
 import { TEACHINGS, DEGREES } from '$lib/teachings';
 
 export const load: PageLoad = async ({ fetch, params }) => {

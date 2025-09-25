@@ -5,19 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script lang="ts">
 	import { carta } from '$lib/carta-config';
-	import { BAN_URL, REPORT_URL, REPORTS_URL } from '$lib/const';
+	import { BAN_URL, REPORT_URL } from '$lib/const';
 	import { formatDate } from '$lib/date';
 	import { toast } from '$lib/toast';
 	import { Markdown } from 'carta-md';
-	import { onMount } from 'svelte';
 
 	import Navbar from '$lib/components/Navbar.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	let { banned, reports } = $derived(data);
-
-	onMount(async () => {});
 
 	async function banUser(username: string, banmode: boolean) {
 		const res = await fetch(BAN_URL, {

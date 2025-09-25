@@ -16,7 +16,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import ListTeaching from './ListTeaching.svelte';
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
-	import { checkAuth } from '$lib/stores/auth';
+	import { refreshAuth } from '$lib/polleg.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		await checkAuth(fetch);
+		await refreshAuth(fetch);
 	});
 
 	function namesToTeachings(names: string[]): Teaching[] {

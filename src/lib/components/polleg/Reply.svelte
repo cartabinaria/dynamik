@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { formatRelativeTime } from '$lib/date';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/polleg.svelte';
 	import { ANSWER_URL, ANSWERS_REPLIES_URL } from '$lib/const';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import Timeline from '$lib/components/polleg/Timeline.svelte';
@@ -54,7 +54,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let isInitialized = false;
 
 	// Reactive variables for auth
-	let user = $derived(isAuthenticated($auth) ? $auth.user : null);
+	let user = $derived(isAuthenticated(auth) ? auth.current.user : null);
 
 	// Initialize state from props - simplified
 	$effect.pre(() => {

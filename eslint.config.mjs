@@ -16,7 +16,7 @@ export default [
 	eslintConfigPrettier,
 	...eslintPluginSvelte.configs['flat/prettier'],
 	{
-		files: ['**/*.svelte'],
+		files: ['**/*.svelte', '**/*.svelte.js', '**/*.svelte.ts'],
 		languageOptions: {
 			ecmaVersion: 2022,
 			sourceType: 'module',

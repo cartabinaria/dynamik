@@ -6,10 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { LOGS_URL } from '$lib/const';
-	import type { Logs } from '$lib/polleg';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
-	import { onMount } from 'svelte';
+	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	let { logs } = $derived(data);

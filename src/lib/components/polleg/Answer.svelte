@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { ANSWER_URL, VOTE_URL } from '$lib/const';
 	import Reply from '$lib/components/polleg/Reply.svelte';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/polleg.svelte';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { formatRelativeTime } from '$lib/date';
 	import { Markdown } from 'carta-md';
@@ -33,7 +33,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let repliesContainer: HTMLElement | null = $state(null);
 
 	// Reactive variables for auth
-	let user = $state(isAuthenticated($auth) ? $auth.user : null);
+	let user = $state(isAuthenticated(auth) ? auth.current.user : null);
 
 	// Sort replies by creation time (oldest first - chronological order)
 	let sortedReplies = $derived(() =>

@@ -3,29 +3,23 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { auth, checkAuth, isAuthenticated } from '$lib/stores/auth';
-import { get } from 'svelte/store';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { LOGS_URL } from '$lib/const';
-import type { Logs } from '$lib/polleg';
+import { createPollegWithAuth, refreshAuth } from '$lib/polleg.svelte';
 
 export const ssr = false;
 
 export const load: PageLoad = async ({ fetch }) => {
-	await checkAuth(fetch); // refresh auth state
-
-	const authState = get(auth);
-
-	if (!isAuthenticated(authState)) {
+	await refreshAuth(fetch);
+	const polleg = createPollegWithAuth(fetch);
+	if (!polleg) {
 		error(401, 'User not authenticated');
 	}
 
-	const logsRes = await fetch(LOGS_URL, { credentials: 'include' });
-	if (!logsRes.ok) {
-		error(logsRes.status, 'Failed to fetch logs');
+	const { data, error: err } = await polleg.getLogs();
+	if (err || !data) {
+		error(500, 'Failed to fetch logs');
 	}
 
-	const logs: Logs[] = await logsRes.json();
-	return { logs };
+	return { logs: data };
 };

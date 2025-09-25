@@ -1,4 +1,4 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 
@@ -9,11 +9,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let {
 		setEditMode,
 		isAdminAndMember,
-		isAuthenticated
+		authenticated: isAuthenticated
 	}: {
 		setEditMode: (flag: boolean) => void;
 		isAdminAndMember: boolean;
-		isAuthenticated?: boolean;
+		authenticated?: boolean;
 	} = $props();
 </script>
 

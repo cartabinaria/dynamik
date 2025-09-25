@@ -5,37 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { checkAuth, auth } from '$lib/stores/auth';
-	import type { Proposal } from '$lib/polleg';
-	import { ASSET_URL, PROPOSAL_URL } from '$lib/const';
+	import { ASSET_URL } from '$lib/const';
 	import PDFViewer from '$lib/components/polleg/PDFViewer.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ProposalApprove from '$lib/components/polleg/ProposalApprove.svelte';
+	import type { PageProps } from './$types';
+	import { invalidateAll } from '$app/navigation';
 
-	let proposals: Proposal[] = $state([]);
-	let message = $state<{ type: 'error' | 'success'; text: string } | null>(null);
-
-	onMount(async () => {
-		await checkAuth(fetch);
-		if (!('user' in $auth && ['admin', 'member'].includes($auth.user?.role))) {
-			message = { type: 'error', text: 'Access denied: admin only' };
-			return;
-		}
-
-		try {
-			const res = await fetch(PROPOSAL_URL, { credentials: 'include' });
-			if (!res.ok) throw new Error(`Failed to load proposals (${res.status})`);
-
-			proposals = await res.json();
-		} catch (e) {
-			message = { type: 'error', text: (e as Error).message };
-		}
-	});
-
-	function updateProposals(id: number) {
-		proposals = proposals.filter((proposal) => proposal.id !== id);
-	}
+	let { data }: PageProps = $props();
+	let { proposals } = $derived(data);
 </script>
 
 <svelte:head>
@@ -62,12 +40,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="collapse-title font-semibold">
 								<div class="flex justify-between">
 									<p class="font-semibold">{`${p.document_path}`}</p>
-									<ProposalApprove
-										{p}
-										onupdate={({ id }) => {
-											updateProposals?.(id);
-										}}
-										document={true}
+									<ProposalApprove {p} onupdate={() => invalidateAll()} document={true}
 									></ProposalApprove>
 								</div>
 								<div class="text-xs text-base-content/50 mt-2 flex items-center gap-2">
@@ -87,7 +60,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									url={ASSET_URL(p.document_path)}
 									questions={p.questions}
 									proposal={true}
-									{updateProposals}
+									updateProposals={() => invalidateAll()}
 								/>
 							</div>
 						</div>

@@ -15,7 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Instructions from '$lib/components/polleg/Instructions.svelte';
 	import PDFViewer from '$lib/components/polleg/PDFViewer.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import { auth, isAuthenticated, checkAuth } from '$lib/stores/auth';
+	import { auth, isAuthenticated, refreshAuth } from '$lib/polleg.svelte';
 	import { page } from '$app/stores';
 	import settings from '$lib/settings';
 
@@ -24,13 +24,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let editMode = $state(false);
 
 	onMount(async () => {
-		await checkAuth(fetch);
+		await refreshAuth(fetch);
 	});
 
 	// Reactive variables for auth
-	let user = $state(isAuthenticated($auth) ? $auth.user : null);
-	let isAdminAndMember = $state(['admin', 'member'].includes(user?.role ?? ''));
-	let userIsAuthenticated = $state(isAuthenticated($auth));
+	let user = $derived(isAuthenticated(auth.current) ? auth.current.user : null);
+	let isAdminAndMember = $derived(['admin', 'member'].includes(user?.role ?? ''));
 
 	async function removePdfCutter(dataRet: PageData) {
 		editMode = false;
@@ -94,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<PDFViewer {data} questions={data.questions} />
 				{:else if data.questions?.length == 0}
 					<!-- If the questions aren't present show instructions and pdf -->
-					<Instructions {isAdminAndMember} isAuthenticated={userIsAuthenticated} {setEditMode} />
+					<Instructions {isAdminAndMember} authenticated={user != null} {setEditMode} />
 					<iframe title="Embedded resource" src={data.url} class="w-full border rounded-lg h-full"
 					></iframe>
 					{#if editMode}

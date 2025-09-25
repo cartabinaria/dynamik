@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { auth, fetchWhoAmI, isAuthenticated, wrapWithAuth } from '$lib/stores/auth';
-import { get } from 'svelte/store';
+import { auth, createPolleg, isAuthenticated } from '$lib/polleg.svelte';
 import { LOGIN_URL } from '$lib/const';
 
 export const ssr = false;
@@ -15,7 +14,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 	const return_to = url.searchParams.get('return_to');
 
 	// If the user is already authenticated, redirect to the home page
-	const authStatus = get(auth);
+	const authStatus = auth.current;
 	if (isAuthenticated(authStatus)) {
 		throw redirect(302, '/');
 	}
@@ -23,14 +22,23 @@ export const load: PageLoad = async ({ url, fetch }) => {
 	// If the url contains a session_token parameter, query the whoami endpoint,
 	// save it to the auth store and redirect to the home page
 	if (session_token) {
-		const authedFetch = wrapWithAuth(fetch, session_token);
-		const whoami = await fetchWhoAmI(authedFetch);
-		if (!('error' in whoami)) {
-			auth.set({ state: 'authenticated', session_token, user: whoami });
-			throw redirect(302, return_to || '/');
+		const polleg = createPolleg(fetch, session_token);
+		const { data: whoami, error: err } = await polleg.whoAmI();
+		if (err || !whoami || 'error' in whoami) {
+			error(401, 'Invalid session token');
 		}
+		// If the whoami request was successful, save the user to the auth store
+		// and redirect to the home page or to the return_to parameter
+		// if it was provided
+		auth.current = { state: 'authenticated', session_token, user: whoami };
+		throw redirect(302, return_to || '/');
 	}
 
 	// Otherwise, redirect to the login page
-	throw redirect(302, LOGIN_URL(url));
+	const redirectUrl = new URL(url);
+	if (return_to) {
+		redirectUrl.searchParams.set('return_to', return_to);
+	}
+
+	throw redirect(302, LOGIN_URL(encodeURIComponent(redirectUrl.toString())));
 };

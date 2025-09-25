@@ -1,16 +1,16 @@
-<!-- 
+<!--
 SPDX-FileCopyrightText: 2024 geno <gabriele.genovese2@studio.unibo.it>
 SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2025 Samuele Musiani <samu@teapot.ovh>
 
-SPDX-License-Identifier: AGPL-3.0-or-later 
+SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
 	import { MarkdownEditor } from 'carta-md';
 	import { onDestroy } from 'svelte';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/polleg.svelte';
 	import { ANSWERS_URL } from '$lib/const';
 	import { carta } from '$lib/carta-config';
 
@@ -41,7 +41,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let mounted = true;
 
 	// derived
-	let user = $derived(() => (isAuthenticated($auth) ? $auth.user : null));
+	let user = $derived(() => (isAuthenticated(auth) ? auth.current.user : null));
 	let isReply = $derived(() => parentAnswerId !== undefined);
 
 	onDestroy(() => {

@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { LOGOUT_URL } from '$lib/const';
-	import { auth, isAuthenticated } from '$lib/stores/auth';
+	import { auth, isAuthenticated } from '$lib/polleg.svelte';
 
 	type Props = {
 		class?: string;
@@ -19,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </script>
 
 <div class="relative {className}">
-	{#if isAuthenticated($auth)}
+	{#if isAuthenticated(auth.current)}
 		<div class="dropdown dropdown-end">
 			<div
 				tabindex="0"
@@ -30,8 +30,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					class="w-10 rounded-full ring-2 ring-transparent hover:ring-primary hover:ring-offset-2 transition-all duration-200"
 				>
 					<img
-						src={$auth.user.avatarUrl}
-						alt="{$auth.user.name || $auth.user.username}'s avatar"
+						src={auth.current.user.avatarUrl}
+						alt="{auth.current.user.name || auth.current.user.username}'s avatar"
 						class="rounded-full object-cover"
 					/>
 				</div>
@@ -44,38 +44,38 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="avatar">
 								<div class="w-12 rounded-full ring-2 ring-primary ring-offset-2">
 									<img
-										src={$auth.user.avatarUrl}
-										alt="{$auth.user.name || $auth.user.username}'s avatar"
+										src={auth.current.user.avatarUrl}
+										alt="{auth.current.user.name || auth.current.user.username}'s avatar"
 										class="rounded-full object-cover"
 									/>
 								</div>
 							</div>
 							<div class="flex-1 min-w-0">
 								<p class="font-semibold text-base-content truncate">
-									{$auth.user.name || $auth.user.username}
+									{auth.current.user.name || auth.current.user.username}
 								</p>
 								<p class="text-sm text-base-content/70 truncate">
-									@{$auth.user.username}
+									@{auth.current.user.username}
 								</p>
-								{#if $auth.user.email}
+								{#if auth.current.user.email}
 									<p class="text-xs text-base-content/50 truncate">
-										{$auth.user.email}
+										{auth.current.user.email}
 									</p>
 								{/if}
 							</div>
-							{#if $auth.user.role === 'admin'}
+							{#if auth.current.user.role === 'admin'}
 								<div class="badge badge-primary badge-sm !font-semibold">Admin</div>
-							{:else if $auth.user.role === 'member'}
+							{:else if auth.current.user.role === 'member'}
 								<div class="badge badge-ghost badge-sm !font-semibold">Member</div>
 							{/if}
 						</div>
 
 						<!-- Menu Items -->
 						<div class="menu p-0 mt-2 w-56 md:w-70">
-							{#if ['admin', 'member'].includes($auth.user?.role)}
+							{#if ['admin', 'member'].includes(auth.current.user?.role)}
 								<li>
 									<a
-										href="/proposals"
+										href={resolve('/proposals')}
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
 										<span class="icon-[ic--round-task-alt] text-lg"></span>
@@ -83,10 +83,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									</a>
 								</li>
 							{/if}
-							{#if $auth.user.role === 'admin'}
+							{#if auth.current.user.role === 'admin'}
 								<li>
 									<a
-										href="/report"
+										href={resolve('/report')}
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 									>
 										<span class="icon-[solar--shield-user-bold] text-lg"></span>
@@ -95,16 +95,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								</li>
 								<li>
 									<a
-										href="/logs"
+										href={resolve('/logs')}
 										class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
-										><span class="icon-[material-symbols--list-rounded] text-lg"></span>
+									>
+										<span class="icon-[material-symbols--list-rounded] text-lg"></span>
 										Logs
 									</a>
 								</li>
 							{/if}
 							<li>
 								<a
-									href="/settings"
+									href={resolve("/settings")}
 									class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 								>
 									<span class="icon-[ic--round-settings] text-lg"></span>
