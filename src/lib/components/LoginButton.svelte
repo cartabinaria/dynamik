@@ -105,7 +105,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							{/if}
 							<li>
 								<a
-									href={resolve("/settings")}
+									href={resolve('/settings')}
 									class="flex items-center gap-3 rounded-lg hover:bg-base-200 transition-colors duration-150"
 								>
 									<span class="icon-[ic--round-settings] text-lg"></span>
@@ -130,7 +130,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{:else}
 		<a
 			class="btn btn-outline btn-primary hover:bg-primary rounded-lg hover:text-primary-content transition-all duration-200 hover:shadow-md"
-			href={resolve('/login') + `?return_to=${encodeURIComponent(url.pathname + url.search)}`}
+			href={resolve('/login') + `?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`}
 			title="Login with GitHub"
 		>
 			<!-- Show full text on desktop, only icon on mobile -->
