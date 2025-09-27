@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 */
 
 import type { PageViewport, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import type { Question } from './polleg.svelte';
 
 export const SCALE = 3;
 
@@ -14,7 +15,7 @@ export interface Box {
 	y: number;
 	height: number;
 	width: number;
-	question?: any;
+	question?: Question;
 }
 
 export interface Page extends Box {

@@ -11,8 +11,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		open?: boolean;
 		onclose?: () => void;
 		children: Snippet;
+		key: number;
 	};
-	let { open = $bindable(false), onclose, children }: Props = $props();
+	let { open = $bindable(false), onclose, children, key }: Props = $props();
 
 	let sheet: HTMLDivElement;
 	let startY = 0;
@@ -64,7 +65,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div
 	bind:this={sheet}
-	class="fixed inset-x-0 bottom-0 z-50 bg-base-100 brightness-150 rounded-t-2xl shadow-lg transition-transform duration-300 ease-out touch-none"
+	class="fixed inset-x-0 bottom-0 z-50 bg-base-100 brightness-150 rounded-t-2xl shadow-lg transition-transform duration-300 ease-out touch-none h-[80%]"
 	style="transform: translateY({translateY}%);"
 	ontouchstart={handleTouchStart}
 	ontouchmove={handleTouchMove}
@@ -73,7 +74,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="flex justify-center py-2 cursor-grab active:cursor-grabbing">
 		<div class="w-12 h-1.5 bg-gray-400 rounded-full"></div>
 	</div>
-	<div class="p-4 max-h-vh overflow-y-auto *:brightness-80">
-		{@render children()}
+	<div class="p-4 h-[90%] overflow-auto *:brightness-80">
+		{#key key}
+			{@render children()}
+		{/key}
 	</div>
 </div>

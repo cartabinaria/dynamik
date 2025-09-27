@@ -73,19 +73,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="navbar flex bg-base-200 shadow-xs sm:px-5 {borderRadius}">
 	<!-- MOBILE -->
-	<div class="sm:hidden flex justify-start items-center">
-		<div class="dropdown w-max">
-			<div class="flex items-center">
+	<div class="flex justify-start *:text-left w-full">
+		<div class="dropdown w-full">
+			<div class="flex justify-start items-center">
 				<button
 					type="button"
 					class="btn btn-ghost flex gap-2 w-max px-1"
 					onclick={mobileBreadcrumb}
 					aria-label="Open breadcrumb menu"
 				>
-					<span class="icon-[solar--hamburger-menu-linear] text-xl"></span>
+					<span class="icon-[solar--hamburger-menu-linear] text-2xl"></span>
 				</button>
 				<button
-					class="btn btn-ghost"
+					class="btn btn-ghost btn-sm"
 					title="Indietro"
 					aria-label="Indietro"
 					onclick={() => history.back()}

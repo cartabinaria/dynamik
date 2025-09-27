@@ -68,7 +68,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<main class="max-w-6xl min-w-fit p-4 mx-auto h-full">
 			<!-- Polleg Preference -->
 			{#if data.questions !== undefined}
-				<div class="tabs tabs-box w-max my-4">
+				<div class="tabs tabs-sm md:tabs-md tabs-box w-max mb-4 md:mt-4">
 					<input
 						type="radio"
 						name="pdf"

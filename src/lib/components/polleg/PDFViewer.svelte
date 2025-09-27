@@ -420,7 +420,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</div>
 
 				<!-- Content area -->
-				<div class="flex-1 overflow-y-auto h-full w-full py-4">
+				<div class="flex-1 overflow-auto h-full w-full py-4">
 					<QuestionComponent bind:question={selectedQuestion} onAnswerUpdate={reloadAllQuestions} />
 				</div>
 
@@ -432,6 +432,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<!-- Mobile Modal (completely separate) -->
 		{#if splitMode && selectedQuestion && !proposal}
 			<BottomSheet
+				key={selectedQuestion.id}
 				bind:open={showSheet}
 				onclose={() => {
 					showSheet = false;

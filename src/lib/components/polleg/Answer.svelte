@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { ANSWER_URL, VOTE_URL } from '$lib/const';
 	import Reply from '$lib/components/polleg/Reply.svelte';
-	import { auth, isAuthenticated } from '$lib/polleg.svelte';
+	import { auth, isAuthenticated, type Answer, type Question } from '$lib/polleg.svelte';
 	import ReplyBox from '$lib/components/polleg/ReplyBox.svelte';
 	import { formatRelativeTime } from '$lib/date';
 	import { Markdown } from 'carta-md';
@@ -17,23 +17,23 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import ReportAnswer from '$lib/components/polleg/ReportAnswer.svelte';
 
 	type Props = {
-		answer: any;
+		answer: Answer;
 		index: number;
-		question: number;
-		data: any;
+		question: Question;
+		data: { answers: Answer[] };
 		reloadAnswers?: () => Promise<void>;
 		onAnswerUpdate?: () => Promise<void>;
 	};
 
 	let { answer, index, question, data, reloadAnswers, onAnswerUpdate }: Props = $props();
 
-	let showReplyBoxFor: any = $state(null);
+	let showReplyBoxFor = $state(null);
 	let isDeleting = $state(false);
 	let showReplies = $state(false);
 	let repliesContainer: HTMLElement | null = $state(null);
 
 	// Reactive variables for auth
-	let user = $state(isAuthenticated(auth) ? auth.current.user : null);
+	let user = $state(isAuthenticated(auth.current) ? auth.current.user : null);
 
 	// Sort replies by creation time (oldest first - chronological order)
 	let sortedReplies = $derived(() =>
@@ -74,7 +74,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						return item.id != id;
 					});
 					data.answers = newAns;
-					answer.content = newAns;
+					answer = newAns[0];
 				}
 			} else {
 				// Error - try to parse response for error details
@@ -96,7 +96,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		}
 	};
 	const vote = async (index: number, answerId: number, newVote: number) => {
-		if (data?.answers[index].i_voted == newVote) newVote = 0;
+		if (data?.answers[index].vote == newVote) newVote = 0;
 
 		let res = await (
 			await fetch(VOTE_URL(answerId), {
@@ -110,7 +110,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		).json();
 
 		if (res) {
-			let oldVote = data.answers[index].i_voted;
+			let oldVote = data.answers[index].vote;
 			if (oldVote == 1 && (newVote == 0 || newVote == -1)) {
 				data.answers[index].upvotes--;
 			}

@@ -17,7 +17,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let {
 		question = $bindable(),
 		onAnswerUpdate
-	}: { question: Question; onAnswerUpdate?: () => Promise<void> | undefined } = $props();
+	}: { question: Question; onAnswerUpdate?: () => Promise<void> } = $props();
 
 	let expanded = false;
 	let answerContainer: HTMLElement | undefined = $state();
@@ -31,6 +31,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			if (isDesktop && !expanded) {
 				expanded = true;
 				loading = true;
+			} else {
+				loading = false;
 			}
 		};
 
@@ -103,7 +105,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{:else}
 		<div
 			bind:this={answerContainer}
-			class="w-full flex flex-col gap-2 md:gap-4 md:px-4"
+			class="w-full h-full flex flex-col gap-2 md:gap-4 md:px-4"
 			data-answers
 		>
 			{#if question.answers.length === 0}
@@ -111,19 +113,22 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/if}
 
 			{#each question.answers as answer, index}
-				<AnswerComponent
-					{answer}
-					{index}
-					{question}
-					data={{ answers: question.answers }}
-					reloadAnswers={load}
-					{onAnswerUpdate}
-				/>
+				{#key answer.id}
+					<AnswerComponent
+						{answer}
+						{index}
+						{question}
+						data={{ answers: question.answers }}
+						reloadAnswers={load}
+						{onAnswerUpdate}
+					/>
+				{/key}
 			{/each}
 		</div>
 	{/if}
-
 	<div class="w-full py-2 md:p-4">
-		<ReplyBox submit={addAnswer} />
+		{#key question.id}
+			<ReplyBox submit={addAnswer} />
+		{/key}
 	</div>
 </div>
