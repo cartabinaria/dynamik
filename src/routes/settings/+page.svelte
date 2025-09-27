@@ -14,8 +14,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import Navbar from '$lib/components/Navbar.svelte';
 
 	let themes = derived(settings, ({ theme }) => allThemes.filter((t) => t != theme));
-
-	let cookieStatus = $state(localStorage.getItem('cookie-consent'));
 </script>
 
 <main class="max-w-5xl p-4 mx-auto">

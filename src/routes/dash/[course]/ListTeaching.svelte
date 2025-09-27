@@ -48,7 +48,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				title="Link alla community"
 				aria-label="Link alla community"
 			>
-				<span class="text-2xl icon-[akar-icons--people-group]"></span>
+				{#if teaching.chat.includes('t.me')}
+					<span class="icon-[ic--baseline-telegram] text-2xl"></span>
+				{:else if teaching.chat.includes('whatsapp')}
+					<span class="icon-[ph--whatsapp-logo-fill] text-2xl"></span>
+				{/if}
 			</a>
 		{/if}
 	</li>

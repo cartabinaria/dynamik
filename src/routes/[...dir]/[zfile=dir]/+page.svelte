@@ -143,7 +143,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				title="Clean all done files in this page"
 				aria-label="Clean all done files in this page"
 			>
-				<input type="checkbox" class="checkbox checkbox-sm" id="my-checkbox" bind:checked={$isDone}/>
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->

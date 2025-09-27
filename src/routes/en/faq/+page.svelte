@@ -14,9 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { PageProps } from './$types';
 	let { data }: PageProps = $props();
 
-	// Search state
 	let searchTerm = $state('');
-	let expandedIndex: string | null = $state(null);
 
 	// Cache normalized search term to avoid repeated toLowerCase() calls
 	let normalizedSearchTerm = $derived(searchTerm.toLowerCase());
@@ -42,11 +40,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let totalFilteredFaqs = $derived(
 		filteredCategories.reduce((total, category) => total + category.faqs.length, 0)
 	);
-
-	// Function to toggle accordion
-	const toggleAccordion = (id: string) => {
-		expandedIndex = expandedIndex === id ? null : id;
-	};
 </script>
 
 <svelte:head>

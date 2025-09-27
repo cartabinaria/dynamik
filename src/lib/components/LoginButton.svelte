@@ -115,8 +115,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="divider my-1"></div>
 							<li>
 								<a
-									href={resolve('/logout') +
-										`?redirect_uri=${encodeURIComponent(url.toString())}`}
+									href={resolve('/logout') + `?redirect_uri=${encodeURIComponent(url.toString())}`}
 									data-sveltekit-preload-data="off"
 									class="flex items-center gap-3 rounded-lg hover:bg-error hover:text-error-content transition-colors duration-150 text-error"
 								>

@@ -12,11 +12,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let { data }: PageProps = $props();
 
-	// State per la ricerca
 	let searchTerm = $state('');
-	let expandedIndex: string | null = $state(null);
 
-	// Cache del termine di ricerca normalizzato per evitare toLowerCase() ripetuti
 	let normalizedSearchTerm = $derived(searchTerm.toLowerCase());
 
 	// Filter categories and FAQs based on search
@@ -40,11 +37,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let totalFilteredFaqs = $derived(() =>
 		filteredCategories.reduce((total, category) => total + category.faqs.length, 0)
 	);
-
-	// Funzione per togglere l'accordion
-	const toggleAccordion = (id: string) => {
-		expandedIndex = expandedIndex === id ? null : id;
-	};
 </script>
 
 <svelte:head>
@@ -115,7 +107,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 					<!-- Category FAQs -->
 					{#each category.faqs as faq, faqIndex (faq.question + faqIndex)}
-						{@const accordionId = `${categoryIndex}-${faqIndex}`}
 						<div class="collapse collapse-arrow join-item border-base-300 border">
 							<input type="checkbox" />
 							<div class="collapse-title font-semibold text-base flex items-center gap-3">
