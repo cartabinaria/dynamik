@@ -46,7 +46,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="contents">
 		<span class="flex items-center flex-[1_0_auto] min-w-0 md:w-max">
 			{#if external}
-				<input type="checkbox" class="checkbox checkbox-sm mr-2" id="my-checkbox" disabled />
+				<input
+					type="checkbox"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
+					id="my-checkbox"
+					disabled
+				/>
 				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
 				<a
 					class="flex link link-hover text-primary sm:flex-wrap"
@@ -59,7 +64,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{:else if isFile}
 				<input
 					type="checkbox"
-					class="checkbox checkbox-sm mr-2"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
 					id="my-checkbox"
 					bind:checked={$isDone}
 				/>
@@ -105,7 +110,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/if}
 		</span>
 		<div class="flex flex-0"></div>
-		<span class="flex items-center justify-end whitespace-nowrap text-xs">
+		<span class="flex flex-col md:flex-row items-center justify-end whitespace-nowrap text-xs">
 			{#if isFile}
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}

@@ -132,7 +132,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<main class="max-w-6xl min-w-fit p-4 mx-auto">
+<main class="max-w-6xl min-w-fit p-1 md:p-4 mx-auto">
 	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
