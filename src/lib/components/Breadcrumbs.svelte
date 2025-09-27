@@ -73,7 +73,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="navbar flex bg-base-200 shadow-xs sm:px-5 {borderRadius}">
 	<!-- MOBILE -->
-	<div class="flex justify-start *:text-left w-full">
+	<div class="sm:hidden flex justify-start *:text-left w-full">
 		<div class="dropdown w-full">
 			<div class="flex justify-start items-center">
 				<button

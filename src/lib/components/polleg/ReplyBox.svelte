@@ -88,73 +88,79 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 </script>
 
-{#if isReply()}
-	<!-- timeline for replies -->
-	<div class="relative flex flex-col items-center">
-		<div class="w-0.5 h-4 bg-primary/30"></div>
-		<div
-			class="w-8 h-8 text-accent/50 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0 icon-[solar--add-circle-line-duotone]"
-		></div>
-	</div>
-{/if}
-
-<!-- box -->
-<div class="flex-1 bg-base-200/30 rounded-lg p-4 w-full">
-	{#if user()}
-		<!-- header -->
-		<div class="flex items-center justify-between mb-4 flex-wrap gap-1">
-			<div class="flex items-center gap-2 text-sm text-base-content/70">
-				<span
-					class={isReply()
-						? 'icon-[solar--chat-round-dots-bold] text-accent/70'
-						: 'icon-[solar--lightbulb-bold] text-primary/70'}
-				></span>
-				{isReply() ? 'Replying to this answer' : 'Share your answer'}
-			</div>
-			<label class="label cursor-pointer gap-2">
-				<input type="checkbox" bind:checked={isAnonymous} class="toggle toggle-sm toggle-primary" />
-				<div
-					class="text-sm hover:text-primary flex items-center gap-2 {isAnonymous
-						? 'text-primary'
-						: ''}"
-				>
-					<span class="icon-[solar--incognito-bold] opacity-70"></span>
-					Post anonymously
-				</div>
-			</label>
-		</div>
-
-		<!-- editor -->
-		<MarkdownEditor bind:value={body} mode="tabs" theme="github" {carta} />
-
-		<!-- buttons -->
-		<div class="flex justify-end gap-2">
-			{#if closeCallback}
-				<button
-					class="btn btn-ghost btn-sm"
-					onclick={(e) => {
-						e.preventDefault();
-						closeCallback();
-					}}
-				>
-					Cancel
-				</button>
-			{/if}
-
-			<button
-				class="btn btn-primary btn-sm"
-				{disabled}
-				onclick={(e) => {
-					e.preventDefault();
-					handleSubmit();
-				}}
-			>
-				{isReply() ? 'Post Reply' : 'Post Answer'}
-			</button>
-		</div>
-	{:else}
-		<div class="text-center text-base-content/60 py-4">
-			<p>Please log in to {isReply() ? 'write a reply' : 'write an answer'}</p>
+<div class="flex gap-2 md:gap-4 w-full mb-4">
+	{#if isReply()}
+		<!-- timeline for replies -->
+		<div class="relative flex flex-col items-center">
+			<div class="w-0.5 h-4 bg-primary/30"></div>
+			<div
+				class="w-8 h-8 text-accent/50 border-2 border-accent/30 rounded-full flex items-center justify-center flex-shrink-0 icon-[solar--add-circle-line-duotone]"
+			></div>
 		</div>
 	{/if}
+
+	<!-- box -->
+	<div class="flex-1 bg-base-200/30 rounded-lg p-4 w-full">
+		{#if user()}
+			<!-- header -->
+			<div class="flex items-center justify-between mb-4 flex-wrap gap-1">
+				<div class="flex items-center gap-2 text-sm text-base-content/70">
+					<span
+						class={isReply()
+							? 'icon-[solar--chat-round-dots-bold] text-accent/70'
+							: 'icon-[solar--lightbulb-bold] text-primary/70'}
+					></span>
+					{isReply() ? 'Replying to this answer' : 'Share your answer'}
+				</div>
+				<label class="label cursor-pointer gap-2">
+					<input
+						type="checkbox"
+						bind:checked={isAnonymous}
+						class="toggle toggle-sm toggle-primary"
+					/>
+					<div
+						class="text-sm hover:text-primary flex items-center gap-2 {isAnonymous
+							? 'text-primary'
+							: ''}"
+					>
+						<span class="icon-[solar--incognito-bold] opacity-70"></span>
+						Post anonymously
+					</div>
+				</label>
+			</div>
+
+			<!-- editor -->
+			<MarkdownEditor bind:value={body} mode="tabs" theme="github" {carta} />
+
+			<!-- buttons -->
+			<div class="flex justify-end gap-2">
+				{#if closeCallback}
+					<button
+						class="btn btn-ghost btn-sm"
+						onclick={(e) => {
+							e.preventDefault();
+							closeCallback();
+						}}
+					>
+						Cancel
+					</button>
+				{/if}
+
+				<button
+					class="btn btn-primary btn-sm"
+					{disabled}
+					onclick={(e) => {
+						e.preventDefault();
+						handleSubmit();
+					}}
+				>
+					{isReply() ? 'Post Reply' : 'Post Answer'}
+				</button>
+			</div>
+		{:else}
+			<div class="text-center text-base-content/60 py-4">
+				<p>Please log in to {isReply() ? 'write a reply' : 'write an answer'}</p>
+			</div>
+		{/if}
+	</div>
 </div>

@@ -27,7 +27,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let { answer, index, question, data, reloadAnswers, onAnswerUpdate }: Props = $props();
 
-	let showReplyBoxFor = $state(null);
+	let showReplyBoxFor = $state(0);
 	let isDeleting = $state(false);
 	let showReplies = $state(false);
 	let repliesContainer: HTMLElement | null = $state(null);
@@ -174,7 +174,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<!-- Upvote Button -->
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
-						(answer?.i_voted == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
+						(answer?.vote == 1 ? 'btn-success' : 'btn-ghost hover:btn-success')}
 					onclick={() => vote(index, answer.id, 1)}
 					title="Upvote this answer"
 					aria-label="Upvote this answer"
@@ -190,7 +190,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<!-- Downvote Button -->
 				<button
 					class={'btn btn-circle btn-sm transition-colors ' +
-						(answer?.i_voted == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
+						(answer?.vote == -1 ? 'btn-error' : 'btn-ghost hover:btn-error')}
 					onclick={() => vote(index, answer.id, -1)}
 					title="Downvote this answer"
 					aria-label="Downvote this answer"

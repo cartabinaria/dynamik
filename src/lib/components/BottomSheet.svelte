@@ -74,7 +74,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="flex justify-center py-2 cursor-grab active:cursor-grabbing">
 		<div class="w-12 h-1.5 bg-gray-400 rounded-full"></div>
 	</div>
-	<div class="p-4 h-[90%] overflow-auto *:brightness-80">
+	<div class="p-4 h-[90%] overflow-y-auto *:brightness-80">
 		{#key key}
 			{@render children()}
 		{/key}

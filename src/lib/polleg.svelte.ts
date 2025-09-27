@@ -25,12 +25,15 @@ export interface Answer {
 	updated_at: string;
 
 	user: string;
+	username?: string;
+	user_avatar_url?: string;
 	content: string;
 	upvotes: number;
 	downvotes: number;
 	count: number;
 	vote?: number;
 	replies: Answer[];
+	can_i_delete?: boolean;
 }
 
 export interface Question {
