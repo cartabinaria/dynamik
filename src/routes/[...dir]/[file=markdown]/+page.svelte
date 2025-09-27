@@ -16,8 +16,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 
-	import 'katex/dist/katex.css';
-
 	let { data }: { data: PageData } = $props();
 
 	let markdown: HTMLElement;
@@ -73,7 +71,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<p transition:fade>
 						<span>
 							Last edited on
-							<span>{formatDate($settings, info.time)}</span>
+							<span>{formatDate(info.time, $settings)}</span>
 							<span>
 								- View on
 								<a href={editUrls.github} target="_blank" rel="noopener noreferrer"> github.com </a>

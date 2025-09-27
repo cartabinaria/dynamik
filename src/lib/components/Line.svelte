@@ -1,7 +1,6 @@
 <!--
-SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
-SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
@@ -15,10 +14,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { File, Directory } from '$lib/api';
 	import { formatDate } from '$lib/date';
 	import { getDoneStatus } from '$lib/todo-file';
-	import { GH_PAGES_BASE_URL } from '$lib/const';
+	import { APPROVE_DOCUMENTS_URL, DOCUMENT_URL, GH_PAGES_BASE_URL } from '$lib/const';
+	import sha256 from 'sha256';
 
-	let { data }: { data: File | Directory } = $props();
-	// export let customUrl: string | undefined = undefined;
+	let { data, isPolleg }: { data: File | Directory; isPolleg?: boolean } = $props();
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
@@ -45,8 +44,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="contents">
 	<div class="contents">
-		<span class="flex items-center flex-[1_0_auto] w-max">
+		<span class="flex items-center flex-[1_0_auto] min-w-0 md:w-max">
 			{#if external}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
+					id="my-checkbox"
+					disabled
+				/>
 				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
 				<a
 					class="flex link link-hover text-primary sm:flex-wrap"
@@ -57,6 +62,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{data.name}
 				</a>
 			{:else if isFile}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 				<button
 					class="flex text-xl mr-2 align-center"
 					onclick={() => isDone.toggle()}
@@ -72,14 +83,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					></span>
 				</button>
 				<a
-					class="flex link link-hover sm:flex-wrap text-primary"
+					class="flex link link-hover break-anywhere text-primary min-w-0"
 					class:line-through={$isDone}
 					href="{base}/{data.name}?{$page.url.searchParams}"
-					target={$settings.newTab ? '_blank' : '_self'}
+					target={$settings.newTab ? '_blank' : null}
 				>
 					{data.name}
 				</a>
+				{#if isPolleg}
+					<span class="ml-2 icon-[solar--chat-round-dots-bold] text-primary text-lg"></span>
+				{/if}
 			{:else}
+				<input type="checkbox" class="checkbox checkbox-sm mr-2" id="my-checkbox" disabled />
 				<span class="flex icon-[solar--folder-bold] text-xl mr-2" style="color: #FDE74C"></span>
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
@@ -89,10 +104,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				>
 					{data.name}
 				</a>
+				{#if isPolleg}
+					<span class="ml-2 icon-[solar--chat-round-dots-bold] text-primary text-lg"></span>
+				{/if}
 			{/if}
 		</span>
 		<div class="flex flex-0"></div>
-		<span class="flex items-center justify-end whitespace-nowrap text-xs">
+		<span class="flex flex-col md:flex-row items-center justify-end whitespace-nowrap text-xs">
 			{#if isFile}
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}
@@ -114,14 +132,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</span>
 		<span class="hidden md:block">
 			{#if $settings.isoDates}
-				{data.time ? formatDate($settings, data.time) : '-'}
+				{data.time ? formatDate(data.time, $settings) : '-'}
 			{:else if data.time}
-				{@const dateParts = splitDate(formatDate($settings, data.time))}
+				{@const dateParts = splitDate(formatDate(data.time, $settings))}
 				<div class="ml-4 grid grid_date grid-flow-col">
 					<div class="justify-self-end mr-2">{dateParts.day}</div>
 					<div>{dateParts.month}</div>
 					<div>{dateParts.year}</div>
-					<div class="ml-1">{dateParts.time}</div>
+					<!-- <div class="ml-1">{dateParts.time}</div> -->
 				</div>
 			{/if}
 		</span>
@@ -130,6 +148,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <style>
 	.grid_date {
-		grid-template-columns: 5% 45% auto auto;
+		grid-template-columns: 5% 60% auto auto;
+	}
+
+	.break-anywhere {
+		word-break: break-word;
+		overflow-wrap: anywhere;
+		word-wrap: break-word;
+		min-width: 0;
 	}
 </style>

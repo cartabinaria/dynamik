@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
-SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
 SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
 
@@ -11,21 +11,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { derived } from 'svelte/store';
 	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
+	import Navbar from '$lib/components/Navbar.svelte';
 
 	let themes = derived(settings, ({ theme }) => allThemes.filter((t) => t != theme));
 </script>
 
-<main class="md:container md:m-auto p-4">
-	<nav class="navbar flex bg-base-200 text-neutral-content rounded-box shadow-xs px-5 mb-5">
-		<div class="navbar-start">
-			<h1 class="text-xl font-semibold text-base-content">Impostazioni</h1>
-		</div>
-		<div class="navbar-end flex items-center">
-			<a href="/" class="btn btn-square btn-ghost" title="Indietro" aria-label="Indietro">
-				<span class="text-primary icon-[akar-icons--arrow-back-thick-fill]"></span>
-			</a>
-		</div>
-	</nav>
+<main class="max-w-5xl p-4 mx-auto">
+	<Navbar title="Impostazioni"></Navbar>
 
 	<div class="max-w-xl mx-auto bg-base-100 rounded-xl shadow-md p-6">
 		<!-- Settings Grid -->
@@ -79,6 +71,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<option value={course.id}>{course.name}</option>
 				{/each}
 			</select>
+
+			<!-- Polleg Preference -->
+			<label for="polleg-toggle" class="label-text font-medium flex items-center gap-2">
+				Always show Q&A on exams
+			</label>
+			<input
+				id="polleg-toggle"
+				type="checkbox"
+				class="toggle toggle-primary"
+				bind:checked={$settings.pollegPreference}
+			/>
 		</div>
 	</div>
 </main>

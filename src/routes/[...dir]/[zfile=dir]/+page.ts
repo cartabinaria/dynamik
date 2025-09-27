@@ -5,8 +5,23 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { getFuzzy, getManifest } from '$lib/api';
+import { DOCUMENTS_URL } from '$lib/const';
 import { DEGREES, TEACHINGS } from '$lib/teachings';
 import type { PageLoad } from './$types';
+
+async function isPollegDocument(filePath: string) {
+	try {
+		const res = await fetch(`${DOCUMENTS_URL}?path=/${filePath}`, {
+			method: 'GET',
+			credentials: 'include'
+		});
+		let data = await res.json();
+		data = data.map((doc: string) => doc.slice(filePath.length + 2));
+		return data;
+	} catch (e) {
+		console.error(e);
+	}
+}
 
 export const load: PageLoad = async ({ fetch, params, url }) => {
 	// Get the relative path using params
@@ -20,12 +35,14 @@ export const load: PageLoad = async ({ fetch, params, url }) => {
 	const fuzzy = await getFuzzy(fetch, fuzzyPath);
 
 	const from = url.searchParams.get('from');
+	const isPolleg = await isPollegDocument(path);
 
 	return {
 		degrees: DEGREES,
 		manifest,
 		fuzzy,
 		from,
-		teachings: TEACHINGS
+		teachings: TEACHINGS,
+		isPolleg
 	};
 };

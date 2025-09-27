@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2024 Samuele Musiani <samu@teapot.ovh>
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
@@ -18,13 +18,19 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import Line from '$lib/components/Line.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import FuzzySearch from './FuzzySearch.svelte';
+	import FuzzySearch from '$lib/components/FuzzySearch.svelte';
 
 	import type { PageData } from './$types';
 	import type { StatikEntry } from '$lib/api';
+	import { refreshAuth } from '$lib/polleg.svelte';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 	let { manifest } = $derived(data);
+
+	onMount(async () => {
+		await refreshAuth(fetch);
+	});
 
 	function kebabToTitle(str: string) {
 		return str
@@ -63,16 +69,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	);
 
 	let title = $derived(genTitle(urlParts));
-
-	// --- Sorting ---
-	let reverseMode = $state(true); // partiamo in ordine A-Z
-
-	/**
-	 * Inverte l'ordine di visualizzazione delle risorse
-	 */
-	function toggleReverse() {
-		reverseMode = !reverseMode;
-	}
 
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
@@ -115,15 +111,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			});
 			return old;
 		});
+		return true;
 	}
 
+	// --- Sorting ---
+	let reverseMode = $state(false); // partiamo in ordine A-Z
+
 	const prepareForDisplay = (statikEntries: StatikEntry[]) => {
-		const sortedEntries = statikEntries.sort((a, b) => a.name.localeCompare(b.name));
-		if (reverseMode) {
-			return sortedEntries.reverse();
-		} else {
-			return sortedEntries;
-		}
+		if (!statikEntries) return [];
+		const sortedEntries = [...statikEntries].sort((a, b) => a.name.localeCompare(b.name));
+		return reverseMode ? sortedEntries.reverse() : sortedEntries;
 	};
 
 	let directories = $derived(prepareForDisplay(data.manifest.directories ?? []));
@@ -135,24 +132,36 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<main class="max-w-6xl min-w-fit p-4 mx-auto">
+<main class="max-w-6xl min-w-fit p-1 md:p-4 mx-auto">
 	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
-				class="lg:ml-2 p-1 flex mr-2 items-center"
+				class="lg:ml-2 p-1 flex ml-3 items-center"
 				onclick={cleanDone}
 				title="Clean all done files in this page"
 				aria-label="Clean all done files in this page"
 			>
-				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
-		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" onclick={toggleReverse}>
-			Nome
-			<span class="ms-2 text-xl icon-[solar--sort-vertical-bold-duotone]" class:flip={reverseMode}
+		<button
+			class="btn btn-ghost lg:ml-2 px-3 py-2 flex items-center gap-2 rounded-xl hover:bg-base-200 transition"
+			onclick={() => (reverseMode = !reverseMode)}
+			title={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
+			aria-label={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
+		>
+			{reverseMode ? 'Nome (Z → A)' : 'Nome (A → Z)'}
+			<span
+				class="text-xl icon-[solar--sort-vertical-bold-duotone] transition-transform duration-300"
+				class:rotate-180={reverseMode}
 			></span>
 		</button>
 	</div>
@@ -162,21 +171,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	>
 		{#if directories != null}
 			{#each directories as dir (dir.url)}
-				<Line data={dir} />
+				<Line data={dir} isPolleg={data.isPolleg.includes(dir.name)} />
 			{/each}
 		{/if}
 		{#if files != null}
 			{#each files as file (file.url)}
-				<Line data={file} />
+				<Line data={file} isPolleg={data.isPolleg.includes(file.name)} />
 			{/each}
 		{/if}
 	</div>
 </main>
 
 <FuzzySearch data={data.fuzzy} bind:this={fuzzy} />
-
-<style>
-	.flip {
-		transform: scaleX(-1) scaleY(-1);
-	}
-</style>

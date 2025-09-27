@@ -16,7 +16,6 @@ export const load = (async ({ fetch, params }) => {
 	if (degree == null) {
 		error(404, `Degree '${degreeParam}' not found`);
 	}
-
 	return {
 		degree,
 		teachings: TEACHINGS,

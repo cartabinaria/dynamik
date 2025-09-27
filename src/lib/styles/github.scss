@@ -1,0 +1,234 @@
+/*
+ * SPDX-FileCopyrightText: 2024 - 2025 Alice Benatti <alice17bee@gmail.com>
+ * SPDX-FileCopyrightText: 2024 Gianmaria Rovelli <rovelli.gianmaria@gmail.com>
+ * SPDX-FileCopyrightText: 2024 Luca Tagliavini <luca@teapot.ovh>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+:root {
+	--carta-background-light: var(--color-base-200);
+	--carta-background: var(--color-base-100);
+	--carta-border: var(--color-neutral);
+	--carta-accent: var(--color-accent);
+	--carta-text: var(--color-base-content);
+}
+
+.carta-theme,
+.carta-theme__github,
+.carta-theme__light {
+	&.carta-editor {
+		z-index: 1 !important;
+		position: unset !important;
+		background-color: var(--ata-background);
+		border: 1px solid var(--carta-border);
+		border-radius: 0.5rem;
+		flex: 1;
+
+		&:focus-within {
+			outline: 2px solid var(--carta-accent);
+		}
+
+		.carta-wrapper {
+			padding: 1rem;
+			flex-grow: 1;
+			overflow-y: auto;
+
+			.carta-container {
+				min-height: 120px;
+				max-height: 160px;
+			}
+		}
+
+		.carta-font-code {
+			font-family: 'Fira Code', monospace;
+			caret-color: var(--carta-text);
+			color: var(--carta-text);
+		}
+
+		.carta-toolbar {
+			height: 2.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			background-color: var(--carta-background-light);
+			border-bottom: 1px solid var(--carta-border);
+			padding-right: 12px;
+			border-top-left-radius: 0.5rem;
+			border-top-right-radius: 0.5rem;
+
+			.carta-toolbar-left,
+			.carta-toolbar-right {
+				display: flex;
+				align-items: center;
+				height: 100%;
+			}
+
+			.carta-toolbar-left {
+				& > *:first-child {
+					border-top-left-radius: 0.5rem;
+				}
+
+				& > * {
+					padding-left: 1rem;
+					padding-right: 1rem;
+					font-size: 0.95rem;
+					color: var(--carta-text);
+				}
+
+				.carta-active {
+					z-index: 0 !important;
+					height: 100%;
+					background-color: var(--carta-background);
+					transform: translateY(1px);
+					color: var(--carta-accent);
+
+					border-right: 1px solid var(--carta-border);
+					border-bottom: 1px solid var(--carta-background);
+
+					&:not(:first-child) {
+						border-left: 1px solid var(--carta-border);
+					}
+				}
+			}
+
+			.carta-toolbar-right {
+				& > * {
+					padding-left: 0.5rem;
+					padding-right: 0.5rem;
+				}
+			}
+
+			.carta-icon {
+				width: 2rem;
+				height: 2rem;
+				color: var(--carta-text);
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 0.25rem;
+
+				&:hover {
+					color: var(--carta-accent);
+					background-color: var(--carta-border);
+				}
+			}
+		}
+
+		.carta-icons-menu {
+			padding: 8px;
+			border: 1px solid var(--carta-border);
+			border-radius: 6px;
+			min-width: 180px;
+			background: var(--carta-background);
+			position: absolute;
+			top: 100%;
+			right: 0;
+			display: flex;
+			flex-direction: column;
+			margin-right: 0.5rem;
+			z-index: 1;
+		}
+
+		/* Syntax highlighting container fallback */
+		[class*='shj-lang-'] {
+			background: transparent;
+		}
+	}
+
+	/* -------------------------
+     Plugin: emoji
+     Se l'elemento ha anche .carta-emoji (es. <div class="carta-theme__github carta-emoji">)
+     ------------------------- */
+	&.carta-emoji {
+		width: 18rem;
+		max-height: 14rem;
+		overflow-y: auto;
+		border-radius: 4px;
+		font-family: inherit;
+		background-color: var(--carta-background);
+		padding: 6px;
+		scroll-padding: 6px;
+		gap: 6px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	&.carta-emoji button {
+		background: var(--carta-background-light);
+		aspect-ratio: 1;
+		border-radius: 4px;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		font-size: 1.2rem;
+		line-height: 100%;
+		color: var(--carta-text);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+	}
+
+	&.carta-emoji button:hover,
+	&.carta-emoji button.carta-active {
+		background: var(--carta-border);
+	}
+
+	/* -------------------------
+     Plugin: slash (command palette)
+     ------------------------- */
+	&.carta-slash {
+		width: 18rem;
+		max-height: 14rem;
+		overflow-y: auto;
+		border-radius: 4px;
+		font-family: inherit;
+		background-color: var(--carta-background);
+		padding: 6px;
+		scroll-padding: 6px;
+	}
+
+	&.carta-slash span {
+		width: fit-content;
+	}
+
+	&.carta-slash button {
+		background: none;
+		width: 100%;
+		padding: 10px;
+		border: 0;
+		border-radius: 4px;
+		color: var(--carta-text);
+		text-align: left;
+		display: block;
+	}
+
+	&.carta-slash .carta-slash-group {
+		padding: 0 4px;
+		margin-bottom: 4px;
+		font-size: 0.8rem;
+		color: var(--carta-accent);
+	}
+
+	&.carta-slash button.carta-active,
+	&.carta-slash button:hover {
+		background: var(--carta-background-light);
+		cursor: pointer;
+	}
+
+	&.carta-slash .carta-snippet-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--carta-text);
+	}
+
+	&.carta-slash .carta-snippet-description {
+		font-size: 0.8rem;
+		text-overflow: ellipsis;
+		/* fallback: usa color-mix dove supportato */
+		color: color-mix(in srgb, var(--carta-text) 70%, #000 30%);
+	}
+}

@@ -33,22 +33,27 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{@const disabled = !activeYears.includes(teaching)}
 	<li
 		class:disabled
-		class="flex flex-row xs:flex-1 justify-center border-base-content items-center content-center m-2 border-2 rounded-md join"
+		class="flex flex-row border-base-content items-center content-center m-2 border rounded-md join w-fit"
 	>
 		<a
 			href={disabled ? null : getUrl(teaching)}
-			class="flex flex-wrap max-w-xs text-center text-lg join-item h-full justify-center content-center"
+			class="text-center text-lg text-balance p-2 flex join-item"
 		>
 			{teaching.name ? teaching.name : teaching.url}
 		</a>
+
 		{#if teaching.chat != null && teaching.chat !== ''}
 			<a
 				href={disabled ? null : 'https://' + teaching.chat}
-				class="flex text-center join-item border-l-2 border-base-content h-full justify-center"
+				class="join-item border-l border-base-content"
 				title="Link alla community"
 				aria-label="Link alla community"
 			>
-				<span class="text-2xl icon-[akar-icons--people-group]"></span>
+				{#if teaching.chat.includes('t.me')}
+					<span class="icon-[ic--baseline-telegram] text-2xl"></span>
+				{:else if teaching.chat.includes('whatsapp')}
+					<span class="icon-[ph--whatsapp-logo-fill] text-2xl"></span>
+				{/if}
 			</a>
 		{/if}
 	</li>

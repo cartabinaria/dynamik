@@ -1,11 +1,13 @@
-<!--
+<!-- 
+SPDX-FileCopyrightText: 2025 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2024 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
--->
+ -->
 
 <script lang="ts">
 	import { EDIT_URLS } from '$lib/const';
+	import LoginButton from '$lib/components/LoginButton.svelte';
 
 	type Props = {
 		url: URL;
@@ -69,25 +71,60 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 </script>
 
-<div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
-	<div class="sm:hidden flex justify-start items-center">
-		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
-			<span
-				class="sm:hidden flex text-2xl items-center text-accent icon-[solar--folder-path-connect-bold-duotone]"
-			>
-			</span>
-			<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
-		</button>
+<div class="navbar flex bg-base-200 shadow-xs sm:px-5 {borderRadius}">
+	<!-- MOBILE -->
+	<div class="sm:hidden flex justify-start *:text-left w-full">
+		<div class="dropdown w-full">
+			<div class="flex justify-start items-center">
+				<button
+					type="button"
+					class="btn btn-ghost flex gap-2 w-max px-1"
+					onclick={mobileBreadcrumb}
+					aria-label="Open breadcrumb menu"
+				>
+					<span class="icon-[solar--hamburger-menu-linear] text-2xl"></span>
+				</button>
+				<button
+					class="btn btn-ghost btn-sm"
+					title="Indietro"
+					aria-label="Indietro"
+					onclick={() => history.back()}
+				>
+					<p class="text-sm wrap-anywhere">{title}</p>
+				</button>
+			</div>
+
+			{#if !breadcrumbMobile}
+				<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-56 z-50">
+					<li>
+						<a href="/" class="flex items-center"
+							><span class="icon-[ic--round-home]"></span>
+							Home
+						</a>
+					</li>
+					{#if degree != null}
+						<li>
+							<a href={'/dash/' + degree} class="flex items-center">
+								<span class="text-xl icon-[ic--round-school]"></span>
+								{degree}
+							</a>
+						</li>
+					{/if}
+					{#each urlParts as part, i (i)}
+						{@const href = getPartHref(path, part) + '?' + searchParams}
+						<li><a {href}>{part}</a></li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
 	</div>
-	<div class="navbar min-h-0 p-0 justify-start items-center">
-		<div
-			class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
-			class:hidden={breadcrumbMobile}
-		>
-			<ul>
+	<!-- DESKTOP  -->
+	<div class="navbar min-h-0 p-0 justify-start items-center gap-2">
+		<div class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm font-semibold">
+			<ul class="flex flex-wrap">
 				<li>
 					<a class="ml-1 flex items-center" href="/" aria-label="Home">
-						<span class="text-xl icon-[akar-icons--home-alt1]"></span>
+						<span class="icon-[ic--round-home] text-lg"></span>
 					</a>
 				</li>
 				{#if degree != null}
@@ -103,34 +140,35 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{/each}
 			</ul>
 		</div>
+		<a
+			class="hidden sm:inline flex items-center rounded-lg btn-ghost shrink-0 w-8"
+			href={editUrls.github_repo}
+			title="Open GitHub Repository {urlParts[0]}"
+			aria-label="Open GitHub Repository {urlParts[0]}"
+		>
+			<span class="text-2xl icon-[akar-icons--github-fill] hover:text-primary"></span>
+		</a>
 	</div>
-	<div class="navbar-end">
+	<div class="navbar-end gap-1 sm:gap-2">
 		<div class="flex flex-1 justify-end">
-			<a
-				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
-				aria-label="GitHub Repository"
-				href={editUrls.github_repo}
-			>
-				<span class="text-2xl icon-[akar-icons--github-fill]"></span>
-			</a>
+			{#if onfuzzy != null}
+				<button
+					title="Search"
+					class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost cursor-pointer"
+					onclick={(e) => {
+						e.preventDefault();
+						onfuzzy(e);
+					}}
+				>
+					<span class="text-primary icon-[akar-icons--search] align-middle"></span>
+					<span class="hidden md:inline">
+						<kbd class="kbd kbd-sm">Ctrl</kbd>
+						+
+						<kbd class="kbd kbd-sm">K</kbd>
+					</span>
+				</button>
+			{/if}
 		</div>
-	</div>
-	<div class="flex flex-1 justify-end mr-2">
-		{#if onfuzzy != null}
-			<button
-				title="Search"
-				class="lg:ml-2 md:min-w-max p-2 bg-base-300 rounded-xl btn-ghost"
-				onclick={(e) => {
-					e.preventDefault();
-					onfuzzy(e);
-				}}
-			>
-				<span class="text-primary icon-[akar-icons--search] align-middle"></span>
-				<span class="hidden md:inline">
-					<kbd class="kbd-sm">Ctrl</kbd>+
-					<kbd class="kbd-sm">K</kbd>
-				</span>
-			</button>
-		{/if}
+		<LoginButton {url} />
 	</div>
 </div>
