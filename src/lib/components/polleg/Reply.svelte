@@ -54,7 +54,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let isInitialized = false;
 
 	// Reactive variables for auth
-	let user = $derived(isAuthenticated(auth) ? auth.current.user : null);
+	let user = $derived(isAuthenticated(auth.current) ? auth.current.user : null);
 
 	// Initialize state from props - simplified
 	$effect.pre(() => {

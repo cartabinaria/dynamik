@@ -15,7 +15,7 @@ export interface Box {
 	y: number;
 	height: number;
 	width: number;
-	question?: Question;
+	question: Question;
 }
 
 export interface Page extends Box {
@@ -37,7 +37,8 @@ export const getPages = async (pdf: PDFDocumentProxy): Promise<Page[]> => {
 			x: viewport.offsetX,
 			y: y,
 			height: viewport.height,
-			width: viewport.width
+			width: viewport.width,
+			question: undefined as unknown as Question
 		});
 		y += viewport.height;
 	}

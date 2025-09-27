@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts" generics="K extends { id: number }">
 	import { APPROVE_DOCUMENTS_URL, PROPOSALS_URL } from '$lib/const';
 	import { toast } from '$lib/toast';
-	import type { Proposal } from '$lib/polleg.svelte';
+	import type { Proposal, Question } from '$lib/polleg.svelte';
 	import { SvelteMap } from 'svelte/reactivity';
 
 	let loadingMap = $state(new Map<number, boolean>());
 
 	type Props = {
-		p: Proposal;
+		p: Proposal | Question;
 		document?: boolean;
 		onupdate: ({ id, action }: { id: number; action: 'approve' | 'reject' }) => void;
 	};

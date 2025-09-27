@@ -93,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<!-- FAQ Count -->
 	{#if searchTerm}
 		<div class="mb-4 text-sm text-base-content/60">
-			{totalFilteredFaqs} result{totalFilteredFaqs() !== 1 ? 's' : ''} found
+			{totalFilteredFaqs} result{totalFilteredFaqs !== 1 ? 's' : ''} found
 		</div>
 	{/if}
 

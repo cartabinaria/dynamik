@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		updateProposals
 	}: {
 		proposal?: boolean;
-		data: D;
+		data?: D;
 		url?: U;
 		questions: Question[];
 		updateProposals?: (id: number) => Promise<void>;
@@ -265,7 +265,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			import.meta.url
 		).toString();
 
-		const loadingPdf = getDocument(url || data.url);
+		const loadingPdf = getDocument(url || data?.url);
 		loadingPdf.onProgress = (params: OnProgressParameters) => {
 			loaded = params.loaded / params.total;
 		};
@@ -313,7 +313,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								p={box.question}
 								onupdate={({ id }) => {
 									questions = questions.filter((q) => q.id !== id);
-									boxes = boxes.filter((b) => b.question.id !== id);
+									boxes = boxes.filter((b) => b.question?.id !== id);
 									updateProposals?.(id);
 								}}
 							></ProposalApprove>

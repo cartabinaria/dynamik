@@ -273,8 +273,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							class="btn btn-ghost btn-sm"
 							onclick={(e) => {
 								e.preventDefault();
-								if (showReplyBoxFor != null) {
-									showReplyBoxFor = null;
+								if (showReplyBoxFor != 0) {
+									showReplyBoxFor = 0;
 								} else {
 									showReplyBoxFor = index;
 									// Scroll to bottom where ReplyBox will appear
@@ -324,11 +324,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="reply-box-container mt-4 w-full">
 						<ReplyBox
 							closeCallback={() => {
-								showReplyBoxFor = null;
+								showReplyBoxFor = 0;
 							}}
 							questionId={question}
 							sendAnswerCallback={async () => {
-								showReplyBoxFor = null;
+								showReplyBoxFor = 0;
 								// Call external callback to update parent component
 								if (onAnswerUpdate) {
 									await onAnswerUpdate();
