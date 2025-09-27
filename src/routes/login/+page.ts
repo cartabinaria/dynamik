@@ -37,7 +37,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   // Otherwise, redirect to the login page
   const redirectUrl = new URL(url);
   if (return_to) {
-    redirectUrl.searchParams.set('return_to', return_to);
+    redirectUrl.searchParams.set('redirect_uri', return_to);
   }
 
   throw redirect(302, LOGIN_URL(encodeURIComponent(redirectUrl.toString())));

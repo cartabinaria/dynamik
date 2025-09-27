@@ -115,7 +115,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="divider my-1"></div>
 							<li>
 								<a
-									href={encodeURI(LOGOUT_URL(url))}
+									href={resolve('/logout') +
+										`?redirect_uri=${encodeURIComponent(url.toString())}`}
+									data-sveltekit-preload-data="off"
 									class="flex items-center gap-3 rounded-lg hover:bg-error hover:text-error-content transition-colors duration-150 text-error"
 								>
 									<span class="icon-[ic--round-logout] text-lg"></span>
@@ -131,6 +133,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<a
 			class="btn btn-outline btn-primary hover:bg-primary rounded-lg hover:text-primary-content transition-all duration-200 hover:shadow-md"
 			href={resolve('/login') + `?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`}
+			data-sveltekit-preload-data="off"
 			title="Login with GitHub"
 		>
 			<!-- Show full text on desktop, only icon on mobile -->
