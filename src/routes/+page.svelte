@@ -123,7 +123,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="divider"></div>
 
 			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
-				{@render line('FAQ', `${base}/faq`, '❓', true)}
 				{@render line('Impostazioni', `${base}/settings`, '🔧', true)}
 				{@render line('Stato', `${base}/build`, '📊', true)}
 			</div>
