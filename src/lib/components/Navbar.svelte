@@ -6,7 +6,12 @@
 
 <nav class="navbar flex bg-base-200 rounded-box shadow-xs px-5 mb-5">
 	<div class="navbar-start flex items-center">
-		<a href="{resolve('/')}" class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md" title="Home" aria-label="Home">
+		<a
+			href={resolve('/')}
+			class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
+			title="Home"
+			aria-label="Home"
+		>
 			<span class="icon-[ic--round-home] text-lg"></span>
 			<p class="hidden md:block">Home</p>
 		</a>
