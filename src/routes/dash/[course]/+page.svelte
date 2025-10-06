@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
-	import { getWhoAmI } from '$lib/upld';
+	// import { getWhoAmI } from '$lib/upld';
 	import ListTeaching from './ListTeaching.svelte';
 	import type { TeachingsBatch } from './types';
 	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
@@ -23,12 +23,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let activeYears: string[] = $state([]);
 
-	type LoginState = { username: string; name: string; avatarUrl: string } | { error: string };
-	let loginState: Promise<LoginState> | undefined = $state(undefined);
+	//! commented out because not used yet by upld
+	// type LoginState = { username: string; name: string; avatarUrl: string } | { error: string };
+	// let loginState: Promise<LoginState> | undefined = $state(undefined);
 
 	onMount(async () => {
 		activeYears = (await data.streaming?.activeTeachings) ?? [];
-		loginState = getWhoAmI(fetch);
+		// loginState = getWhoAmI(fetch);
 	});
 
 	function namesToTeachings(names: string[]): Teaching[] {

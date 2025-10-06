@@ -67,13 +67,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// --- Sorting ---
 	let reverseMode = $state(false); // starting from Z-A
 
-	/**
-	 * Inverte l'ordine di visualizzazione delle risorse
-	 */
-	function toggleReverse() {
-		reverseMode = !reverseMode;
-	}
-
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
 		if (degree.teachings != null) return false;

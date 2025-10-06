@@ -107,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		<ul class="menu p-2 text-lg w-full mt-2">
 			<div class="grid gap-6 sm:grid-cols-2">
-				{#each Object.keys(degreeAggregates) as category}
+				{#each Object.keys(degreeAggregates) as category (category)}
 					{#if checkDegreeCategory(data, category).length > 0}
 						<div class="p-4 hover:shadow-lg transition bg-base-300 rounded-2xl">
 							<!-- Corsi della categoria -->
