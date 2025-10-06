@@ -107,9 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 	</div>
 	<div class="navbar min-h-0 p-0 justify-start items-center">
-		<div
-			class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm font-semibold"
-		>
+		<div class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm font-semibold">
 			<ul class="flex flex-wrap">
 				<li>
 					<a class="ml-1 flex items-center" href="/" aria-label="Home">
