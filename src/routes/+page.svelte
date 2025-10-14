@@ -43,7 +43,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </svelte:head>
 
 {#if $shouldShowBanner && browser}
-	<div class="bg-info bg-opacity-50 text-content p-4">
+	<div class="flex justify-center">
 		<!-- FEATURE BANNER -->
 		<div class="fixed z-1 bg-info bg-opacity-30 text-content p-4 rounded-xl m-4">
 			<div class="flex items-center justify-between">
@@ -51,13 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<p class="font-semibold">
 					<i><b>🔥Nuova feature: ToDo List🔥</b></i>
 					All'interno di tutte le pagine con file cliccando sopra l'icona
-					<span class="inline-flex items-baseline icon-[solar--file-bold-duotone]"></span>
-					potrai segnarlo e salvarlo come "fatto"
-					<span
-						class="inline-flex items-baseline text-success icon-[solar--file-check-bold-duotone]"
-					></span>, cancella i tuoi "ToDo" nella pagina corrente con
-					<span class="inline-flex items-baseline text-warning icon-[solar--broom-bold-duotone]"
-					></span>
+					potrai segnarlo e salvarlo come "fatto"!
 				</p>
 				<button
 					class="btn btn-ghost btn-circle btn-error focus:outline-hidden"
@@ -76,7 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<li class="flex-auto">
 		<a
 			class="flex justify-center items-center p-4 rounded-lg hover:shadow-lg hover:bg-accent/80 transition w-full
-         transition-all duration-300 ease-in-out {tools ? 'bg-base-300' : 'border'}"
+         transition-all duration-300 ease-in-out {tools ? 'bg-base-200' : 'border'}"
 			{href}
 		>
 			<span class="text-3xl mb-2">{icon}</span>
@@ -109,7 +103,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="grid gap-6 sm:grid-cols-2">
 				{#each Object.keys(degreeAggregates) as category (category)}
 					{#if checkDegreeCategory(data, category).length > 0}
-						<div class="p-4 hover:shadow-lg transition bg-base-300 rounded-2xl">
+						<div class="p-4 hover:shadow-lg transition bg-base-200 rounded-2xl">
 							<!-- Corsi della categoria -->
 							<div class="grid gap-2">
 								{#each checkDegreeCategory(data, category) as degree (degree.id)}
