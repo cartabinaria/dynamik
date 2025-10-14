@@ -50,8 +50,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<div><!-- justifier --></div>
 				<p class="font-semibold">
 					<i><b>🔥Nuova feature: ToDo List🔥</b></i>
-					All'interno di tutte le pagine con file cliccando sopra l'icona
-					potrai segnarlo e salvarlo come "fatto"!
+					All'interno di tutte le pagine con file cliccando sopra l'icona potrai segnarlo e salvarlo
+					come "fatto"!
 				</p>
 				<button
 					class="btn btn-ghost btn-circle btn-error focus:outline-hidden"
