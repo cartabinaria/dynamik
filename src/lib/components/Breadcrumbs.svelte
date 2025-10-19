@@ -71,23 +71,47 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
-		<button class="sm:hidden flex btn btn-ghost btn-sm" onclick={() => mobileBreadcrumb()}>
-			<span
-				class="sm:hidden flex text-2xl items-center text-accent icon-[solar--folder-path-connect-bold-duotone]"
+		<div class="dropdown w-max">
+			<button
+				type="button"
+				class="btn btn-ghost flex gap-2 w-max"
+				onclick={mobileBreadcrumb}
+				aria-label="Open breadcrumb menu"
 			>
-			</span>
-			<p class="text-accent" class:hidden={!breadcrumbMobile}>{title}</p>
-		</button>
+				<span class="text-lg text-accent icon-[solar--folder-path-connect-bold-duotone]"></span>
+				<p class="text-accent text-xs wrap-anywhere">{title}</p>
+			</button>
+
+			{#if !breadcrumbMobile}
+				<ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-56 z-50">
+					<li>
+						<a href="/" class="flex items-center"
+							><span class="icon-[ic--round-home]"></span>
+							Home
+						</a>
+					</li>
+					{#if degree != null}
+						<li>
+							<a href={'/dash/' + degree} class="flex items-center">
+								<span class="text-xl icon-[ic--round-school]"></span>
+								{degree}
+							</a>
+						</li>
+					{/if}
+					{#each urlParts as part, i (i)}
+						{@const href = getPartHref(path, part) + '?' + searchParams}
+						<li><a {href}>{part}</a></li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
 	</div>
 	<div class="navbar min-h-0 p-0 justify-start items-center">
-		<div
-			class="breadcrumbs sm:flex lg:text-lg sm:items-start text-sm sm:flex-wrap font-semibold"
-			class:hidden={breadcrumbMobile}
-		>
-			<ul>
+		<div class="breadcrumbs hidden sm:flex lg:text-lg sm:items-center text-sm font-semibold">
+			<ul class="flex flex-wrap">
 				<li>
 					<a class="ml-1 flex items-center" href="/" aria-label="Home">
-						<span class="text-xl icon-[akar-icons--home-alt1]"></span>
+						<span class="icon-[ic--round-home] text-lg"></span>
 					</a>
 				</li>
 				{#if degree != null}

@@ -65,14 +65,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let title = $derived(genTitle(urlParts));
 
 	// --- Sorting ---
-	let reverseMode = $state(true); // partiamo in ordine A-Z
-
-	/**
-	 * Inverte l'ordine di visualizzazione delle risorse
-	 */
-	function toggleReverse() {
-		reverseMode = !reverseMode;
-	}
+	let reverseMode = $state(false); // starting from Z-A
 
 	// Checks if a teaching is part of a certain degree
 	function isInDegree(teachingName: string, degree: Degree, elective: boolean): boolean {
@@ -115,15 +108,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			});
 			return old;
 		});
+		return true;
 	}
 
 	const prepareForDisplay = (statikEntries: StatikEntry[]) => {
-		const sortedEntries = statikEntries.sort((a, b) => a.name.localeCompare(b.name));
-		if (reverseMode) {
-			return sortedEntries.reverse();
-		} else {
-			return sortedEntries;
-		}
+		if (!statikEntries) return [];
+		const sortedEntries = [...statikEntries].sort((a, b) => a.name.localeCompare(b.name));
+		return reverseMode ? sortedEntries.reverse() : sortedEntries;
 	};
 
 	let directories = $derived(prepareForDisplay(data.manifest.directories ?? []));
@@ -135,24 +126,36 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<main class="max-w-6xl min-w-fit p-4 mx-auto">
+<main class="max-w-6xl min-w-fit p-1 md:p-4 mx-auto">
 	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
 		{#if $isDone}
 			<button
-				class="lg:ml-2 p-1 flex mr-2 items-center"
+				class="lg:ml-2 p-1 flex ml-3 items-center"
 				onclick={cleanDone}
 				title="Clean all done files in this page"
 				aria-label="Clean all done files in this page"
 			>
-				<span class="text-warning text-xl icon-[solar--broom-bold-duotone]"></span>
+				<input
+					type="checkbox"
+					class="checkbox checkbox-sm"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 			</button>
 		{/if}
 		<!-- Reverse Mode -->
-		<button class="lg:ml-2 p-1 flex items-center rounded-xl text-primary" onclick={toggleReverse}>
-			Nome
-			<span class="ms-2 text-xl icon-[solar--sort-vertical-bold-duotone]" class:flip={reverseMode}
+		<button
+			class="btn btn-ghost lg:ml-2 px-3 py-2 flex items-center gap-2 rounded-xl hover:bg-base-200 transition"
+			onclick={() => (reverseMode = !reverseMode)}
+			title={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
+			aria-label={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
+		>
+			{reverseMode ? 'Nome (Z → A)' : 'Nome (A → Z)'}
+			<span
+				class="text-xl icon-[solar--sort-vertical-bold-duotone] transition-transform duration-300"
+				class:rotate-180={reverseMode}
 			></span>
 		</button>
 	</div>
@@ -174,9 +177,3 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </main>
 
 <FuzzySearch data={data.fuzzy} bind:this={fuzzy} />
-
-<style>
-	.flip {
-		transform: scaleX(-1) scaleY(-1);
-	}
-</style>

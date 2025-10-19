@@ -1,9 +1,7 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
-SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
-SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
+SPDX-FileCopyrightText: 2023 Erik Koci <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
@@ -18,7 +16,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
 	let { data }: { data: File | Directory } = $props();
-	// export let customUrl: string | undefined = undefined;
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
@@ -47,6 +44,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<div class="contents">
 		<span class="flex items-center flex-[1_0_auto] w-max">
 			{#if external}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
+					id="my-checkbox"
+					disabled
+				/>
 				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
 				<a
 					class="flex link link-hover text-primary sm:flex-wrap"
@@ -57,6 +60,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{data.name}
 				</a>
 			{:else if isFile}
+				<input
+					type="checkbox"
+					class="checkbox checkbox-xs md:checkbox-sm mr-2"
+					id="my-checkbox"
+					bind:checked={$isDone}
+				/>
 				<button
 					class="flex text-xl mr-2 align-center"
 					onclick={() => isDone.toggle()}
@@ -80,6 +89,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{data.name}
 				</a>
 			{:else}
+				<input type="checkbox" class="checkbox checkbox-sm mr-2" id="my-checkbox" disabled />
 				<span class="flex icon-[solar--folder-bold] text-xl mr-2" style="color: #FDE74C"></span>
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
@@ -92,7 +102,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/if}
 		</span>
 		<div class="flex flex-0"></div>
-		<span class="flex items-center justify-end whitespace-nowrap text-xs">
+		<span class="flex flex-col md:flex-row items-center justify-end whitespace-nowrap text-xs">
 			{#if isFile}
 				{isFile && data.size != '0 B' ? data.size : '-'}
 				{#if data.size != '0 B'}
@@ -121,7 +131,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="justify-self-end mr-2">{dateParts.day}</div>
 					<div>{dateParts.month}</div>
 					<div>{dateParts.year}</div>
-					<div class="ml-1">{dateParts.time}</div>
+					<!-- <div class="ml-1">{dateParts.time}</div> -->
 				</div>
 			{/if}
 		</span>
@@ -130,6 +140,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <style>
 	.grid_date {
-		grid-template-columns: 5% 45% auto auto;
+		grid-template-columns: 5% 60% auto auto;
 	}
 </style>
