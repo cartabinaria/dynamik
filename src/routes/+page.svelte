@@ -70,7 +70,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<li class="flex-auto">
 		<a
 			class="flex justify-center items-center p-4 rounded-lg hover:shadow-lg hover:bg-accent/80 transition w-full
-         transition-all duration-300 ease-in-out {tools ? 'bg-base-200' : 'border'}"
+         transition-all duration-300 ease-in-out {tools ? 'bg-base-200' : ''}"
 			{href}
 		>
 			<span class="text-3xl mb-2">{icon}</span>
