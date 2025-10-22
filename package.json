@@ -29,7 +29,7 @@
 		"@iconify-json/solar": "^1.2.4",
 		"@iconify/tailwind4": "^1.0.6",
 		"@iconify/utils": "^3.0.2",
-		"@sveltejs/adapter-auto": "^6.1.1",
+		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/adapter-node": "^5.4.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/adapter-vercel": "^5.10.3",
