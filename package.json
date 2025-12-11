@@ -68,5 +68,9 @@
 		"workbox-build": "^7.3.0"
 	},
 	"packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@iconify-json/lucide": "^1.2.80",
+		"@iconify-json/streamline-ultimate": "^1.2.2"
+	}
 }

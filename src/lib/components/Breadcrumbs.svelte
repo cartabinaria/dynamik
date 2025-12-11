@@ -129,7 +129,92 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 	</div>
 	<div class="navbar-end">
-		<div class="flex flex-1 justify-end">
+		<div class="flex flex-1 gap-1 justify-end max-w-min">
+			<button
+				type="button"
+				class="btn w-max sm:btn-sm md:btn-md btn-primary border-none rounded-xl bg-linear-to-r from-primary to-accent hover:brightness-105 transition-all duration-200 ease-out gap-2 hover:scale-105"
+				aria-label="Apri suggerimenti per contribuire"
+				onclick={() => (document.getElementById('my_modal_2') as HTMLDialogElement)?.showModal()}
+			>
+				<span class="text-2xl icon-[lucide--file-heart]"></span>
+				<span class="font-semibold tracking-wide">Dona i tuoi appunti</span>
+			</button>
+			<dialog id="my_modal_2" class="modal">
+				<div
+					class="modal-box rounded-2xl bg-base-200/90 backdrop-blur max-w-2xl border border-base-300"
+				>
+					<div class="flex items-center gap-3">
+						<span class="text-4xl text-primary icon-[lucide--file-heart]"></span>
+						<div>
+							<h3 class="text-xl font-bold">Dona i tuoi appunti</h3>
+							<p class="mt-1 text-sm opacity-80">
+								Caricare i tuoi file è più semplice di quanto pensi!
+							</p>
+						</div>
+					</div>
+					<div class="steps steps-vertical mt-2 *:text-start">
+						<div class="step step-primary">
+							<div
+								class="flex flex-col pt-10 md:pt-0 md:flex-row gap-2 items-start md:items-center h-full"
+							>
+								<a
+									href={editUrls.github_repo}
+									class="btn rounded-xl btn-sm btn-primary gap-2 w-full md:w-max"
+								>
+									<span class="text-2xl icon-[akar-icons--github-fill]"></span>
+									<span>Vai alla Repo</span>
+								</a>
+								<p>
+									Fai una <b>fork</b> del repository dell’insegnamento a cui vuoi contribuire.
+								</p>
+							</div>
+						</div>
+						<div class="step step-primary">
+							<p>
+								Aggiungi i tuoi appunti/modifiche nella cartella corretta seguendo la struttura già
+								esistente e <b>committa</b> le tue modifiche.
+							</p>
+						</div>
+						<div class="step step-primary">
+							<p>
+								Fai una <b>pull request</b> verso il repository principale e aspetta che venga approvata
+								dai nostri moderatori.
+							</p>
+						</div>
+						<div class="flex flex-col pt-10 md:pt-0 md:flex-row gap-2 items-start md:items-center">
+							<a
+								href="https://cartabinaria.students.cs.unibo.it/wiki/raccolte-di-risorse/contribuire-a-un-insegnamento/"
+								class="btn rounded-xl btn-sm btn-secondary gap-2 w-full md:w-max"
+							>
+								<span class="text-2xl icon-[material-symbols--menu-book]"></span>
+								<span>Vai alla Wiki</span>
+							</a>
+							<p>Hai bisogno di più informazioni? Leggi la wiki, in cui passo passo ti guidiamo.</p>
+						</div>
+						<div class="flex flex-col pt-10 md:pt-0 md:flex-row gap-2 items-start md:items-center">
+							<a
+								href="https://t.me/cartabinaria"
+								class="btn rounded-xl btn-sm btn-accent gap-2 w-full md:w-max"
+							>
+								<span class="text-2xl icon-[ph--telegram-logo-fill]"></span>
+								<span>Scrivici</span>
+							</a>
+							<p>
+								Dubbi o domande? Entra nel nostro canale Telegram, c'è sempre qualcuno pronto ad
+								aiutarti.
+							</p>
+						</div>
+					</div>
+					<div class="mt-4 alert border-info bg-info/20">
+						<span class="icon-[ph--lightbulb-filament-bold] text-lg"></span>
+						<span>Contribuire è gratuito e aiuta tutta la community. Grazie!</span>
+					</div>
+				</div>
+				<form method="dialog" class="modal-backdrop">
+					<button aria-label="Chiudi">Chiudi</button>
+				</form>
+			</dialog>
+
 			<a
 				class="sm:ml-2 p-1 flex items-center rounded-lg btn-ghost shrink-0 w-8"
 				aria-label="GitHub Repository"
