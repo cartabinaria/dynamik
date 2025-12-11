@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@iconify-json/lucide':
+        specifier: ^1.2.80
+        version: 1.2.80
+      '@iconify-json/streamline-ultimate':
+        specifier: ^1.2.2
+        version: 1.2.2
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -1060,6 +1067,9 @@ packages:
   '@iconify-json/ic@1.2.4':
     resolution: {integrity: sha512-pzPMmrZrBQuwT7nmtrYdkttun8KalRGgZPIL1Ny9KpF2zjRGIUPN+npTfuD3lrgO/OnSwAoJWuekQwBpt/Cqrw==}
 
+  '@iconify-json/lucide@1.2.80':
+    resolution: {integrity: sha512-DwAHO+xJEJpOV5y2Q0DIoR3Au9UPk+J6an6KRO281QAxsz/+YpeySGSyZzUEK9tMrSAohkQamqlHx6lPDB8BEg==}
+
   '@iconify-json/material-symbols@1.2.46':
     resolution: {integrity: sha512-cNWdSAa5Z3f0TlqdCt28rmeYWGKwe68J1ORdyHyqC4D6H7CWiVKBJXV3TDTocOQVDO372bz+cmsFeo4+pbRy+A==}
 
@@ -1068,6 +1078,9 @@ packages:
 
   '@iconify-json/solar@1.2.5':
     resolution: {integrity: sha512-WMAiNwchU8zhfrySww6KQBRIBbsQ6SvgIu2yA+CHGyMima/0KQwT5MXogrZPJGoQF+1Ye3Qj6K+1CiyNn3YkoA==}
+
+  '@iconify-json/streamline-ultimate@1.2.2':
+    resolution: {integrity: sha512-0Vz9UHgMrmRUYt3JFqm0E6PDdroItVqK4fKf3T72jVwS2MAmc8dcqvCy+f0hzOVzJfo3G34ejFA9Y8l/K44hTQ==}
 
   '@iconify/tailwind4@1.1.0':
     resolution: {integrity: sha512-HqgAYtYk4eFtLvdYfhQrBRT9ohToh+VJJVhHtJ7B4Qhw+J+mRPvGC9Wr6Cgtb36YbIWqBxWuBaAUw9TE/8m2/w==}
@@ -4741,6 +4754,10 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
+  '@iconify-json/lucide@1.2.80':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@iconify-json/material-symbols@1.2.46':
     dependencies:
       '@iconify/types': 2.0.0
@@ -4750,6 +4767,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/solar@1.2.5':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/streamline-ultimate@1.2.2':
     dependencies:
       '@iconify/types': 2.0.0
 
