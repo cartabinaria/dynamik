@@ -134,7 +134,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				type="button"
 				class="btn w-max sm:btn-sm md:btn-md btn-primary border-none rounded-xl bg-linear-to-r from-primary to-accent hover:brightness-105 transition-all duration-200 ease-out gap-2 hover:scale-105"
 				aria-label="Apri suggerimenti per contribuire"
-				onclick={() => document.getElementById('my_modal_2')?.showModal()}
+				onclick={() => (document.getElementById('my_modal_2') as HTMLDialogElement)?.showModal()}
 			>
 				<span class="text-2xl icon-[lucide--file-heart]"></span>
 				<span class="font-semibold tracking-wide">Dona i tuoi appunti</span>
