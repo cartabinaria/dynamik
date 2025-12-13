@@ -174,7 +174,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<div class="step step-primary">
 							<p>
 								Aggiungi i tuoi appunti/modifiche nella cartella corretta seguendo la struttura già
-								esistente e <b>committa</b> le tue modifiche.
+								esistente e <b>fai un commit</b> con le tue modifiche.
 							</p>
 						</div>
 						<div class="step step-primary">
