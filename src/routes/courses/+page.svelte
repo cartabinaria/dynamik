@@ -4,8 +4,8 @@ SPDX-FileCopyrightText: 2026 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { RISORSE_BASE_URL } from '$lib/const';
 	import type { Teaching } from '$lib/teachings';
 	import { DEGREES } from '$lib/teachings';
 
@@ -20,6 +20,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		);
 	}
 
+	let sortedTeachings = $derived(data.teachings.sort((a, b) => a.name.localeCompare(b.name)));
+
 	// Search functionality
 	let searchQuery = $state('');
 
@@ -30,10 +32,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			value.name.toLowerCase().includes(query) ||
 			value.professors?.some((prof) => prof.toLowerCase().includes(query));
 
-		return data.teachings.filter(queryFilter);
+		return sortedTeachings.filter(queryFilter);
 	});
 
-	let sortedTeachings = $derived(filteredTeachings.sort((a, b) => a.name.localeCompare(b.name)));
+	const teachingCodeToUrl = (code: string) => {
+		return `https://www.unibo.it/it/didattica/insegnamenti/insegnamento/${code}`;
+	};
 </script>
 
 <main class="max-w-7xl p-4 mx-auto">
@@ -53,20 +57,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</p>
 		</div>
 
-		<!-- Courses Table -->
-		<div class="overflow-x-auto">
-			<table class="table table-zebra w-full">
+		<!-- Courses Table - Desktop View -->
+		<div class="hidden md:block overflow-x-auto">
+			<table class="table table-zebra w-full table-fixed">
 				<thead>
 					<tr>
-						<th>Code</th>
-						<th>Course Name</th>
-						<th>Degrees</th>
-						<th>Professors</th>
-						<th>Links</th>
+						<th class="w-20">Code</th>
+						<th class="w-1/4">Course Name</th>
+						<th class="w-1/4">Degrees</th>
+						<th class="w-1/5">Professors</th>
+						<th class="w-28 text-right">Links</th>
 					</tr>
 				</thead>
 				<tbody>
-					{#each sortedTeachings as teaching (teaching.url)}
+					{#each filteredTeachings as teaching (teaching.url)}
 						{@const degrees = getDegreesForCourse(teaching.url)}
 						<tr>
 							<td>
@@ -78,26 +82,49 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</td>
 							<td>
 								<a
-									href="{RISORSE_BASE_URL}/{teaching.url}"
-									class="link link-primary font-medium truncate block max-w-md"
-									target="_blank"
+									href={resolve('/[...dir]', { dir: teaching.url })}
+									class="link link-primary font-medium break-words"
 									rel="noopener noreferrer"
 									title={teaching.name}
 								>
-									{teaching.name.length > 60 ? teaching.name.slice(0, 60) + '...' : teaching.name}
+									{teaching.name}
 								</a>
 							</td>
 							<td>
-								{#if degrees.length > 0}
+								<div class="max-w-full overflow-hidden">
+									{#if degrees.length > 0}
+										<!-- Badges on larger screens -->
+										<div class="hidden lg:flex flex-wrap gap-1">
+											{#each degrees as degree (degree.id)}
+												<a
+													href={resolve('/dash/[course]', { course: degree.id })}
+													class="badge badge-soft badge-primary badge-sm whitespace-nowrap"
+													title={degree.name}
+												>
+													{degree.icon}
+													{degree.name}
+												</a>
+											{/each}
+										</div>
+										<!-- Simple text on medium screens -->
+										<div class="lg:hidden text-sm">
+											{degrees.map((d) => `${d.icon} ${d.name}`).join(', ')}
+										</div>
+									{:else}
+										<span class="text-sm text-base-content/50">-</span>
+									{/if}
+								</div>
+							</td>
+							<td>
+								{#if teaching.professors && teaching.professors.length > 0}
 									<div class="flex flex-wrap gap-1">
-										{#each degrees as degree (degree.id)}
+										{#each teaching.professors as prof (prof)}
 											<a
-												href="/dash/{degree.id}"
-												class="badge badge-soft badge-primary badge-sm"
-												title={degree.name}
+												href={`https://www.unibo.it/sitoweb/${prof}`}
+												class="badge badge-soft badge-sm"
+												target="_blank"
 											>
-												{degree.icon}
-												{degree.name}
+												{prof}
 											</a>
 										{/each}
 									</div>
@@ -106,14 +133,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								{/if}
 							</td>
 							<td>
-								{#if teaching.professors && teaching.professors.length > 0}
-									<span class="text-sm">{teaching.professors.join(', ')}</span>
-								{:else}
-									<span class="text-sm text-base-content/50">-</span>
-								{/if}
-							</td>
-							<td>
-								<div class="flex gap-2">
+								<div class="flex gap-2 flex-wrap justify-end">
 									{#if teaching.chat}
 										<a
 											href="https://{teaching.chat}"
@@ -126,7 +146,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{/if}
 									{#if teaching.website}
 										<a
-											href="https://www.unibo.it/it/didattica/insegnamenti/insegnamento/{teaching.website}"
+											href={teachingCodeToUrl(teaching.website)}
 											class="btn btn-xs btn-secondary"
 											target="_blank"
 											rel="noopener noreferrer"
@@ -140,6 +160,97 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					{/each}
 				</tbody>
 			</table>
+		</div>
+
+		<!-- Courses Cards - Mobile View -->
+		<div class="md:hidden grid gap-4">
+			{#each filteredTeachings as teaching (teaching.url)}
+				{@const degrees = getDegreesForCourse(teaching.url)}
+				<div class="card bg-base-200 shadow-md">
+					<div class="card-body p-4">
+						<!-- Course Name -->
+						<h2 class="card-title text-base mb-2">
+							<a
+								href={resolve('/[...dir]', { dir: teaching.url })}
+								class="link link-primary"
+								rel="noopener noreferrer"
+							>
+								{teaching.name}
+							</a>
+						</h2>
+
+						<!-- Code -->
+						{#if teaching.website}
+							<div class="flex items-center gap-2 text-sm mb-2">
+								<span class="font-semibold">Code:</span>
+								<span class="font-mono">{teaching.website}</span>
+							</div>
+						{/if}
+
+						<!-- Degrees -->
+						{#if degrees.length > 0}
+							<div class="mb-2">
+								<span class="text-sm font-semibold">Degrees:</span>
+								<div class="flex flex-wrap gap-1 mt-1">
+									{#each degrees as degree (degree.id)}
+										<a
+											href={resolve('/dash/[course]', { course: degree.id })}
+											class="badge badge-soft badge-primary badge-sm"
+											title={degree.name}
+										>
+											{degree.icon}
+											{degree.name}
+										</a>
+									{/each}
+								</div>
+							</div>
+						{/if}
+
+						<!-- Professors -->
+						{#if teaching.professors && teaching.professors.length > 0}
+							<div class="mb-2">
+								<span class="text-sm font-semibold">Professors:</span>
+								<p class="text-sm text-base-content/70">
+									{#each teaching.professors as prof, index (prof)}
+										<a
+											href={`https://www.unibo.it/sitoweb/${prof}`}
+											class="link link-secondary"
+											target="_blank"
+										>
+											{prof}
+										</a>
+										{index < teaching.professors.length - 1 ? ', ' : ''}
+									{/each}
+								</p>
+							</div>
+						{/if}
+
+						<!-- Links -->
+						<div class="card-actions justify-end mt-2">
+							{#if teaching.chat}
+								<a
+									href="https://{teaching.chat}"
+									class="btn btn-xs btn-primary"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Chat
+								</a>
+							{/if}
+							{#if teaching.website}
+								<a
+									href={teachingCodeToUrl(teaching.website)}
+									class="btn btn-xs btn-secondary"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Website
+								</a>
+							{/if}
+						</div>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</div>
 </main>
