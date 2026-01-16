@@ -23,6 +23,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { PageData } from './$types';
 	import type { StatikEntry } from '$lib/api';
 
+	import IconSolarSortVerticalBoldDuotone from '@iconify-svelte/solar/sort-vertical-bold-duotone';
+
 	let { data }: { data: PageData } = $props();
 	let { manifest } = $derived(data);
 
@@ -153,10 +155,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			aria-label={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
 		>
 			{reverseMode ? 'Nome (Z → A)' : 'Nome (A → Z)'}
-			<span
-				class="text-xl icon-[solar--sort-vertical-bold-duotone] transition-transform duration-300"
-				class:rotate-180={reverseMode}
-			></span>
+			<IconSolarSortVerticalBoldDuotone
+				class={['transition-transform duration-300 w-5 h-5', reverseMode && 'rotate-180']}
+			/>
 		</button>
 	</div>
 

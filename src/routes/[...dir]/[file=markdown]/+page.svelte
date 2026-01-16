@@ -16,6 +16,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 
+	import IconMaterialSymbolsCloseRounded from '@iconify-svelte/material-symbols/close-rounded';
+	import IconMaterialSymbolsMenuRounded from '@iconify-svelte/material-symbols/menu-rounded';
+
 	import 'katex/dist/katex.css';
 
 	let { data }: { data: PageData } = $props();
@@ -57,9 +60,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				class="btn btn-ghost text-2xl"
 			>
 				{#if menuOpen}
-					<span class="icon-[material-symbols--close-rounded]"></span>
+					<IconMaterialSymbolsCloseRounded class="w-6 h-6" />
 				{:else}
-					<span class="icon-[material-symbols--menu-rounded]"></span>
+					<IconMaterialSymbolsMenuRounded class="w-6 h-6" />
 				{/if}
 			</button>
 		</div>
