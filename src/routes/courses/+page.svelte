@@ -38,6 +38,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	const teachingCodeToUrl = (code: string) => {
 		return `https://www.unibo.it/it/didattica/insegnamenti/insegnamento/${code}`;
 	};
+
+	const professorToUrl = (prof: string) => {
+		return `https://www.unibo.it/sitoweb/${prof}`;
+	};
 </script>
 
 <main class="max-w-7xl p-4 mx-auto">
@@ -120,7 +124,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									<div class="flex flex-wrap gap-1">
 										{#each teaching.professors as prof (prof)}
 											<a
-												href={`https://www.unibo.it/sitoweb/${prof}`}
+												href={professorToUrl(prof)}
 												class="badge badge-soft badge-sm"
 												target="_blank"
 											>
@@ -195,7 +199,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-soft badge-primary badge-sm"
+											class="badge badge-soft badge-primary"
 											title={degree.name}
 										>
 											{degree.icon}
@@ -211,15 +215,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="mb-2">
 								<span class="text-sm font-semibold">Professors:</span>
 								<p class="text-sm text-base-content/70">
-									{#each teaching.professors as prof, index (prof)}
-										<a
-											href={`https://www.unibo.it/sitoweb/${prof}`}
-											class="link link-secondary"
-											target="_blank"
-										>
+									{#each teaching.professors as prof (prof)}
+										<a href={professorToUrl(prof)} class="badge badge-soft" target="_blank">
 											{prof}
 										</a>
-										{index < teaching.professors.length - 1 ? ', ' : ''}
 									{/each}
 								</p>
 							</div>
