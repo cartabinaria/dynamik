@@ -15,6 +15,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { getDoneStatus } from '$lib/todo-file';
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
+	import IconAkarLinkChain from '@iconify-svelte/akar-icons/link-chain';
+	import IconSolarFileBoldDuotone from '@iconify-svelte/solar/file-bold-duotone';
+	import IconSolarFileCheckBoldDuotone from '@iconify-svelte/solar/file-check-bold-duotone';
+	import IconSolarFolderBold from '@iconify-svelte/solar/folder-bold';
+	import IconSolarDownloadSquareBold from '@iconify-svelte/solar/download-square-bold';
+
 	let { data }: { data: File | Directory } = $props();
 
 	/**
@@ -50,7 +56,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					id="my-checkbox"
 					disabled
 				/>
-				<span class="flex text-xl icon-[akar-icons--link-chain] mr-2" style="color: #AFD2E9"></span>
+				<IconAkarLinkChain class="w-5 h-5 mr-2 text-[#AFD2E9]" />
 				<a
 					class="flex link link-hover text-primary sm:flex-wrap"
 					href={data.url}
@@ -73,12 +79,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					title="Click to mark as done"
 					aria-label="Click to mark as done"
 				>
-					<span
-						class="text-bold icon-[solar--file-bold-duotone]"
-						style={$isDone ? '' : 'color: #AFD2E9'}
-						class:icon-[solar--file-check-bold-duotone]={$isDone}
-						class:text-success={$isDone}
-					></span>
+					{#if $isDone}
+						<IconSolarFileCheckBoldDuotone class="text-success w-5 h-5" />
+					{:else}
+						<IconSolarFileBoldDuotone class="text-[#AFD2E9] w-5 h-5" />
+					{/if}
 				</button>
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
@@ -90,7 +95,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				</a>
 			{:else}
 				<input type="checkbox" class="checkbox checkbox-sm mr-2" id="my-checkbox" disabled />
-				<span class="flex icon-[solar--folder-bold] text-xl mr-2" style="color: #FDE74C"></span>
+				<IconSolarFolderBold class="text-[#FDE74C] w-5 h-5 mr-2" />
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
 					href={isUsingExternalBase(data)
@@ -113,11 +118,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						download
 						target="_blank"
 					>
-						<span class="text-accent text-3xl icon-[solar--download-square-bold]"></span>
+						<IconSolarDownloadSquareBold class="text-accent w-7 h-7 ml-3" />
 					</a>
 				{:else}
 					<button disabled class="flex text-lg ml-3" aria-label="Download">
-						<span class="text-neutral text-3xl icon-[solar--download-square-bold]"></span>
+						<IconSolarDownloadSquareBold class="text-neutral w-7 h-7 ml-3" />
 					</button>
 				{/if}
 			{/if}

@@ -13,6 +13,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { base } from '$app/paths';
 	import type { TeachingsBatch } from './types';
 
+	import IconAkarIconsPeopleGroup from '@iconify-svelte/akar-icons/people-group';
+
 	type Props = {
 		years: TeachingsBatch[];
 		activeYears: Teaching[];
@@ -49,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				title="Link alla community"
 				aria-label="Link alla community"
 			>
-				<span class="text-2xl icon-[akar-icons--people-group]"></span>
+				<IconAkarIconsPeopleGroup class="w-6 h-6" />
 			</a>
 		{/if}
 	</li>
