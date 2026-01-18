@@ -49,17 +49,21 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	<div class="mt-6">
 		<!-- Search Bar -->
-		<div class="mb-6 mx-auto max-w-4xl">
-			<input
-				type="text"
-				placeholder="Search courses or professors..."
-				class="input input-bordered w-full"
-				bind:value={searchQuery}
-			/>
-			<p class="text-sm text-base-content/70 mt-2 text-center">
-				Showing {filteredTeachings.length} of {data.teachings.length} courses
-			</p>
+		<div
+			class="mb-3 mx-auto max-w-4xl sticky top-2 z-10 card bg-base-200 border-2 border-primary shadow-md"
+		>
+			<div class="card-body p-4">
+				<input
+					type="text"
+					placeholder="Search courses or professors..."
+					class="input input-bordered w-full"
+					bind:value={searchQuery}
+				/>
+			</div>
 		</div>
+		<p class="text-sm text-base-content/70 my-3 text-center">
+			Showing {filteredTeachings.length} of {data.teachings.length} courses
+		</p>
 
 		<!-- Courses Table - Desktop View -->
 		<div class="hidden md:block overflow-x-auto">
@@ -87,7 +91,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<td>
 								<a
 									href={resolve('/[...dir]', { dir: teaching.url })}
-									class="link link-primary font-medium break-words"
+									class="font-semibold wrap-break-word link link-primary link-hover"
 									rel="noopener noreferrer"
 									title={teaching.name}
 								>
@@ -102,7 +106,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 											{#each degrees as degree (degree.id)}
 												<a
 													href={resolve('/dash/[course]', { course: degree.id })}
-													class="badge badge-soft badge-primary badge-sm whitespace-nowrap"
+													class="badge badge-soft badge-sm whitespace-nowrap"
 													title={degree.name}
 												>
 													{degree.icon}
@@ -155,7 +159,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 											target="_blank"
 											rel="noopener noreferrer"
 										>
-											Website
+											University Page
 										</a>
 									{/if}
 								</div>
@@ -199,7 +203,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-soft badge-primary"
+											class="badge badge-soft"
 											title={degree.name}
 										>
 											{degree.icon}
@@ -214,7 +218,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						{#if teaching.professors && teaching.professors.length > 0}
 							<div class="mb-2">
 								<span class="text-sm font-semibold">Professors:</span>
-								<p class="text-sm text-base-content/70">
+								<p class="text-sm text-base-content/70 flex flex-wrap gap-1 mt-1">
 									{#each teaching.professors as prof (prof)}
 										<a href={professorToUrl(prof)} class="badge badge-soft" target="_blank">
 											{prof}
@@ -229,7 +233,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							{#if teaching.chat}
 								<a
 									href="https://{teaching.chat}"
-									class="btn btn-xs btn-primary"
+									class="btn btn-sm btn-primary"
 									target="_blank"
 									rel="noopener noreferrer"
 								>
@@ -239,11 +243,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							{#if teaching.website}
 								<a
 									href={teachingCodeToUrl(teaching.website)}
-									class="btn btn-xs btn-secondary"
+									class="btn btn-sm btn-secondary"
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									Website
+									University Page
 								</a>
 							{/if}
 						</div>
