@@ -69,8 +69,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</p>
 
 		<!-- Courses Table - Desktop View -->
-		<div class="hidden md:block overflow-x-auto">
-			<table class="table table-zebra w-full table-fixed">
+		<div class="hidden md:block overflow-x-auto container mx-auto">
+			<table class="table table-zebra w-full">
 				<thead>
 					<tr>
 						<th class="w-20">Code</th>
@@ -109,7 +109,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 											{#each degrees as degree (degree.id)}
 												<a
 													href={resolve('/dash/[course]', { course: degree.id })}
-													class="badge badge-soft badge-sm whitespace-nowrap"
+													class="badge badge-outline badge-sm p-3 rounded-full whitespace-nowrap"
 													title={degree.name}
 												>
 													{degree.icon}
@@ -119,7 +119,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										</div>
 										<!-- Simple text on medium screens -->
 										<div class="lg:hidden text-sm">
-											{degrees.map((d) => `${d.icon} ${d.name}`).join(', ')}
+											{degrees.map((d) => d.name).join(', ')}
 										</div>
 									{:else}
 										<span class="text-sm text-base-content/50">-</span>
@@ -132,7 +132,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 										{#each teaching.professors as prof (prof)}
 											<a
 												href={professorToUrl(prof)}
-												class="badge badge-soft badge-sm"
+												class="badge badge-sm p-3 rounded-full"
 												target="_blank"
 											>
 												{prof}
@@ -208,8 +208,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-info badge-outline p-3 rounded-full"
+											class="badge badge-outline p-3 rounded-full"
 										>
+											{degree.icon}
 											{degree.name}
 										</a>
 									{/each}
@@ -233,7 +234,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<div class="grid grid-cols-3 gap-3 pt-2 mt-6">
 							<a
 								href={resolve('/[...dir]', { dir: teaching.url })}
-								class="btn btn-secondary btn-sm h-10"
+								class="btn btn-accent btn-sm h-10"
 							>
 								Details
 							</a>
@@ -241,7 +242,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<a
 								href={teaching.chat ? `https://${teaching.chat}` : '#'}
 								class={[
-									'btn btn-accent btn-sm h-10',
+									'btn btn-primary btn-sm h-10',
 									teaching.chat == null && 'btn-disabled opacity-30'
 								]}
 								target="_blank"
@@ -252,12 +253,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<a
 								href={teaching.website ? teachingCodeToUrl(teaching.website) : '#'}
 								class={[
-									'btn btn-outline btn-sm h-10',
+									'btn btn-secondary btn-sm h-10',
 									teaching.website == null && 'btn-disabled opacity-30'
 								]}
 								target="_blank"
 							>
-								University
+								University Page
 							</a>
 						</div>
 					</div>
