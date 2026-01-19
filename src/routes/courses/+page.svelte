@@ -141,27 +141,33 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								{/if}
 							</td>
 							<td>
-								<div class="flex gap-2 flex-wrap justify-end">
-									{#if teaching.chat}
-										<a
-											href="https://{teaching.chat}"
-											class="btn btn-xs btn-primary"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Chat
-										</a>
-									{/if}
-									{#if teaching.website}
-										<a
-											href={teachingCodeToUrl(teaching.website)}
-											class="btn btn-xs btn-secondary"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											University Page
-										</a>
-									{/if}
+								<div class="flex gap-2 justify-end">
+									<a
+										href={resolve('/[...dir]', { dir: teaching.url })}
+										class="btn btn-xs btn-accent"
+									>
+										Details
+									</a>
+									<a
+										href={teaching.chat ? `https://${teaching.chat}` : '#'}
+										class={['btn btn-xs btn-primary', teaching.chat == null && 'btn-disabled']}
+										target="_blank"
+										title={teaching.chat == null ? 'No chat available' : 'Course Chat'}
+										rel="noopener noreferrer"
+									>
+										Chat
+									</a>
+									<a
+										href={teaching.website ? teachingCodeToUrl(teaching.website) : '#'}
+										class={['btn btn-xs btn-secondary', teaching.website == null && 'btn-disabled']}
+										title={teaching.website == null
+											? 'No university page available'
+											: 'University Page'}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										University Page
+									</a>
 								</div>
 							</td>
 						</tr>
