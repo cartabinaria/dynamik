@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 - 2024 Samuele Musiani <samu@teapot.ovh>
-SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
 SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
@@ -22,6 +22,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import type { PageData } from './$types';
 	import type { StatikEntry } from '$lib/api';
+
+	import IconSolarSortVerticalBoldDuotone from '@iconify-svelte/solar/sort-vertical-bold-duotone';
 
 	let { data }: { data: PageData } = $props();
 	let { manifest } = $derived(data);
@@ -153,10 +155,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			aria-label={reverseMode ? 'Ordina A → Z' : 'Ordina Z → A'}
 		>
 			{reverseMode ? 'Nome (Z → A)' : 'Nome (A → Z)'}
-			<span
-				class="text-xl icon-[solar--sort-vertical-bold-duotone] transition-transform duration-300"
-				class:rotate-180={reverseMode}
-			></span>
+			<IconSolarSortVerticalBoldDuotone
+				class={['transition-transform duration-300 w-5 h-5', reverseMode && 'rotate-180']}
+			/>
 		</button>
 	</div>
 
