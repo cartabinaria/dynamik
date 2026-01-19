@@ -9,6 +9,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { Teaching } from '$lib/teachings';
 	import { DEGREES } from '$lib/teachings';
 
+	import IconMdiCogOutline from '@iconify-svelte/mdi/cog-outline';
+	import IconMdiGraduationCap from '@iconify-svelte/mdi/graduation-cap';
+
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -177,42 +180,36 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 
 		<!-- Courses Cards - Mobile View -->
-		<div class="md:hidden grid gap-4">
+		<div class="md:hidden grid gap-4 p-2">
 			{#each filteredTeachings as teaching (teaching.url)}
 				{@const degrees = getDegreesForCourse(teaching.url)}
-				<div class="card bg-base-200 shadow-md">
-					<div class="card-body p-4">
-						<!-- Course Name -->
-						<h2 class="card-title text-base mb-2">
-							<a
-								href={resolve('/[...dir]', { dir: teaching.url })}
-								class="link link-primary"
-								rel="noopener noreferrer"
-							>
-								{teaching.name}
-							</a>
-						</h2>
 
-						<!-- Code -->
-						{#if teaching.website}
-							<div class="flex items-center gap-2 text-sm mb-2">
-								<span class="font-semibold">Code:</span>
-								<span class="font-mono">{teaching.website}</span>
-							</div>
-						{/if}
+				<div class="card bg-base-200 text-base-content">
+					<div class="card-body p-6">
+						<div class="flex justify-between items-start gap-4 mb-4">
+							<h2 class="card-title text-primary text-xl font-bold leading-tight">
+								<a href={resolve('/[...dir]', { dir: teaching.url })} class="hover:brightness-110">
+									{teaching.name}
+								</a>
+							</h2>
+							{#if teaching.website}
+								<div
+									class="bg-slate-700/50 text-slate-400 text-[10px] font-mono px-2 py-1 rounded uppercase text-nowrap"
+								>
+									Code: {teaching.website}
+								</div>
+							{/if}
+						</div>
 
-						<!-- Degrees -->
 						{#if degrees.length > 0}
-							<div class="mb-2">
-								<span class="text-sm font-semibold">Degrees:</span>
-								<div class="flex flex-wrap gap-1 mt-1">
+							<div class="flex items-center gap-3">
+								<IconMdiCogOutline class="text-slate-400 w-6 h-6" />
+								<div class="flex flex-wrap gap-2">
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-soft"
-											title={degree.name}
+											class="badge badge-info badge-outline p-3 rounded-full"
 										>
-											{degree.icon}
 											{degree.name}
 										</a>
 									{/each}
@@ -220,42 +217,48 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</div>
 						{/if}
 
-						<!-- Professors -->
-						{#if teaching.professors && teaching.professors.length > 0}
-							<div class="mb-2">
-								<span class="text-sm font-semibold">Professors:</span>
-								<p class="text-sm text-base-content/70 flex flex-wrap gap-1 mt-1">
+						{#if teaching.professors != null && teaching.professors.length > 0}
+							<div class="flex items-center gap-3 mt-1">
+								<IconMdiGraduationCap class="text-slate-400 w-6 h-6" />
+								<div class="flex flex-wrap gap-2">
 									{#each teaching.professors as prof (prof)}
-										<a href={professorToUrl(prof)} class="badge badge-soft" target="_blank">
+										<a href={professorToUrl(prof)} class="badge p-3 rounded-full" target="_blank">
 											{prof}
 										</a>
 									{/each}
-								</p>
+								</div>
 							</div>
 						{/if}
 
-						<!-- Links -->
-						<div class="card-actions justify-end mt-2">
-							{#if teaching.chat}
-								<a
-									href="https://{teaching.chat}"
-									class="btn btn-sm btn-primary"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									Chat
-								</a>
-							{/if}
-							{#if teaching.website}
-								<a
-									href={teachingCodeToUrl(teaching.website)}
-									class="btn btn-sm btn-secondary"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									University Page
-								</a>
-							{/if}
+						<div class="grid grid-cols-3 gap-3 pt-2 mt-6">
+							<a
+								href={resolve('/[...dir]', { dir: teaching.url })}
+								class="btn btn-secondary btn-sm h-10"
+							>
+								Details
+							</a>
+
+							<a
+								href={teaching.chat ? `https://${teaching.chat}` : '#'}
+								class={[
+									'btn btn-accent btn-sm h-10',
+									teaching.chat == null && 'btn-disabled opacity-30'
+								]}
+								target="_blank"
+							>
+								Chat
+							</a>
+
+							<a
+								href={teaching.website ? teachingCodeToUrl(teaching.website) : '#'}
+								class={[
+									'btn btn-outline btn-sm h-10',
+									teaching.website == null && 'btn-disabled opacity-30'
+								]}
+								target="_blank"
+							>
+								University
+							</a>
 						</div>
 					</div>
 				</div>
