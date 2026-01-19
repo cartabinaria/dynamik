@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
 SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
