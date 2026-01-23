@@ -18,13 +18,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      '@iconify-json/lucide':
-        specifier: ^1.2.80
-        version: 1.2.80
-      '@iconify-json/streamline-ultimate':
-        specifier: ^1.2.2
-        version: 1.2.2
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -1062,12 +1055,6 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
-
-  '@iconify-json/lucide@1.2.80':
-    resolution: {integrity: sha512-DwAHO+xJEJpOV5y2Q0DIoR3Au9UPk+J6an6KRO281QAxsz/+YpeySGSyZzUEK9tMrSAohkQamqlHx6lPDB8BEg==}
-
-  '@iconify-json/streamline-ultimate@1.2.2':
-    resolution: {integrity: sha512-0Vz9UHgMrmRUYt3JFqm0E6PDdroItVqK4fKf3T72jVwS2MAmc8dcqvCy+f0hzOVzJfo3G34ejFA9Y8l/K44hTQ==}
 
   '@iconify-svelte/akar-icons@1.0.0':
     resolution: {integrity: sha512-PXvCQEGLX5HizLsNXFkgQ8Ci/erN918FQKxviquDwI8UJKwNG83I+Z+nOSmyt7Yu2HjqsLa5+ecu29t9WOMLOw==}
@@ -4357,14 +4344,6 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
-
-  '@iconify-json/lucide@1.2.80':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify-json/streamline-ultimate@1.2.2':
-    dependencies:
-      '@iconify/types': 2.0.0
 
   '@iconify-svelte/akar-icons@1.0.0(svelte@5.43.8)':
     dependencies:
