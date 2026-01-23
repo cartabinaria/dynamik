@@ -208,7 +208,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-outline p-3 rounded-full"
+											class="badge badge-outline p-3 rounded-full whitespace-nowrap text-ellipsis"
 										>
 											{degree.icon}
 											{degree.name}
@@ -223,7 +223,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 								<IconMdiGraduationCap class="text-slate-400 w-6 h-6" />
 								<div class="flex flex-wrap gap-2">
 									{#each teaching.professors as prof (prof)}
-										<a href={professorToUrl(prof)} class="badge p-3 rounded-full" target="_blank">
+										<a
+											href={professorToUrl(prof)}
+											class="badge p-3 rounded-full whitespace-nowrap text-ellipsis"
+											target="_blank"
+										>
 											{prof}
 										</a>
 									{/each}
