@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
 
 	import type { Degree } from '$lib/teachings';
@@ -114,9 +114,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="grid gap-2">
 								{#each checkDegreeCategory(data, category) as degree (degree.id)}
 									{#if degree.teachings != null}
-										{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
+										{@render line(
+											degree.name,
+											resolve('/dash/[course]', { course: degree.id }),
+											degree.icon
+										)}
 									{:else}
-										{@render line(degree.name, `${base}/${degree.id}`, degree.icon)}
+										{@render line(
+											degree.name,
+											resolve('/[...dir]', { dir: degree.id }),
+											degree.icon
+										)}
 									{/if}
 								{/each}
 							</div>
@@ -128,8 +136,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="divider"></div>
 
 			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
-				{@render line('Impostazioni', `${base}/settings`, '🔧', true)}
-				{@render line('Stato', `${base}/build`, '📊', true)}
+				{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
+				{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
+				{@render line('Stato', resolve('/build'), '📊', true)}
 			</div>
 		</ul>
 

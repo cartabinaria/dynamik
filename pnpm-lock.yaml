@@ -37,6 +37,9 @@ importers:
       '@iconify-svelte/material-symbols':
         specifier: ^1.0.12
         version: 1.0.12(svelte@5.43.8)
+      '@iconify-svelte/mdi':
+        specifier: ^1.0.0
+        version: 1.0.0(svelte@5.43.8)
       '@iconify-svelte/ph':
         specifier: ^1.0.1
         version: 1.0.1(svelte@5.43.8)
@@ -1067,6 +1070,9 @@ packages:
 
   '@iconify-svelte/material-symbols@1.0.12':
     resolution: {integrity: sha512-LeO5CLlZPZ/mKEnuuooir6v55KnCUGyWuxb5moUfMBjRSq7L1Fzbggzc7BIysaimcaXt3WWlevPxvxO1pVGjyg==}
+
+  '@iconify-svelte/mdi@1.0.0':
+    resolution: {integrity: sha512-P7vHI/9KRnflurdxQlH9l8heO3HFVxH4TmrLYnYZqhCp/CMec5UVELB7Z8OKysaFmZq5X1udDn9fb/SxWUU1Aw==}
 
   '@iconify-svelte/ph@1.0.1':
     resolution: {integrity: sha512-4hAX8FeaFn0zvDhTw0rR6zQEnkyKcm8FVI/tIUeS4ZIIU4wI/0vXxevxXwk+8MawPRHmWoUMi6jqc+ugKNzSZg==}
@@ -4360,6 +4366,12 @@ snapshots:
       - svelte
 
   '@iconify-svelte/material-symbols@1.0.12(svelte@5.43.8)':
+    dependencies:
+      '@iconify/css-svelte': 1.0.0(svelte@5.43.8)
+    transitivePeerDependencies:
+      - svelte
+
+  '@iconify-svelte/mdi@1.0.0(svelte@5.43.8)':
     dependencies:
       '@iconify/css-svelte': 1.0.0(svelte@5.43.8)
     transitivePeerDependencies:
