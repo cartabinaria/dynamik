@@ -8,12 +8,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { derived } from 'svelte/store';
 	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';
 	import { DEGREES } from '$lib/teachings';
 	import Navbar from '$lib/components/Navbar.svelte';
-
-	let themes = derived(settings, ({ theme }) => allThemes.filter((t) => t != theme));
 </script>
 
 <main class="max-w-5xl p-4 mx-auto">
@@ -25,9 +22,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<!-- Theme Selection -->
 			<label for="theme-select" class="label-text font-medium">Theme</label>
 			<select id="theme-select" class="select select-primary w-full" bind:value={$settings.theme}>
-				<option disabled selected>{$settings.theme}</option>
-				{#each $themes as theme (theme)}
-					<option>{theme}</option>
+				<option disabled>-- Select a theme --</option>
+				{#each allThemes.toSorted() as theme (theme)}
+					<option selected={theme === $settings.theme}>{theme}</option>
 				{/each}
 			</select>
 
