@@ -184,7 +184,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{#each filteredTeachings as teaching (teaching.url)}
 				{@const degrees = getDegreesForCourse(teaching.url)}
 
-				<div class="card bg-base-200 text-base-content">
+				<div class="card bg-base-200 overflow-x-hidden text-base-content">
 					<div class="card-body p-6">
 						<div class="flex justify-between items-start gap-4 mb-4">
 							<h2 class="card-title text-primary text-xl font-bold leading-tight">
@@ -202,16 +202,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						</div>
 
 						{#if degrees.length > 0}
-							<div class="flex items-center gap-3">
-								<IconMdiCogOutline class="text-slate-400 w-6 h-6" />
-								<div class="flex flex-wrap gap-2">
+							<div class="flex items-start gap-3">
+								<IconMdiCogOutline class="text-slate-400 w-6 h-6 shrink-0 mt-1" />
+								<div class="flex flex-wrap gap-2 w-full">
 									{#each degrees as degree (degree.id)}
 										<a
 											href={resolve('/dash/[course]', { course: degree.id })}
-											class="badge badge-outline p-3 rounded-full whitespace-nowrap text-ellipsis"
+											class="badge badge-outline p-3 rounded-full h-auto py-1"
 										>
 											{degree.icon}
-											{degree.name}
+											<span class="ml-1">
+												{degree.name}
+											</span>
 										</a>
 									{/each}
 								</div>
@@ -220,7 +222,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 						{#if teaching.professors != null && teaching.professors.length > 0}
 							<div class="flex items-center gap-3 mt-1">
-								<IconMdiGraduationCap class="text-slate-400 w-6 h-6" />
+								<IconMdiGraduationCap class="text-slate-400 w-6 h-6 shrink-0" />
 								<div class="flex flex-wrap gap-2">
 									{#each teaching.professors as prof (prof)}
 										<a
