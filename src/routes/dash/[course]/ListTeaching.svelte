@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2024 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Alice Benatti <alice17bee@gmail.com>
 SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
 SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
@@ -12,6 +12,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import type { Teaching } from '$lib/teachings';
 	import { base } from '$app/paths';
 	import type { TeachingsBatch } from './types';
+
+	import IconAkarIconsPeopleGroup from '@iconify-svelte/akar-icons/people-group';
 
 	type Props = {
 		years: TeachingsBatch[];
@@ -49,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				title="Link alla community"
 				aria-label="Link alla community"
 			>
-				<span class="text-2xl icon-[akar-icons--people-group]"></span>
+				<IconAkarIconsPeopleGroup class="w-6 h-6" />
 			</a>
 		{/if}
 	</li>

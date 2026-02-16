@@ -1,5 +1,14 @@
+<!--
+SPDX-FileCopyrightText: 2026 Eyad Issa <eyadlorenzo@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts">
 	import { resolve } from '$app/paths';
+
+	import IconIcRoundHome from '@iconify-svelte/ic/round-home';
+	import IconAkarIconsArrowBackThickFill from '@iconify-svelte/akar-icons/arrow-back-thick-fill';
 
 	let { goback = true, title }: { goback?: boolean; title: string } = $props();
 </script>
@@ -8,11 +17,11 @@
 	<div class="navbar-start flex items-center">
 		<a
 			href={resolve('/')}
-			class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md"
+			class="btn btn-ghost btn-primary rounded-lg btn-sm md:btn-md flex items-center"
 			title="Home"
 			aria-label="Home"
 		>
-			<span class="icon-[ic--round-home] text-lg"></span>
+			<IconIcRoundHome class="w-4 h-4" />
 			<p class="hidden md:block">Home</p>
 		</a>
 		{#if goback}
@@ -22,7 +31,7 @@
 				aria-label="Indietro"
 				onclick={() => history.back()}
 			>
-				<span class="icon-[akar-icons--arrow-back-thick-fill] text-lg"></span>
+				<IconAkarIconsArrowBackThickFill class="w-4 h-4" />
 				<p class="hidden md:block">Go back</p>
 			</button>
 		{/if}

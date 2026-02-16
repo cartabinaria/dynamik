@@ -1,6 +1,6 @@
 <!--
 SPDX-FileCopyrightText: 2023 - 2025 Alice Benatti <alice17bee@gmail.com>
-SPDX-FileCopyrightText: 2023 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2023 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 SPDX-FileCopyrightText: 2023 Xuanqiang Angelo Huang <huangelo02@gmail.com>
 SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
 SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
@@ -10,11 +10,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { browser } from '$app/environment';
 
 	import type { Degree } from '$lib/teachings';
 	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+
+	import IconAkarIconsXSmall from '@iconify-svelte/akar-icons/x-small';
+	import IconPhHandPalmFill from '@iconify-svelte/ph/hand-palm-fill';
+	import IconPhTelegramLogoFill from '@iconify-svelte/ph/telegram-logo-fill';
 
 	let { data }: { data: { degrees: Degree[] } } = $props();
 
@@ -59,7 +63,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					aria-label="I've read this, close it!"
 					title="I've read this, close it!"
 				>
-					<span class="text-xl icon-[akar-icons--x-small]"></span>
+					<IconAkarIconsXSmall class="w-5 h-5" />
 				</button>
 			</div>
 		</div>
@@ -69,8 +73,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 {#snippet line(name: string, href: string, icon: string, tools?: boolean)}
 	<li class="flex-auto">
 		<a
-			class="flex justify-center items-center p-4 rounded-lg hover:shadow-lg hover:bg-accent/80 transition w-full
-         transition-all duration-300 ease-in-out {tools ? 'bg-base-200' : ''}"
+			class={[
+				'flex justify-center items-center p-4 rounded-lg hover:shadow-lg hover:bg-accent/80 transition w-full duration-300 ease-in-out',
+				tools && 'bg-base-200'
+			]}
 			{href}
 		>
 			<span class="text-3xl mb-2">{icon}</span>
@@ -108,9 +114,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							<div class="grid gap-2">
 								{#each checkDegreeCategory(data, category) as degree (degree.id)}
 									{#if degree.teachings != null}
-										{@render line(degree.name, `${base}/dash/${degree.id}`, degree.icon)}
+										{@render line(
+											degree.name,
+											resolve('/dash/[course]', { course: degree.id }),
+											degree.icon
+										)}
 									{:else}
-										{@render line(degree.name, `${base}/${degree.id}`, degree.icon)}
+										{@render line(
+											degree.name,
+											resolve('/[...dir]', { dir: degree.id }),
+											degree.icon
+										)}
 									{/if}
 								{/each}
 							</div>
@@ -122,13 +136,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="divider"></div>
 
 			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
-				{@render line('Impostazioni', `${base}/settings`, '🔧', true)}
-				{@render line('Stato', `${base}/build`, '📊', true)}
+				{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
+				{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
+				{@render line('Stato', resolve('/build'), '📊', true)}
 			</div>
 		</ul>
 
 		<div class="alert alert-warning md:mx-4 md:my-8 grow mx-2 sm:mx-auto rounded-xl" role="alert">
-			<span class="icon-[ph--hand-palm-fill] text-4xl"></span>
+			<IconPhHandPalmFill class="w-10 h-10" />
 			<div>
 				<p class="block font-bold">
 					<strong>Disclaimer</strong>
@@ -140,7 +155,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</strong>
 				</p>
 				<p class="text-xs">
-					I materiali presenti sono stati creati da studenti e non sono verificati o approvati da
+					I materiali presenti sono stati caricati da studenti e non sono verificati o approvati da
 					docenti o dal dipartimento. Per segnalare errori, problemi o richieste di rimozione di
 					materiale, contattaci su <a class="link" href="https://t.me/cartabinaria">Telegram.</a>
 				</p>
@@ -150,7 +165,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div class="my-8">
 			<p class="text-center">
 				<a href="https://t.me/cartabinaria" class="btn btn-ghost rounded-xl">
-					<span class="icon-[ph--telegram-logo-fill] text-2xl"></span>
+					<IconPhTelegramLogoFill class="w-6 h-6 mr-2" />
+
 					Contattaci su Telegram
 				</a>
 			</p>
