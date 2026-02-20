@@ -65,7 +65,7 @@
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"shiki": "^3.21.0",
-		"svelte": "^5.48.2",
+		"svelte": "^5.51.5",
 		"svelte-check": "^4.3.5",
 		"svelte-eslint-parser": "^1.4.1",
 		"svelte-local-storage-store": "^0.6.4",
