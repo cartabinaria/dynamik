@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.3",
-		"@eslint/js": "^9.39.2",
+		"@eslint/js": "^9.39.3",
 		"@iconify-svelte/akar-icons": "^1.0.0",
 		"@iconify-svelte/ic": "^1.0.1",
 		"@iconify-svelte/lucide": "^1.0.24",
