@@ -54,8 +54,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<div><!-- justifier --></div>
 				<p class="font-semibold">
 					<i><b>🔥Nuova feature: ToDo List🔥</b></i>
-					All'interno di tutte le pagine con file cliccando sopra l'icona potrai segnarlo e salvarlo
-					come "fatto"!
+					All'interno di tutte le pagine con file cliccando sopra l'icona potrai segnarlo e salvarlo come
+					"fatto"!
 				</p>
 				<button
 					class="btn btn-ghost btn-circle btn-error focus:outline-hidden"
@@ -138,6 +138,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
 				{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
 				{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
+				{@render line('Cestino delle Donazioni', resolve('/donation-bin'), '🗑️', true)}
 				{@render line('Stato', resolve('/build'), '📊', true)}
 			</div>
 		</ul>
