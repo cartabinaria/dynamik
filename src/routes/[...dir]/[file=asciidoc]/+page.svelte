@@ -10,6 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import tocbot from 'tocbot';
+	import 'katex/dist/katex.css';
 
 	let { data }: { data: PageData } = $props();
 
@@ -49,7 +50,3 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	</section>
 	<section class="prose" id="toc" role="contentinfo"></section>
 </main>
-
-<style>
-	@import 'katex/dist/katex.css';
-</style>
