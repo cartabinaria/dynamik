@@ -16,11 +16,25 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let { data }: PageProps = $props();
 
+	const degreesByCourse = new Map<string, typeof DEGREES>();
+	for (const degree of DEGREES) {
+		if (degree.teachings) {
+			const processedTeachings = new Set<string>();
+			for (const teaching of degree.teachings) {
+				if (!processedTeachings.has(teaching.name)) {
+					if (!degreesByCourse.has(teaching.name)) {
+						degreesByCourse.set(teaching.name, []);
+					}
+					degreesByCourse.get(teaching.name)!.push(degree);
+					processedTeachings.add(teaching.name);
+				}
+			}
+		}
+	}
+
 	// Function to find which degrees include a specific course
 	function getDegreesForCourse(courseUrl: string) {
-		return DEGREES.filter((degree) =>
-			degree.teachings?.some((teaching) => teaching.name === courseUrl)
-		);
+		return degreesByCourse.get(courseUrl) || [];
 	}
 
 	let sortedTeachings = $derived(data.teachings.sort((a, b) => a.name.localeCompare(b.name)));
