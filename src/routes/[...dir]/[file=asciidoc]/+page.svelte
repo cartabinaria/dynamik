@@ -10,6 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import tocbot from 'tocbot';
+	import DOMPurify from 'dompurify';
 
 	let { data }: { data: PageData } = $props();
 
@@ -22,7 +23,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		// @ts-expect-error - asciidoctor is not typed
 		// eslint-disable-next-line no-undef
 		const asciidoctor = new Asciidoctor();
-		html = asciidoctor.convert(data.body, { attributes: { showtitle: true } }) as string;
+		const converted = asciidoctor.convert(data.body, { attributes: { showtitle: true } }) as string;
+
+		html = DOMPurify.sanitize(converted);
 
 		autoRender(docContainer, { throwOnError: false });
 
