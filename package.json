@@ -62,7 +62,7 @@
 		"daisyui": "^5.5.19",
 		"dayjs": "^1.11.20",
 		"dompurify": "^3.3.3",
-		"eslint": "^9.39.2",
+		"eslint": "^10.2.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.17.0",
 		"fuse.js": "^7.3.0",
