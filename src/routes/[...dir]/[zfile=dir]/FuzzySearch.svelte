@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { browser } from '$app/environment';
+
 	import type { Fuzzy, FuzzyFile } from '$lib/api';
 	import Fuse from 'fuse.js';
 
@@ -37,7 +39,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			return result.url;
 		}
 
-		return base + new URL(result.url, location.origin).pathname;
+		// SSR-safe: no `location` on the server
+		const origin = browser ? window.location.origin : 'http://localhost';
+
+		return base + new URL(result.url, origin).pathname;
 	}
 
 	function keydown(e: KeyboardEvent) {
