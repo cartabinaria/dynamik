@@ -61,7 +61,7 @@
 		"@vite-pwa/sveltekit": "^1.1.0",
 		"daisyui": "^5.5.19",
 		"dayjs": "^1.11.20",
-		"dompurify": "^3.3.3",
+		"dompurify": "^3.4.0",
 		"eslint": "^10.2.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.17.0",
