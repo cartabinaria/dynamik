@@ -1,13 +1,14 @@
 <!--
-SPDX-FileCopyrightText: 2024 - 2025 Eyad Issa <eyadlorenzo@gmail.com>
+SPDX-FileCopyrightText: 2024 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
+
 	import type { Fuzzy, FuzzyFile } from '$lib/api';
 	import Fuse from 'fuse.js';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: Fuzzy } = $props();
 
@@ -20,6 +21,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	let focusIdx = $state(0);
 	const resetFocus = () => (focusIdx = 0);
+	const setFocusIdx = (idx: number) => {
+		focusIdx = idx;
+	};
 
 	// svelte-ignore non_reactive_update
 	let resultList: HTMLUListElement;
@@ -28,7 +32,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	export function show() {
 		visible = !visible;
 		setTimeout(() => {
-			queryInput.focus();
+			if (queryInput) queryInput.focus();
 		}, 100);
 	}
 
@@ -37,7 +41,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			return result.url;
 		}
 
-		return base + new URL(result.url, location.origin).pathname;
+		const url = new URL(result.url);
+
+		// @ts-expect-error - the way in which SvelteKit handles
+		// the type safety of `resolve` does not allow us to resolve
+		// artibrary paths.
+		return resolve(url.pathname);
 	}
 
 	function keydown(e: KeyboardEvent) {
@@ -48,14 +57,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			if (!visible) visible = true;
 			setTimeout(() => {
-				queryInput.focus();
+				if (queryInput) queryInput.focus();
 			}, 100);
 		} else if (e.key === 'ArrowDown' && resultList) {
 			e.preventDefault();
-			focusIdx = focusIdx < resultList.children.length - 1 ? focusIdx + 1 : focusIdx;
+			setFocusIdx(focusIdx < resultList.children.length - 1 ? focusIdx + 1 : focusIdx);
 		} else if (e.key === 'ArrowUp' && resultList) {
 			e.preventDefault();
-			focusIdx = focusIdx > 0 ? focusIdx - 1 : 0;
+			setFocusIdx(focusIdx > 0 ? focusIdx - 1 : 0);
 		} else if (e.key === 'Enter' && resultList != null) {
 			e.preventDefault();
 			const activeEL = resultList.children[focusIdx] as HTMLLIElement;
@@ -65,9 +74,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			}
 		}
 	}
-</script>
 
-<svelte:body onkeydown={keydown} />
+	onMount(() => {
+		window.addEventListener('keydown', keydown);
+		return () => window.removeEventListener('keydown', keydown);
+	});
+</script>
 
 <input type="checkbox" id="my-modal" class="modal-toggle" checked={visible} />
 
@@ -85,11 +97,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{#if results.length !== 0}
 			<div class="divider mt-0 mb-2"></div>
 
-			<ul class="menu p-2" bind:this={resultList}>
+			<ul class="menu p-2 w-full" bind:this={resultList}>
 				{#each results as result, i (result.item.path)}
 					{@const href = getFuzzyHref(result.item)}
 					<li>
-						<a {href} class:focus={i === focusIdx} class="flex">
+						<a
+							{href}
+							class={['flex', i === focusIdx && 'menu-focus']}
+							onmouseenter={() => setFocusIdx(i)}
+						>
 							<span class="grow">
 								{result.item.name}
 							</span>
