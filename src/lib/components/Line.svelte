@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import settings from '$lib/settings';
 	import type { File, Directory } from '$lib/api';
 	import { formatDate } from '$lib/date';
@@ -40,7 +40,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		return { day, month, year, time };
 	}
 
-	let base = $derived($page.url.pathname.split('?')[0]);
+	let base = $derived(page.url.pathname.split('?')[0]);
 	let isFile = $derived('mime' in data);
 	let external = $derived('mime' in data ? data.mime === 'text/statik-link' : false);
 	let isDone = $derived(getDoneStatus(data.url));
@@ -88,8 +88,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
 					class:line-through={$isDone}
-					href="{base}/{data.name}?{$page.url.searchParams}"
-					target={$settings.newTab ? '_blank' : '_self'}
+					href="{base}/{data.name}?{page.url.searchParams}"
+					target={$settings.newTab ? '_blank' : undefined}
 				>
 					{data.name}
 				</a>
@@ -99,8 +99,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				<a
 					class="flex link link-hover sm:flex-wrap text-primary"
 					href={isUsingExternalBase(data)
-						? base + '/' + data.name + '?' + $page.url.searchParams
-						: data.url + '?' + $page.url.searchParams}
+						? base + '/' + data.name + '?' + page.url.searchParams
+						: data.url + '?' + page.url.searchParams}
 				>
 					{data.name}
 				</a>
