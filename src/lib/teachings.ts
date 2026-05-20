@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023 Erik <kocierik@gmail.com>
 // SPDX-FileCopyrightText: 2023 Luca Tagliavini <luca@teapot.ovh>
 // SPDX-FileCopyrightText: 2023 Stefano Volpe <stefano.volpe@student.uva.nl>
-// SPDX-FileCopyrightText: 2023 Eyad Issa <eyadlorenzo@gmail.com>
+// SPDX-FileCopyrightText: 2026 Eyad Issa <eyadlorenzo@gmail.com>
 // SPDX-FileCopyrightText: 2023 kocierik <kocierik@gmail.com>
 // SPDX-FileCopyrightText: 2023 manuandru <34137244+manuandru@users.noreply.github.com>
 // SPDX-FileCopyrightText: 2024 Samuele Musiani <samu@teapot.ovh>
@@ -83,16 +83,10 @@ export async function getActiveTeachings(
 	return activeTeachings;
 }
 
-// TEACHINGS
-import teachingsArray from '../config/teachings.json' assert { type: 'json' };
+// Config files
 
-function teachingToIndexedTeaching(t: Teaching): [string, Teaching] {
-	return [t.url, t];
-}
+import RAW_TEACHINGS from '../config/teachings.json' with { type: 'json' };
+import DEGREES from '../config/degrees.json' with { type: 'Degree[]' };
 
-const TEACHINGS = new Map<string, Teaching>(teachingsArray.map(teachingToIndexedTeaching));
-export { TEACHINGS };
-
-// DEGREES
-import DEGREES from '../config/degrees.json' assert { type: 'Degree[]' };
-export { DEGREES };
+const TEACHINGS = new Map<string, Teaching>(RAW_TEACHINGS.map((t) => [t.url, t]));
+export { TEACHINGS, DEGREES };
