@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 - 2024 Eyad Issa <eyadlorenzo@gmail.com>
+# SPDX-FileCopyrightText: 2023 - 2026 Eyad Issa <eyadlorenzo@gmail.com>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -15,7 +15,7 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 24
 
 jobs:
   build:
