@@ -45,7 +45,7 @@
 		"marked": "^10.0.0",
 		"postcss": "^8.5.15",
 		"prettier": "^3.8.4",
-		"prettier-plugin-svelte": "^3.5.2",
+		"prettier-plugin-svelte": "^4.1.1",
 		"shiki": "^3.22.0",
 		"svelte": "^5.56.3",
 		"svelte-check": "^4.6.0",
