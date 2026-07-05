@@ -118,8 +118,8 @@ importers:
         specifier: ^0.17.0
         version: 0.17.0
       marked:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^18.0.5
+        version: 18.0.5
       postcss:
         specifier: ^8.5.16
         version: 8.5.16
@@ -2648,9 +2648,9 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  marked@10.0.0:
-    resolution: {integrity: sha512-YiGcYcWj50YrwBgNzFoYhQ1hT6GmQbFG8SksnYJX1z4BXTHSOrz1GB5/Jm2yQvMg4nN1FHP4M6r03R10KrVUiA==}
-    engines: {node: '>= 18'}
+  marked@18.0.5:
+    resolution: {integrity: sha512-S6GcvALHg6K4ohtu4E7x0a1AqhAjp6cV8KhLSyN9qVapnzJkusVBxZRcIU9AeYsbe6P1hKDusSbEOzGyyuce6w==}
+    engines: {node: '>= 20'}
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -6010,7 +6010,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  marked@10.0.0: {}
+  marked@18.0.5: {}
 
   math-intrinsics@1.1.0: {}
 
