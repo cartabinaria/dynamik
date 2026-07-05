@@ -40,11 +40,11 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3(svelte@5.56.4(@typescript-eslint/types@8.62.1))
       '@iconify-svelte/lucide':
-        specifier: ^1.0.44
-        version: 1.0.44(svelte@5.56.4(@typescript-eslint/types@8.62.1))
+        specifier: ^1.0.48
+        version: 1.0.48(svelte@5.56.4(@typescript-eslint/types@8.62.1))
       '@iconify-svelte/material-symbols':
-        specifier: ^1.0.38
-        version: 1.0.38(svelte@5.56.4(@typescript-eslint/types@8.62.1))
+        specifier: ^1.0.42
+        version: 1.0.42(svelte@5.56.4(@typescript-eslint/types@8.62.1))
       '@iconify-svelte/mdi':
         specifier: ^1.0.2
         version: 1.0.2(svelte@5.56.4(@typescript-eslint/types@8.62.1))
@@ -915,11 +915,11 @@ packages:
   '@iconify-svelte/ic@1.0.3':
     resolution: {integrity: sha512-CPTdnFfTqcJryp+kSKbOaaxop//ZVCaRP2pVzd+LOFtqFKwmD9AWH711EX2Gy81AP2HHIagAyKM5SKdiHdDlJQ==}
 
-  '@iconify-svelte/lucide@1.0.44':
-    resolution: {integrity: sha512-HNtUnWlreqN6wNoL7AKC0AaXDyabwLgCUtp2cJjY8gdvXFNxAtN0iAZCUQ0AP88BX9WOqe2xxuXtemPMuPb2rg==}
+  '@iconify-svelte/lucide@1.0.48':
+    resolution: {integrity: sha512-4XfzIR+PVI0s4KGp0xeI5WcVjwUn7orNKp8mL0+nf8MqA1GhcN3nhfln868WyJBuT7FfQwym9ZsZvTJ2WSt+Uw==}
 
-  '@iconify-svelte/material-symbols@1.0.38':
-    resolution: {integrity: sha512-eeQvqJbMxP5YjAdZ2pSHZjWg/eHNnPxoiQupMzASRIKX3m+Z9A8pYBhSsDuVcR2FKdo5VPc6lXVNNIcHehSdpw==}
+  '@iconify-svelte/material-symbols@1.0.42':
+    resolution: {integrity: sha512-YcCOFE4Jk3tIv67ZXrsuTfBDU4UbiswGB3+h53N5Yd1YQp0LJsVj7f/RnzeWPfLZKgILJCieJ62Gm647d3PdFg==}
 
   '@iconify-svelte/mdi@1.0.2':
     resolution: {integrity: sha512-rZ+nkXXR/KKvxwqaiBnXywoi6horZx4JYwMGLaMTUWKtIKy/fsUAkYXZIV6/e2Ks2rHI4us+bCm5+zEnFYds3w==}
@@ -4311,13 +4311,13 @@ snapshots:
     transitivePeerDependencies:
       - svelte
 
-  '@iconify-svelte/lucide@1.0.44(svelte@5.56.4(@typescript-eslint/types@8.62.1))':
+  '@iconify-svelte/lucide@1.0.48(svelte@5.56.4(@typescript-eslint/types@8.62.1))':
     dependencies:
       '@iconify/css-svelte': 1.0.1(svelte@5.56.4(@typescript-eslint/types@8.62.1))
     transitivePeerDependencies:
       - svelte
 
-  '@iconify-svelte/material-symbols@1.0.38(svelte@5.56.4(@typescript-eslint/types@8.62.1))':
+  '@iconify-svelte/material-symbols@1.0.42(svelte@5.56.4(@typescript-eslint/types@8.62.1))':
     dependencies:
       '@iconify/css-svelte': 1.0.1(svelte@5.56.4(@typescript-eslint/types@8.62.1))
     transitivePeerDependencies:
