@@ -9,12 +9,6 @@ import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-	plugins: [
-		tailwindcss(),
-		sveltekit(),
-		SvelteKitPWA({
-			/* other pwa options */
-		})
-	],
+	plugins: [tailwindcss(), sveltekit(), SvelteKitPWA({/* other pwa options */})],
 	optimizeDeps: {}
 });
