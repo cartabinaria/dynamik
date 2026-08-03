@@ -27,7 +27,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@v6.0.9
         name: Install pnpm
         id: pnpm-install
         with:
