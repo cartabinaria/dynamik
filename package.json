@@ -43,7 +43,7 @@
 		"globals": "^17.7.0",
 		"katex": "^0.17.0",
 		"marked": "^18.0.5",
-		"postcss": "^8.5.16",
+		"postcss": "^8.5.23",
 		"prettier": "^3.9.4",
 		"prettier-plugin-svelte": "^4.1.1",
 		"shiki": "^4.3.1",
