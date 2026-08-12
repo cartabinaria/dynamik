@@ -58,6 +58,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					menuOpen = !menuOpen;
 				}}
 				class="btn btn-ghost text-2xl"
+				title="Toggle table of contents"
+				aria-label="Toggle table of contents"
 			>
 				{#if menuOpen}
 					<IconMaterialSymbolsCloseRounded class="w-6 h-6" />
