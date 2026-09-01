@@ -18,6 +18,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let iframe: HTMLIFrameElement;
 	onMount(() => {
 		iframe.contentWindow?.focus(); // Focus the iframe
+
+		// Add the pdf-viewport class to activate the style during the lifetime of the component 
+		const { documentElement: html, body } = document;
+		html.classList.add('pdf-viewport');
+		body.classList.add('pdf-viewport');
+
+		return () => {
+			html.classList.remove('pdf-viewport');
+			body.classList.remove('pdf-viewport');
+		};
 	});
 
 	function genTitle(url: string) {
@@ -79,8 +89,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 </div>
 
 <style>
-	:global(html),
-	:global(body) {
+	:global(html.pdf-viewport),
+	:global(body.pdf-viewport) {
 		height: 100%;
 		overflow: hidden;
 	}
