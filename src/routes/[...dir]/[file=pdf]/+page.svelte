@@ -19,7 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	onMount(() => {
 		iframe.contentWindow?.focus(); // Focus the iframe
 
-		// Add the pdf-viewport class to activate the style during the lifetime of the component 
+		// Add the pdf-viewport class to activate the style during the lifetime of the component
 		const { documentElement: html, body } = document;
 		html.classList.add('pdf-viewport');
 		body.classList.add('pdf-viewport');
