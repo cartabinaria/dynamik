@@ -6,7 +6,6 @@ import type { PageLoad } from './$types';
 import { ASSET_URL } from '$lib/const';
 import { marked } from 'marked';
 import type { Statik } from '$lib/api';
-import DOMPurify from 'dompurify';
 
 export const ssr = false;
 
@@ -27,10 +26,8 @@ export const load = (async ({ fetch, params }) => {
 	const fileContent = await fileContentReq.text();
 	const mdRendered = await marked(fileContent, { async: true });
 
-	const clean = DOMPurify.sanitize(mdRendered);
-
 	return {
-		markdown: clean,
+		markdown: mdRendered,
 		info: { fileInfo: fileInfo(fetch, params) }
 	};
 }) satisfies PageLoad;
