@@ -11,6 +11,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import { formatDate } from '$lib/date';
+	import SanitizedHtml from '$lib/components/SanitizedHtml.svelte';
 	import settings from '$lib/settings';
 	import { EDIT_URLS } from '../../../lib/const';
 	import { page } from '$app/stores';
@@ -67,8 +68,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</button>
 		</div>
 		<section class="prose md:mx-auto mt-10 mx-6" id="markdown" bind:this={markdown} role="document">
-			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-			{@html data.markdown}
+			<SanitizedHtml html={data.markdown} />
 
 			<div class="my-4 prose prose-slate italic max-w-none text-center mx-10">
 				{#await data.info.fileInfo then info}

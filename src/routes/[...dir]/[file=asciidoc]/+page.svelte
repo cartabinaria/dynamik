@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import SanitizedHtml from '$lib/components/SanitizedHtml.svelte';
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import tocbot from 'tocbot';
@@ -44,8 +45,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <main class="container m-auto grid gap-4 grid-cols-[4fr_1fr]">
 	<section class="prose m-auto" id="markdown" role="document" bind:this={docContainer}>
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		{@html html}
+		<SanitizedHtml {html} />
 	</section>
 	<section class="prose" id="toc" role="contentinfo"></section>
 </main>
