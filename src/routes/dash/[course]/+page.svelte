@@ -12,12 +12,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
-	import { teachingsFilter, type Degree, type Teaching } from '$lib/teachings';
-	// import { getWhoAmI } from '$lib/upld';
+	import { teachingsFilter, type Degree, type Teaching } from '#lib/teachings.ts';
+	// import { getWhoAmI } from '#lib/upld.ts';
 	import ListTeaching from './ListTeaching.svelte';
 	import type { TeachingsBatch } from './types';
-	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '$lib/const';
-	import Navbar from '$lib/components/Navbar.svelte';
+	import { MAX_YEARS_FOR_DEGREE, RISORSE_BASE_URL } from '#lib/const.ts';
+	import Navbar from '#lib/components/Navbar.svelte';
 
 	let { data }: { data: PageData } = $props();
 

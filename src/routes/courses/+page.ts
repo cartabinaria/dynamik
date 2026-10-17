@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { TEACHINGS } from '$lib/teachings';
+import { TEACHINGS } from '#lib/teachings.ts';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = () => {

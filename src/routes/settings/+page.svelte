@@ -8,9 +8,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '$lib/settings';
-	import { DEGREES } from '$lib/teachings';
-	import Navbar from '$lib/components/Navbar.svelte';
+	import settings, { themes as allThemes, DEFAULT_COURSE_KEY } from '#lib/settings.ts';
+	import { DEGREES } from '#lib/teachings.ts';
+	import Navbar from '#lib/components/Navbar.svelte';
 </script>
 
 <main class="max-w-5xl p-4 mx-auto">

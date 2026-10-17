@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { resolve } from '$app/paths';
 
-	import type { Fuzzy, FuzzyFile } from '$lib/api';
+	import type { Fuzzy, FuzzyFile } from '#lib/api.ts';
 	import Fuse from 'fuse.js';
 	import { onMount } from 'svelte';
 
@@ -43,10 +43,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 		const url = new URL(result.url);
 
-		// @ts-expect-error - the way in which SvelteKit handles
-		// the type safety of `resolve` does not allow us to resolve
-		// artibrary paths.
-		return resolve(url.pathname);
+		return resolve(url.pathname.slice(1));
 	}
 
 	function keydown(e: KeyboardEvent) {

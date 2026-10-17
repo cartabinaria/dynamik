@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import { EDIT_URLS } from '$lib/const';
+	import { EDIT_URLS } from '#lib/const.ts';
 
 	import SolarFolderIcon from '@iconify-svelte/solar/folder-path-connect-bold-duotone';
 	import IcRoundHomeIcon from '@iconify-svelte/ic/round-home';
@@ -18,7 +18,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import PhLightbulbFilamentBoldIcon from '@iconify-svelte/ph/lightbulb-filament-bold';
 
 	type Props = {
-		url: URL;
+		url: {
+			pathname: string;
+			searchParams: Pick<URLSearchParams, 'get' | 'has'>;
+		};
 		degree?: string | null;
 		onfuzzy?: (e: Event) => void;
 		borderRadius?: string | null;

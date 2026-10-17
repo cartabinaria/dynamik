@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { getActiveTeachings } from '$lib/teachings';
-import { DEGREES, TEACHINGS } from '$lib/teachings';
+import { getActiveTeachings } from '#lib/teachings.ts';
+import { DEGREES, TEACHINGS } from '#lib/teachings.ts';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 

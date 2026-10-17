@@ -13,15 +13,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { page } from '$app/state';
 
-	import { teachingsFilter, type Degree } from '$lib/teachings';
-	import { doneFiles, anyFileDone } from '$lib/todo-file';
+	import { teachingsFilter, type Degree } from '#lib/teachings.ts';
+	import { doneFiles, anyFileDone } from '#lib/todo-file.ts';
 
-	import Line from '$lib/components/Line.svelte';
-	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import Line from '#lib/components/Line.svelte';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import FuzzySearch from './FuzzySearch.svelte';
 
 	import type { PageData } from './$types';
-	import type { StatikEntry } from '$lib/api';
+	import type { StatikEntry } from '#lib/api.ts';
 
 	import IconSolarSortVerticalBoldDuotone from '@iconify-svelte/solar/sort-vertical-bold-duotone';
 

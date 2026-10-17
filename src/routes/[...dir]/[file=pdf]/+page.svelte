@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import Breadcrumbs from '#lib/components/Breadcrumbs.svelte';
 	import { page } from '$app/state';
 	import IconLucideMaximize from '@iconify-svelte/lucide/maximize';
 	import IconLucideMinimize from '@iconify-svelte/lucide/minimize';
@@ -36,7 +36,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	}
 	let title = $derived(genTitle(data.url));
 
-	function genIframeUrl(baseUrl: string, pageUrl: URL) {
+	function genIframeUrl(
+		baseUrl: string,
+		pageUrl: { searchParams: Pick<URLSearchParams, 'has' | 'get'> }
+	) {
 		const params = pageUrl.searchParams;
 
 		if (params.has('page')) {

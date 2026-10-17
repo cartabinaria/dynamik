@@ -5,7 +5,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { PageLoad } from './$types';
-import { ASSET_URL } from '$lib/const';
+import { ASSET_URL } from '#lib/const.ts';
 import { redirect } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ params }) => {
