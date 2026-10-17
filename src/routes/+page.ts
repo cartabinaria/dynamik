@@ -6,7 +6,7 @@
 
 import type { PageLoad } from './$types';
 
-import { DEGREES } from '$lib/teachings';
+import { DEGREES } from '#lib/teachings.ts';
 
 export const load: PageLoad = async () => {
 	return { degrees: DEGREES };

@@ -9,8 +9,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import settings from '$lib/settings';
-	import { DEGREES } from '$lib/teachings';
+	import settings from '#lib/settings.ts';
+	import { DEGREES } from '#lib/teachings.ts';
 
 	onMount(() => {
 		settings.subscribe(() => {
@@ -26,8 +26,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 
 	import '../app.css';
-	import favicon from '$lib/assets/cartabinaria.png';
-	import ogImage from '$lib/assets/cartabinaria-opengraph.png';
+	import favicon from '#lib/assets/cartabinaria.png';
+	import ogImage from '#lib/assets/cartabinaria-opengraph.png';
 </script>
 
 <svelte:head>

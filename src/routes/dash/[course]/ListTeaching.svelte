@@ -9,8 +9,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script lang="ts">
-	import type { Teaching } from '$lib/teachings';
-	import { base } from '$app/paths';
+	import type { Teaching } from '#lib/teachings.ts';
+	import { resolve } from '$app/paths';
 	import type { TeachingsBatch } from './types';
 
 	import IconAkarIconsPeopleGroup from '@iconify-svelte/akar-icons/people-group';
@@ -25,7 +25,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let { years, activeYears, title, from }: Props = $props();
 
 	function getUrl(teaching: Teaching) {
-		let url = base + '/' + teaching.url;
+		let url = resolve(teaching.url);
 		if (from != null) url += '?from=' + from;
 		return url;
 	}

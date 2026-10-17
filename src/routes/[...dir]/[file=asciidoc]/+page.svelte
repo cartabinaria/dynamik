@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import SanitizedHtml from '$lib/components/SanitizedHtml.svelte';
+	import SanitizedHtml from '#lib/components/SanitizedHtml.svelte';
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
 	import tocbot from 'tocbot';

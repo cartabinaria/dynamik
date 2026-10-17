@@ -10,11 +10,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import tocbot from 'tocbot';
 	// @ts-expect-error - katex auto-render is not typed
 	import autoRender from 'katex/dist/contrib/auto-render.mjs';
-	import { formatDate } from '$lib/date';
-	import SanitizedHtml from '$lib/components/SanitizedHtml.svelte';
-	import settings from '$lib/settings';
+	import { formatDate } from '#lib/date.ts';
+	import SanitizedHtml from '#lib/components/SanitizedHtml.svelte';
+	import settings from '#lib/settings.ts';
 	import { EDIT_URLS } from '../../../lib/const';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 
 	import IconMaterialSymbolsCloseRounded from '@iconify-svelte/material-symbols/close-rounded';
@@ -72,7 +72,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			<div class="my-4 prose prose-slate italic max-w-none text-center mx-10">
 				{#await data.info.fileInfo then info}
-					{@const editUrls = EDIT_URLS($page.url.pathname)}
+					{@const editUrls = EDIT_URLS(page.url.pathname)}
 					<p transition:fade>
 						<span>
 							Last edited on

@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import type { Teaching } from '$lib/teachings';
-	import { DEGREES } from '$lib/teachings';
+	import Navbar from '#lib/components/Navbar.svelte';
+	import type { Teaching } from '#lib/teachings.ts';
+	import { DEGREES } from '#lib/teachings.ts';
 
 	import IconMdiCogOutline from '@iconify-svelte/mdi/cog-outline';
 	import IconMdiGraduationCap from '@iconify-svelte/mdi/graduation-cap';
@@ -93,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</td>
 							<td>
 								<a
-									href={resolve('/[...dir]', { dir: teaching.url })}
+									href={resolve(teaching.url)}
 									class="font-semibold wrap-break-word link link-primary link-hover"
 									rel="noopener noreferrer"
 									title={teaching.name}
@@ -145,12 +145,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							</td>
 							<td>
 								<div class="flex gap-2 justify-end">
-									<a
-										href={resolve('/[...dir]', { dir: teaching.url })}
-										class="btn btn-xs btn-accent"
-									>
-										Details
-									</a>
+									<a href={resolve(teaching.url)} class="btn btn-xs btn-accent"> Details </a>
 									<a
 										href={teaching.chat ? `https://${teaching.chat}` : '#'}
 										class={['btn btn-xs btn-primary', teaching.chat == null && 'btn-disabled']}
@@ -188,7 +183,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					<div class="card-body p-6">
 						<div class="flex justify-between items-start gap-4 mb-4">
 							<h2 class="card-title text-primary text-xl font-bold leading-tight">
-								<a href={resolve('/[...dir]', { dir: teaching.url })} class="hover:brightness-110">
+								<a href={resolve(teaching.url)} class="hover:brightness-110">
 									{teaching.name}
 								</a>
 							</h2>
@@ -238,12 +233,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						{/if}
 
 						<div class="grid grid-cols-3 gap-3 pt-2 mt-6">
-							<a
-								href={resolve('/[...dir]', { dir: teaching.url })}
-								class="btn btn-accent btn-sm h-10"
-							>
-								Details
-							</a>
+							<a href={resolve(teaching.url)} class="btn btn-accent btn-sm h-10"> Details </a>
 
 							<a
 								href={teaching.chat ? `https://${teaching.chat}` : '#'}

@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { getFuzzy, getManifest } from '$lib/api';
-import { DEGREES, TEACHINGS } from '$lib/teachings';
+import { getFuzzy, getManifest } from '#lib/api.ts';
+import { DEGREES, TEACHINGS } from '#lib/teachings.ts';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, params, url }) => {

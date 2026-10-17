@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import localeIt from 'dayjs/locale/it';
 
-import type { Settings } from '$lib/settings';
+import type { Settings } from '#lib/settings.ts';
 
 dayjs.locale(localeIt);
 dayjs.extend(localizedFormat);

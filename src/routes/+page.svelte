@@ -11,10 +11,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 
-	import type { Degree } from '$lib/teachings';
-	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+	import type { Degree } from '#lib/teachings.ts';
+	import { setBannerClosed, shouldShowBanner } from '#lib/newsBanners.ts';
 
 	import IconAkarIconsXSmall from '@iconify-svelte/akar-icons/x-small';
 	import IconPhHandPalmFill from '@iconify-svelte/ph/hand-palm-fill';
@@ -38,7 +38,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <svelte:head>
 	<title>Risorse CartaBinaria</title>
 	<!-- OG meta graph -->
+
 	<meta name="title" property="og:title" content="Dashboard" />
+
 	<meta
 		name="description"
 		property="og:description"
@@ -120,11 +122,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 											degree.icon
 										)}
 									{:else}
-										{@render line(
-											degree.name,
-											resolve('/[...dir]', { dir: degree.id }),
-											degree.icon
-										)}
+										{@render line(degree.name, resolve(degree.id), degree.icon)}
 									{/if}
 								{/each}
 							</div>
@@ -136,9 +134,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="divider"></div>
 
 			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
-				{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
-				{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
-				{@render line('Stato', resolve('/build'), '📊', true)}
+				{@render line('Tutti i Corsi', resolve('courses'), '📚', true)}
+				{@render line('Impostazioni', resolve('settings'), '🔧', true)}
+				{@render line('Stato', resolve('build'), '📊', true)}
 			</div>
 		</ul>
 

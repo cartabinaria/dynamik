@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { FUZZY_URL, STATIK_URL } from '$lib/const';
+import { FUZZY_URL, STATIK_URL } from '#lib/const.ts';
 
 export type StatikEntry = {
 	name: string;

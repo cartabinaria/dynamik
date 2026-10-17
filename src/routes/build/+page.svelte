@@ -11,9 +11,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { teachingsFilter } from '$lib/teachings';
-	import { MAX_YEARS_FOR_DEGREE } from '$lib/const';
-	import Navbar from '$lib/components/Navbar.svelte';
+	import { teachingsFilter } from '#lib/teachings.ts';
+	import { MAX_YEARS_FOR_DEGREE } from '#lib/const.ts';
+	import Navbar from '#lib/components/Navbar.svelte';
 
 	const WORKFLOW_NAMES = ['filenames', 'build-and-deploy'];
 	const WORKFLOW_URL = (project: string, workflow: string) =>

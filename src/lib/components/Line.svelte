@@ -9,11 +9,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script lang="ts">
 	import { page } from '$app/state';
-	import settings from '$lib/settings';
-	import type { File, Directory } from '$lib/api';
-	import { formatDate } from '$lib/date';
-	import { getDoneStatus } from '$lib/todo-file';
-	import { GH_PAGES_BASE_URL } from '$lib/const';
+	import settings from '#lib/settings.ts';
+	import type { File, Directory } from '#lib/api.ts';
+	import { formatDate } from '#lib/date.ts';
+	import { getDoneStatus } from '#lib/todo-file.ts';
+	import { GH_PAGES_BASE_URL } from '#lib/const.ts';
 
 	import IconAkarLinkChain from '@iconify-svelte/akar-icons/link-chain';
 	import IconSolarFileBoldDuotone from '@iconify-svelte/solar/file-bold-duotone';
