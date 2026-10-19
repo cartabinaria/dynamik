@@ -30,7 +30,7 @@
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.3",
-		"@types/jsdom": "^28.0.3",
+		"@types/jsdom": "^30.0.0",
 		"@types/katex": "^0.16.8",
 		"@vite-pwa/sveltekit": "^1.1.0",
 		"daisyui": "^5.7.50",
