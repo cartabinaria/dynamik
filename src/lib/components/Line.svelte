@@ -10,9 +10,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script lang="ts">
 	import { page } from '$app/state';
 	import settings from '$lib/settings';
-	import type { File, Directory } from '$lib/api';
+	import type { File, Directory, StatikEntry } from '$lib/api';
 	import { formatDate } from '$lib/date';
-	import { getDoneStatus } from '$lib/todo-file';
+	import { doneFiles, getDoneStatus, anyFileDone } from '$lib/todo-file';
 	import { GH_PAGES_BASE_URL } from '$lib/const';
 
 	import IconAkarLinkChain from '@iconify-svelte/akar-icons/link-chain';
@@ -21,7 +21,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import IconSolarFolderBold from '@iconify-svelte/solar/folder-bold';
 	import IconSolarDownloadSquareBold from '@iconify-svelte/solar/download-square-bold';
 
-	let { data }: { data: File | Directory } = $props();
+	let { data, variants = [] }: { data: File | Directory; variants?: StatikEntry[] } = $props();
+
+	/**
+	 * All the urls rendered by this row: the main file plus the same-content
+	 * variants shown on the same line (see issue #289).
+	 */
+	let allUrls = $derived([data.url, ...variants.map((variant) => variant.url)]);
 
 	/**
 	 * Check if the statik url for the data uses an external link to 'cartabinaria.github.io'
@@ -43,7 +49,18 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	let base = $derived(page.url.pathname.split('?')[0]);
 	let isFile = $derived('mime' in data);
 	let external = $derived('mime' in data ? data.mime === 'text/statik-link' : false);
-	let isDone = $derived(getDoneStatus(data.url));
+	let isDone = $derived(variants.length === 0 ? getDoneStatus(data.url) : anyFileDone(allUrls));
+
+	function toggleDone() {
+		doneFiles.update((old) => {
+			const next = !(old[data.url] ?? false);
+			const updated = { ...old };
+			for (const url of allUrls) {
+				updated[url] = next;
+			}
+			return updated;
+		});
+	}
 </script>
 
 <div class="contents">
@@ -74,7 +91,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				/>
 				<button
 					class="flex text-xl mr-2 align-center"
-					onclick={() => isDone.toggle()}
+					onclick={toggleDone}
 					type="button"
 					title="Click to mark as done"
 					aria-label="Click to mark as done"
@@ -93,6 +110,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				>
 					{data.name}
 				</a>
+				{#each variants as variant (variant.url)}
+					<a
+						class="badge badge-sm badge-outline link-hover text-primary ml-2"
+						href="{base}/{variant.name}?{page.url.searchParams}"
+						target={$settings.newTab ? '_blank' : undefined}
+					>
+						{variant.name.split('.').pop()?.toUpperCase()}
+					</a>
+				{/each}
 			{:else}
 				<input type="checkbox" class="checkbox checkbox-sm mr-2" id="my-checkbox" disabled />
 				<IconSolarFolderBold class="text-[#FDE74C] w-5 h-5 mr-2" />
