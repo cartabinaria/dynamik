@@ -18,6 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 	import Line from '$lib/components/Line.svelte';
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
+	import { groupFileVariants } from '$lib/file-groups';
 	import FuzzySearch from './FuzzySearch.svelte';
 
 	import type { PageData } from './$types';
@@ -120,7 +121,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	};
 
 	let directories = $derived(prepareForDisplay(data.manifest.directories ?? []));
-	let files = $derived(prepareForDisplay(data.manifest.files ?? []));
+	let files = $derived(groupFileVariants(prepareForDisplay(data.manifest.files ?? [])));
 </script>
 
 <svelte:head>
@@ -170,8 +171,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			{/each}
 		{/if}
 		{#if files != null}
-			{#each files as file (file.url)}
-				<Line data={file} />
+			{#each files as entry ('primary' in entry ? entry.primary.url : entry.url)}
+				<Line
+					data={'primary' in entry ? entry.primary : entry}
+					variants={'primary' in entry ? entry.variants : undefined}
+				/>
 			{/each}
 		{/if}
 	</div>
