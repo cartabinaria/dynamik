@@ -14,7 +14,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import { browser } from '$app/environment';
 
 	import type { Degree } from '$lib/teachings';
-	import { setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
+	import { newsBanner, setBannerClosed, shouldShowBanner } from '$lib/newsBanners';
 
 	import IconAkarIconsXSmall from '@iconify-svelte/akar-icons/x-small';
 	import IconPhHandPalmFill from '@iconify-svelte/ph/hand-palm-fill';
@@ -53,9 +53,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<div class="flex items-center justify-between">
 				<div><!-- justifier --></div>
 				<p class="font-semibold">
-					<i><b>🔥Nuova feature: ToDo List🔥</b></i>
-					All'interno di tutte le pagine con file cliccando sopra l'icona potrai segnarlo e salvarlo come
-					"fatto"!
+					<i><b>{$newsBanner.title}</b></i>
+					{$newsBanner.body}
+					{#if $newsBanner.href}
+						<a class="link" href={$newsBanner.href}>leggi di più</a>
+					{/if}
 				</p>
 				<button
 					class="btn btn-ghost btn-circle btn-error focus:outline-hidden"
