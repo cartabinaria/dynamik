@@ -24,7 +24,57 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		html.classList.add('pdf-viewport');
 		body.classList.add('pdf-viewport');
 
+		let controller: AbortController | undefined;
+		async function keydown(e: KeyboardEvent) {
+			if (
+				e.defaultPrevented ||
+				e.isComposing ||
+				e.key.toLowerCase() !== 's' ||
+				e.ctrlKey === e.metaKey ||
+				e.altKey ||
+				e.shiftKey ||
+				!data.url
+			) {
+				return;
+			}
+
+			const target = e.target;
+			if (
+				target instanceof HTMLElement &&
+				(target.isContentEditable || target.closest('input, textarea, select'))
+			) {
+				return;
+			}
+
+			e.preventDefault();
+			if (e.repeat || controller) return;
+
+			const filename = title;
+			controller = new AbortController();
+			const { signal } = controller;
+			try {
+				const response = await fetch(data.url, { signal });
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+				const blob = await response.blob();
+				signal.throwIfAborted();
+				const url = URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.href = url;
+				link.download = filename;
+				link.click();
+				URL.revokeObjectURL(url);
+			} catch (error) {
+				if (!signal.aborted) console.error('Failed to download PDF', error);
+			} finally {
+				controller = undefined;
+			}
+		}
+
+		// Key events inside the cross-origin PDF iframe do not reach this window.
+		window.addEventListener('keydown', keydown);
 		return () => {
+			window.removeEventListener('keydown', keydown);
+			controller?.abort();
 			html.classList.remove('pdf-viewport');
 			body.classList.remove('pdf-viewport');
 		};
