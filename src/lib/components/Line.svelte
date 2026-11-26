@@ -48,7 +48,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="contents">
 	<div class="contents">
-		<span class="flex items-center flex-[1_0_auto] w-max">
+		<span class="flex items-center min-w-0 wrap-anywhere md:flex-[1_0_auto] md:w-max">
 			{#if external}
 				<input
 					type="checkbox"

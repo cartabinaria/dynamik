@@ -19,6 +19,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	import IconAkarIconsXSmall from '@iconify-svelte/akar-icons/x-small';
 	import IconPhHandPalmFill from '@iconify-svelte/ph/hand-palm-fill';
 	import IconPhTelegramLogoFill from '@iconify-svelte/ph/telegram-logo-fill';
+	import IconLucideChevronRight from '@iconify-svelte/lucide/chevron-right';
 
 	let { data }: { data: { degrees: Degree[] } } = $props();
 
@@ -71,105 +72,88 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 {/if}
 
 {#snippet line(name: string, href: string, icon: string, tools?: boolean)}
-	<li class="flex-auto">
+	<li>
 		<a
 			class={[
-				'flex justify-center items-center p-4 rounded-lg hover:shadow-lg hover:bg-accent/80 transition w-full duration-300 ease-in-out',
+				'flex items-center gap-3 rounded-field px-3 py-2.5 font-semibold transition-colors hover:bg-base-300',
 				tools && 'bg-base-200'
 			]}
 			{href}
 		>
-			<span class="text-3xl mb-2">{icon}</span>
-			<span class="font-semibold text-center">{name}</span>
+			<span class="grid size-10 shrink-0 place-items-center rounded-field bg-base-100 text-2xl">
+				{icon}
+			</span>
+			<span class="grow">{name}</span>
+			<IconLucideChevronRight class="size-4 shrink-0 opacity-60" />
 		</a>
 	</li>
 {/snippet}
 
-<div class="flex justify-center">
-	<div class="container max-w-5xl">
-		<div class="mt-10 mx-auto text-center">
-			<h1 class="mb-4 text-4xl font-bold">Risorse</h1>
-			<p>
-				Materiali di studio condivisi e creati da studenti per studenti, gestiti da
-				<span class="underline">
-					<a href="https://cartabinaria.students.cs.unibo.it"> CartaBinaria </a>
-				</span>
+<main class="mx-auto max-w-5xl px-4 pb-10">
+	<header class="mt-12 mb-8 text-center">
+		<p class="text-sm font-semibold tracking-widest text-primary uppercase">CartaBinaria</p>
+		<h1 class="mt-2 text-4xl font-bold sm:text-5xl">Risorse</h1>
+		<p class="mx-auto mt-4 max-w-2xl text-lg">
+			Materiali di studio condivisi e creati da studenti per studenti, gestiti da
+			<a class="link" href="https://cartabinaria.students.cs.unibo.it">CartaBinaria</a>
+		</p>
+		<p class="mx-auto mt-2 max-w-2xl opacity-80">
+			Seleziona il tuo corso di laurea per accedere ai materiali di studio condivisi e creati da
+			studenti per studenti.
+		</p>
+	</header>
+
+	<nav aria-label="Corsi di laurea" class="grid gap-4 sm:grid-cols-2">
+		{#each Object.keys(degreeAggregates) as category (category)}
+			{#if checkDegreeCategory(data, category).length > 0}
+				<ul class="rounded-box border border-base-300 bg-base-200 p-2">
+					{#each checkDegreeCategory(data, category) as degree (degree.id)}
+						{#if degree.teachings != null}
+							{@render line(
+								degree.name,
+								resolve('/dash/[course]', { course: degree.id }),
+								degree.icon
+							)}
+						{:else}
+							{@render line(degree.name, resolve('/[...dir]', { dir: degree.id }), degree.icon)}
+						{/if}
+					{/each}
+				</ul>
+			{/if}
+		{/each}
+	</nav>
+
+	<ul class="mt-4 grid gap-4 sm:grid-cols-3">
+		{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
+		{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
+		{@render line('Stato', resolve('/build'), '📊', true)}
+	</ul>
+
+	<div
+		class="mt-8 flex items-start gap-4 rounded-box border border-warning/50 bg-warning/10 p-4 text-sm"
+		role="alert"
+	>
+		<IconPhHandPalmFill class="size-8 shrink-0 text-warning" />
+		<div>
+			<p class="mb-1 font-bold">Disclaimer</p>
+			<p class="mb-2">
+				Questo sito è stato pensato, creato e mantenuto da studenti.
+				<strong>
+					Non è in alcun modo ufficiale e non è affiliato con l'Università di Bologna.
+				</strong>
 			</p>
-		</div>
-		<div class="divider"></div>
-
-		<div class="prose sm:mx-auto mx-4">
 			<p>
-				Seleziona il tuo corso di laurea per accedere ai materiali di studio condivisi e creati da
-				studenti per studenti.
-			</p>
-		</div>
-
-		<ul class="menu p-2 text-lg w-full mt-2">
-			<div class="grid gap-6 sm:grid-cols-2">
-				{#each Object.keys(degreeAggregates) as category (category)}
-					{#if checkDegreeCategory(data, category).length > 0}
-						<div class="p-4 hover:shadow-lg transition bg-base-200 rounded-2xl">
-							<!-- Corsi della categoria -->
-							<div class="grid gap-2">
-								{#each checkDegreeCategory(data, category) as degree (degree.id)}
-									{#if degree.teachings != null}
-										{@render line(
-											degree.name,
-											resolve('/dash/[course]', { course: degree.id }),
-											degree.icon
-										)}
-									{:else}
-										{@render line(
-											degree.name,
-											resolve('/[...dir]', { dir: degree.id }),
-											degree.icon
-										)}
-									{/if}
-								{/each}
-							</div>
-						</div>
-					{/if}
-				{/each}
-			</div>
-
-			<div class="divider"></div>
-
-			<div class="flex justify-between flex-wrap gap-2 sm:gap-4">
-				{@render line('Tutti i Corsi', resolve('/courses'), '📚', true)}
-				{@render line('Impostazioni', resolve('/settings'), '🔧', true)}
-				{@render line('Stato', resolve('/build'), '📊', true)}
-			</div>
-		</ul>
-
-		<div class="alert alert-warning md:mx-4 md:my-8 grow mx-2 sm:mx-auto rounded-xl" role="alert">
-			<IconPhHandPalmFill class="w-10 h-10" />
-			<div>
-				<p class="block font-bold">
-					<strong>Disclaimer</strong>
-				</p>
-				<p class="text-xs mb-2">
-					Questo sito è stato pensato, creato e mantenuto da studenti.
-					<strong>
-						Non è in alcun modo ufficiale e non è affiliato con l'Università di Bologna.
-					</strong>
-				</p>
-				<p class="text-xs">
-					I materiali presenti sono stati caricati da studenti e non sono verificati o approvati da
-					docenti o dal dipartimento. Per segnalare errori, problemi o richieste di rimozione di
-					materiale, contattaci su <a class="link" href="https://t.me/cartabinaria">Telegram.</a>
-				</p>
-			</div>
-		</div>
-
-		<div class="my-8">
-			<p class="text-center">
-				<a href="https://t.me/cartabinaria" class="btn btn-ghost rounded-xl">
-					<IconPhTelegramLogoFill class="w-6 h-6 mr-2" />
-
-					Contattaci su Telegram
-				</a>
+				I materiali presenti sono stati caricati da studenti e non sono verificati o approvati da
+				docenti o dal dipartimento. Per segnalare errori, problemi o richieste di rimozione di
+				materiale, contattaci su <a class="link" href="https://t.me/cartabinaria">Telegram.</a>
 			</p>
 		</div>
 	</div>
-</div>
+
+	<p class="mt-8 text-center">
+		<a href="https://t.me/cartabinaria" class="btn btn-primary">
+			<IconPhTelegramLogoFill class="size-6" />
+			Contattaci su Telegram
+		</a>
+	</p>
+</main>

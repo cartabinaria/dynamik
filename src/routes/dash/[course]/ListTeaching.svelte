@@ -35,11 +35,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{@const disabled = !activeYears.includes(teaching)}
 	<li
 		class:disabled
-		class="flex flex-row border-base-content items-center content-center m-2 border rounded-md join w-fit"
+		class="flex flex-row items-center m-1.5 rounded-field border border-base-300 bg-base-200 transition-colors hover:border-primary join w-fit"
 	>
 		<a
 			href={disabled ? null : getUrl(teaching)}
-			class="text-center text-lg text-balance p-2 flex join-item"
+			class="text-center text-base font-medium text-balance px-3 py-2 flex join-item border-0"
 		>
 			{teaching.name ? teaching.name : teaching.url}
 		</a>
@@ -47,11 +47,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{#if teaching.chat != null && teaching.chat !== ''}
 			<a
 				href={disabled ? null : 'https://' + teaching.chat}
-				class="join-item border-l border-base-content"
+				class="join-item self-stretch flex items-center px-2.5 border-l border-base-300 text-accent"
 				title="Link alla community"
 				aria-label="Link alla community"
 			>
-				<IconAkarIconsPeopleGroup class="w-6 h-6" />
+				<IconAkarIconsPeopleGroup class="w-5 h-5" />
 			</a>
 		{/if}
 	</li>
@@ -62,9 +62,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		{#if year.teachings.length > 0}
 			{@const type = year.year != 0 ? year.year.toString() + ' anno' : 'Generali'}
 			<li class="menu-title">
-				<span class="text-2xl mt-5 italic">{type} {title}</span>
+				<span class="text-xl mt-6 font-bold text-base-content">{type} {title}</span>
 			</li>
-			<div class="divider mt-0"></div>
+			<div class="divider mt-0 mb-2"></div>
 			<div class="flex flex-row flex-wrap">
 				{#each year.teachings as t (t.name)}
 					{#if t}

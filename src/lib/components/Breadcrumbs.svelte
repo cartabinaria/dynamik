@@ -83,15 +83,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <div class="navbar flex bg-base-200 shadow-xs px-5 {borderRadius}">
 	<div class="sm:hidden flex justify-start items-center">
-		<div class="dropdown w-max">
+		<div class="dropdown min-w-0">
 			<button
 				type="button"
-				class="btn btn-ghost flex gap-2 w-max"
+				class="btn btn-ghost btn-sm flex gap-2 max-w-full px-2"
 				onclick={mobileBreadcrumb}
 				aria-label="Open breadcrumb menu"
 			>
-				<SolarFolderIcon class="text-lg text-accent w-4 h-4" />
-				<p class="text-accent text-xs wrap-anywhere">{title}</p>
+				<SolarFolderIcon class="text-lg text-accent w-4 h-4 shrink-0" />
+				<p class="text-accent text-xs truncate">{title}</p>
 			</button>
 
 			{#if !breadcrumbMobile}
@@ -144,12 +144,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div class="flex flex-1 gap-1 justify-end max-w-min">
 			<button
 				type="button"
-				class="btn w-max sm:btn-sm md:btn-md btn-primary border-none rounded-xl bg-linear-to-r from-primary to-accent hover:brightness-105 transition-all duration-200 ease-out gap-2 hover:scale-105"
+				class="btn w-max btn-sm md:btn-md btn-primary border-none rounded-field bg-linear-to-r from-primary to-accent hover:brightness-105 transition-all duration-200 ease-out gap-2 hover:scale-105"
 				aria-label="Apri suggerimenti per contribuire"
 				onclick={() => (showModal = true)}
 			>
-				<LucideFileHeartIcon class="w-6 h-6" />
-				<span class="font-semibold tracking-wide">Dona i tuoi appunti</span>
+				<LucideFileHeartIcon class="w-5 h-5 md:w-6 md:h-6" />
+				<span class="hidden min-[400px]:inline font-semibold tracking-wide"
+					>Dona i tuoi appunti</span
+				>
 			</button>
 			<div class="modal" class:modal-open={showModal}>
 				<div

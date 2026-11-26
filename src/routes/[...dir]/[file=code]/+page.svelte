@@ -49,15 +49,16 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	{#if errorMessage != null}
 		<p class="error-message">{errorMessage}</p>
 	{:else if formattedTokens != null}
-		<div class="font-mono p-4">
-			<div class="font-mono p-4 whitespace-pre">
-				{#each formattedTokens.tokens as tokenArr, i (i)}
-					<span class="inline-block w-10 text-right select-none opacity-60 mr-2">{i + 1}</span
-					>{#each tokenArr as token, j (j)}<span
-							style="color: {token.color}; font-style: {token.fontStyle};">{token.content}</span
-						>{/each}<br />
-				{/each}
-			</div>
+		<div
+			class="font-mono m-2 md:m-4 p-4 rounded-box overflow-x-auto whitespace-pre"
+			style="background-color: {formattedTokens.bg}; color: {formattedTokens.fg};"
+		>
+			{#each formattedTokens.tokens as tokenArr, i (i)}
+				<span class="inline-block w-10 text-right select-none opacity-60 mr-2">{i + 1}</span
+				>{#each tokenArr as token, j (j)}<span
+						style="color: {token.color}; font-style: {token.fontStyle};">{token.content}</span
+					>{/each}<br />
+			{/each}
 		</div>
 	{:else}
 		<p class="text-4xl font-bold flex justify-center items-center h-64">Loading...</p>
