@@ -128,7 +128,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	<meta property="og:title" content={title} />
 </svelte:head>
 
-<main class="max-w-6xl min-w-fit p-1 md:p-4 mx-auto">
+<main class="max-w-6xl min-w-0 p-2 md:p-4 mx-auto">
 	<Breadcrumbs {degree} url={page.url} onfuzzy={() => fuzzy.show()} />
 
 	<div class="flex flex-1 justify-start mr-4 mb-3 mt-4">
@@ -162,7 +162,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	</div>
 
 	<div
-		class="grid gap-5 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] mx-4 text-lg"
+		class="grid gap-x-5 gap-y-3 md:grid-cols-[min-content_auto_min-content_max-content] grid-cols-[1fr_auto_min-content] items-center rounded-box border border-base-300 bg-base-200 p-4 md:px-6"
 	>
 		{#if directories != null}
 			{#each directories as dir (dir.url)}
